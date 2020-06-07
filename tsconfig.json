@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react",
+        "lib": ["es2018", "dom"],
+        "types": ["node"],
+        "typeRoots": ["**/node_modules/@types/", "./src/typings/"],
+        "baseUrl": ".",
+        "resolveJsonModule": true,
+        "paths": {}
+    },
+    "include": ["./src/**/*"]
+}
