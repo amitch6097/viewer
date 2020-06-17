@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './InputGroup.less';
+
 export interface InputGroupProps {
     label: string;
     children: any;

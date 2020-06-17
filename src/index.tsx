@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 
 import './styles.less';
 
-import { history } from './history';
-
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
 import { Home } from './pages/Home/';
@@ -14,7 +12,7 @@ function App() {
     return (
         <Router>
             <Route exact path="/create" component={Create} />
-            <Route path="/" component={Home} />
+            <Route exact path="/" component={Home} />
         </Router>
     );
 }

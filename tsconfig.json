@@ -15,5 +15,5 @@
         "resolveJsonModule": true,
         "paths": {}
     },
-    "include": ["./src/**/*"]
+    "include": ["./src/**/*", "./typings/**/*"]
 }

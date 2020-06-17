@@ -1,6 +1,8 @@
 import React from 'react';
 import './AppBar.less';
 
+import { history } from '../../history';
+
 import AppBar_M from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +10,14 @@ import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 
-export function AppBar() {
+export interface IAppBarProps {
+    onClickAddBusiness?: () => void;
+}
+
+//@ts-ignore
+window.a = history;
+
+export function AppBar(props: IAppBarProps) {
     return (
         <div className="bb-app-bar">
             <AppBar_M position="static">
@@ -24,7 +33,9 @@ export function AppBar() {
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    <Button color="inherit">Add A Business</Button>
+                    <Button onClick={props.onClickAddBusiness} color="inherit">
+                        Add A Business
+                    </Button>
                     <Button color="inherit">Login</Button>
                     <Button color="inherit">Sign Up</Button>
                 </Toolbar>

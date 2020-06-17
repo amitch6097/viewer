@@ -5,13 +5,19 @@
     "dependencies": {
         "@material-ui/core": "^4.10.1",
         "@material-ui/icons": "^4.9.1",
+        "@material-ui/lab": "^4.0.0-alpha.56",
+        "algoliasearch": "^4.3.0",
         "express": "^4.17.1",
         "react": "^16.10.2",
         "react-dom": "^16.10.2",
+        "react-instantsearch-dom": "^6.5.0",
         "react-router-dom": "^5.1.2",
-        "react-spring": "^8.0.27"
+        "react-spring": "^8.0.27",
+        "react-text-mask": "^5.4.3",
+        "text-mask-addons": "^3.8.0"
     },
     "scripts": {
+        "deploy": "firebase deploy",
         "serve:dev": "http-server --proxy http://localhost:8080? ./public/",
         "build": "cross-env NODE_PATH=./node_modules webpack --config webpack.config.js",
         "watch": "cross-env NODE_PATH=./node_modules npm-run-all --parallel webpack:watch prettier:watch",
