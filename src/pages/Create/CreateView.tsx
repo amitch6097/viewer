@@ -1,15 +1,6 @@
 import React from 'react';
 import './CreateView.less';
 
-import { AppBar } from '../../components/AppBar';
-import { InputGroup } from '../../components/InputGroup';
-import { ExpandCheckbox } from '../../components/ExpandCheckbox';
-
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -23,6 +14,8 @@ import {
     IOwner,
     IBusinessListing,
 } from '../../../typings/types';
+import { AppBar } from '../../components/AppBar';
+import { Footer } from '../../components/Footer';
 import { InfoStep } from './Steps/InfoStep';
 import { IdentifyStep } from './Steps/IdentifyStep';
 import { DetailsStep } from './Steps/DetailsStep';
@@ -43,6 +36,7 @@ export interface ICreateViewProps {
     onChangeIdentityText: (identity: EIdentify, text: string) => void;
     onChangeIdentitySelected: (identity: EIdentify, selected: boolean) => void;
     onChangeOwnerBio: (index: number) => (bio: string) => void;
+    onCreateListing: () => void;
 }
 
 export class CreateView extends React.Component<ICreateViewProps> {
@@ -142,9 +136,11 @@ export class CreateView extends React.Component<ICreateViewProps> {
                                 'about'
                             )}
                             onChangeOwnerBio={this.props.onChangeOwnerBio}
+                            onNextStep={this.props.onCreateListing}
                         />
                     )}
                 </div>
+                < Footer title={'Title'} description={'description'}/>
             </div>
         );
     }

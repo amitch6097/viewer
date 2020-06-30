@@ -1,9 +1,15 @@
 export interface IBusinessDocument {
-    data: IBusiness;
+    id?: string;
+    data: IBusinessListing;
     meta: {
         createdAt: string;
         createdBy: string;
     };
+}
+
+export interface ICategory {
+    id: string;
+    label: string;
 }
 
 export interface IBusinessListing {
@@ -16,18 +22,7 @@ export interface IBusinessListing {
     owners: IOwner[];
     name: string;
     about: string;
-}
-
-export interface IBusiness {
-    bio: string;
-    category: string;
-    name: string;
-    number: string;
-    owners: IOwner[]; // ids;
-    tags: string[];
-    website: string;
-    likes: number;
-    listing: IBusinessListing;
+    guid: string;
 }
 
 export interface IOwner {
@@ -35,6 +30,7 @@ export interface IOwner {
     bio: string;
     position: string;
     image: string;
+    imageId: string;
 }
 
 export enum Collections {

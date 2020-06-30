@@ -6,35 +6,31 @@ import {
     IBusinessListing,
 } from '../../../typings/types';
 
+import { LocalStorage } from '../../services/LocalStorage';
 import { CreateView } from './CreateView';
+import { generateGUID } from '../../helpers';
+import { Business } from '../../lib/Business';
 
 export interface ICreateContainerState {
     step: number;
     business: IBusinessListing;
 }
 
-function getLocalStorageState(): ICreateContainerState | undefined{
-    if (window?.localStorage) {
-        const stateString = window.localStorage.getItem(CreateContainer.LocalStorageId);
-        const state = stateString && JSON.parse(stateString);
-        return state;
-    }
-}
-
 export class CreateContainer extends React.Component<
     {},
     ICreateContainerState
 > {
-
-    static LocalStorageId = 'bb-create-state'
+    static LocalStorageId = 'bb-create-state';
 
     constructor(props) {
         super(props);
-        
-        const localStorageState = getLocalStorageState();
+        const localStorageState = LocalStorage.get(
+            CreateContainer.LocalStorageId
+        ) as ICreateContainerState;
         this.state = localStorageState || {
             step: 0,
             business: {
+                guid: generateGUID(),
                 about: '',
                 name: '',
                 category: '',
@@ -58,11 +54,19 @@ export class CreateContainer extends React.Component<
                         bio: '',
                         position: '',
                         image: undefined,
+                        imageId: undefined,
                     },
                 ],
             },
         };
     }
+
+    onCreateListing = async () => {
+        const response = await Business.createBusiness({
+            business: this.state.business,
+        });
+        console.log(response);
+    };
 
     addOwner = () => {
         const { owners } = this.state.business;
@@ -77,13 +81,14 @@ export class CreateContainer extends React.Component<
                         bio: '',
                         position: '',
                         image: undefined,
+                        imageId: undefined,
                     },
                 ],
             },
         });
     };
 
-    removeOwner = index => () => {
+    removeOwner = (index) => () => {
         const { owners } = this.state.business;
         const ownersCopy = [...owners];
         ownersCopy.splice(index, 1);
@@ -112,10 +117,11 @@ export class CreateContainer extends React.Component<
         });
     };
 
-    onAddOwnerImage = index => e => {
+    onAddOwnerImage = (index) => (e) => {
         const { owners } = this.state.business;
 
         const file = e.target.files[0];
+        console.log(file);
         const url = URL.createObjectURL(file);
         console.log(url);
         owners[index] = {
@@ -131,9 +137,7 @@ export class CreateContainer extends React.Component<
     };
 
     setStep = (step: number) => {
-        if (window?.localStorage) {
-            window.localStorage.setItem(CreateContainer.LocalStorageId, JSON.stringify(this.state))
-        }
+        LocalStorage.set(CreateContainer.LocalStorageId, this.state);
         this.setState({
             step,
         });
@@ -189,7 +193,7 @@ export class CreateContainer extends React.Component<
         });
     };
 
-    onClickStepLink = index => e => {
+    onClickStepLink = (index) => (e) => {
         e.preventDefault();
         this.setStep(index);
     };
@@ -209,6 +213,7 @@ export class CreateContainer extends React.Component<
                 onChangeIdentityText={this.onChangeIdentityText}
                 onChangeIdentitySelected={this.onChangeIdentitySelected}
                 onChangeOwnerBio={this.onChangeOwnerBio}
+                onCreateListing={this.onCreateListing}
             />
         );
     }

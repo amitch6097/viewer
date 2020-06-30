@@ -2,6 +2,20 @@ import { EIdentify } from '../typings/types';
 
 export const strings = {
     create: {
+        info: {
+            labels: {
+                website: 'Website',
+                address: 'Address',
+                email: 'Business Email',
+                category: 'Category',
+                phone: 'Business Phone',
+            },
+            errors: {
+                category: 'Please provide a category',
+                phone: 'Please provide a phone number',
+                email: 'Please provide a email',
+            },
+        },
         identify: {
             [EIdentify.MINORITY]: {
                 label: 'This is a Minority Owned Business',
@@ -17,5 +31,57 @@ export const strings = {
         website: 'Website',
         phone: 'Phone',
         email: 'Email',
+    },
+
+    buttons: {
+        continue: 'Continue',
+        createListing: 'Create Listing',
+    },
+
+    labels: {
+        website: 'Website',
+        address: 'Address',
+        email: 'Business Email',
+    },
+
+    categories: {
+        legal: 'Legal Services',
+        lodging: 'Lodging & Travel',
+        marketing: 'Marketing & Advertising',
+        news: 'News & Media',
+        pets: 'Pet Services',
+        realestate: 'Real Estate',
+        restaurant: 'Restaurants & Nightlife',
+        shopping: 'Shopping & Retail',
+        sports: 'Sports & Recreation',
+        transportation: 'Transportation',
+        utilities: 'Utilities',
+        events: 'Wedding, Events & Meetings',
+        accounting: 'Accounting & Tax Services',
+        arts: 'Arts, Culture & Entertainment',
+        auto: 'Auto Sales & Service',
+        banking: 'Banking & Finance',
+        business: 'Business Services',
+        community: 'Community Organizations',
+        dentists: 'Dentists & Orthodontists',
+        education: 'Education',
+        wellness: 'Health & Wellness',
+        health: 'Health Care',
+        home: 'Home Improvement',
+        insurance: 'Insurance',
+        web: 'Internet & Web Services',
+    },
+
+    login: {
+        signIn: 'Sign In',
+        forgotPassword: 'Forgot Password?',
+        email: 'Email Address',
+        password: 'Password',
+        dontHaveAccount: "Don't have an account? Sign Up",
+    },
+
+    signUp: {
+        signUp: 'Sign Up',
+        signIn: 'Already have an account? Sign in',
     },
 };

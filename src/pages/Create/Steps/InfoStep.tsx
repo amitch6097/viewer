@@ -2,30 +2,16 @@ import React from 'react';
 import './InfoStep.less';
 
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 
+import { strings } from '../../../strings';
 import { onChangeValue } from '../../../helpers';
-
-import ExploreIcon from '@material-ui/icons/Explore';
-import RoomIcon from '@material-ui/icons/Room';
-import CallIcon from '@material-ui/icons/Call';
-
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-
 import { EmailMask, PhoneMask } from '../../../components/Masks';
+
+import { Select } from '../../../components/Select';
+import { getCategories } from '../../../helpers';
 
 export interface IInfoStepProps {
     category: string;
@@ -68,15 +54,15 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
 
         if (!this.props.category) {
             hasError = true;
-            nextErrors.categoryError = 'Please provide a category';
+            nextErrors.categoryError = strings.create.info.errors.category;
         }
         if (!this.props.phone) {
             hasError = true;
-            nextErrors.phoneError = 'Please provide a phone number';
+            nextErrors.phoneError = strings.create.info.errors.phone;
         }
         if (!this.props.email) {
             hasError = true;
-            nextErrors.emailError = 'Please provide a email';
+            nextErrors.emailError = strings.create.info.errors.email;
         }
 
         this.setState({
@@ -97,18 +83,13 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                     justify="flex-start"
                     alignItems="flex-start"
                 >
-                    <TextField
-                        classes={{
-                            root: 'bb-info-step__text-field',
-                        }}
-                        required
-                        id="category"
-                        key="category"
-                        label="Category"
-                        variant="outlined"
-                        error={Boolean(this.state.categoryError)}
+                    <Select
+                        error={this.state.categoryError}
+                        className={'bb-info-step__text-field'}
                         value={this.props.category}
-                        onChange={onChangeValue(this.props.onChangeCategory)}
+                        label={strings.create.info.labels.category}
+                        onChange={this.props.onChangeCategory}
+                        options={getCategories()}
                     />
                     <OutlinedInput
                         classes={{
@@ -119,7 +100,7 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                         name="phone"
                         error={Boolean(this.state.phoneError)}
                         // helperText={this.state.phoneError}
-                        label="Business Phone&nbsp;*"
+                        label={strings.create.info.labels.phone + '&nbsp;*'}
                         inputComponent={PhoneMask}
                     />
                     <OutlinedInput
@@ -131,7 +112,7 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                         value={this.props.email}
                         onChange={onChangeValue(this.props.onChangeEmail)}
                         name="email"
-                        label="Business Email&nbsp;*"
+                        label={strings.create.info.labels.email + '&nbsp;*'}
                         inputComponent={EmailMask}
                     />
                     <TextField
@@ -140,7 +121,7 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                         }}
                         key="address"
                         id="address"
-                        label="Address"
+                        label={strings.create.info.labels.address}
                         variant="outlined"
                         value={this.props.address}
                         onChange={onChangeValue(this.props.onChangeAddress)}
@@ -151,7 +132,7 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                         }}
                         key="website"
                         id="website"
-                        label="Website"
+                        label={strings.create.info.labels.website}
                         variant="outlined"
                         value={this.props.website}
                         onChange={onChangeValue(this.props.onChangeWebsite)}
@@ -162,7 +143,7 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                         variant="contained"
                         color="primary"
                     >
-                        Continue
+                        {strings.buttons.continue}
                     </Button>
                 </Grid>
             </div>

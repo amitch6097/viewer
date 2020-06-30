@@ -24,6 +24,7 @@ aria-label="vertical outlined primary button group"
 export function ActionButton(props: IActionButtonProps) {
     return (
         <Button
+            {...props}
             classes={{
                 root: 'bb-action-button',
                 label: 'bb-action-button__label',

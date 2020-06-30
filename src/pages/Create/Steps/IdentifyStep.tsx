@@ -1,24 +1,14 @@
 import React from 'react';
 import './IdentifyStep.less';
 
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 
 import { ExpandCheckbox } from '../../../components/ExpandCheckbox';
 import { EIdentify, IIdentify } from '../../../../typings/types';
 import { onChangeValue } from '../../../helpers';
-
 import { strings } from '../../../strings';
 
 export interface IIdentifyStepProps {
@@ -130,7 +120,7 @@ export class IdentifyStep extends React.Component<
                         variant="contained"
                         color="primary"
                     >
-                        Continue
+                        {strings.buttons.continue}
                     </Button>
                 </Grid>
             </div>

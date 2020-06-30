@@ -12,3 +12,11 @@ export function goToBusinessLookup(historyProp) {
 export function gotToHome(historyProp) {
     historyProp.push('/');
 }
+
+export function gotToLogin(historyProp) {
+    historyProp.push('/login');
+}
+
+export function gotToSignUp(historyProp) {
+    historyProp.push('/login');
+}
