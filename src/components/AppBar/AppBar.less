@@ -1,16 +1,22 @@
 .bb-app-bar {
- .bb-app-bar__search {
-    margin-left: 0;
-    position: relative;
+    .bb-app-bar__search {
+        margin-left: 0;
+        position: relative;
 
-     .bb-app-bar__search-icon {
-        height: 100%;
-        position: absolute;
-        pointer-events: none;
+        .bb-app-bar__search-icon {
+            height: 100%;
+            position: absolute;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .bb-app-bar__controls {
+        flex: 1;
         display: flex;
-        align-items: center;
-        justify-content: center;
-
-     }
- }   
+        flex-direction: row;
+        justify-content: flex-end;
+    }
 }

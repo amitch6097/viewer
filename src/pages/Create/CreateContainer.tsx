@@ -14,6 +14,7 @@ import { Business } from '../../lib/Business';
 export interface ICreateContainerState {
     step: number;
     business: IBusinessListing;
+    exists: boolean;
 }
 
 export class CreateContainer extends React.Component<
@@ -29,6 +30,7 @@ export class CreateContainer extends React.Component<
         ) as ICreateContainerState;
         this.state = localStorageState || {
             step: 0,
+            exists: undefined,
             business: {
                 guid: generateGUID(),
                 about: '',
@@ -60,6 +62,12 @@ export class CreateContainer extends React.Component<
             },
         };
     }
+
+    onSetExists = (exists: boolean) => {
+        this.setState({
+            exists,
+        });
+    };
 
     onCreateListing = async () => {
         const response = await Business.createBusiness({
@@ -214,6 +222,8 @@ export class CreateContainer extends React.Component<
                 onChangeIdentitySelected={this.onChangeIdentitySelected}
                 onChangeOwnerBio={this.onChangeOwnerBio}
                 onCreateListing={this.onCreateListing}
+                onSetExists={this.onSetExists}
+                exists={this.state.exists}
             />
         );
     }

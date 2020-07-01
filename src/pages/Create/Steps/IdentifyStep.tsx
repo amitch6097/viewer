@@ -26,10 +26,6 @@ export class IdentifyStep extends React.Component<
     IIdentifyStepProps,
     IIdentifyStepState
 > {
-    static Label(): string {
-        return 'Identify your Business';
-    }
-
     state: IIdentifyStepState = {
         errors: {} as Record<EIdentify, string>,
     };
@@ -38,17 +34,14 @@ export class IdentifyStep extends React.Component<
         let hasErrors = false;
         const errors: Record<EIdentify, string> = Object.keys(
             this.props.identify
-        ).reduce(
-            (tempErrors, key: EIdentify) => {
-                const identity = this.props.identify[key];
-                if (identity.selected && !identity.text) {
-                    hasErrors = true;
-                    tempErrors[key] = 'Please provide more information.';
-                }
-                return tempErrors;
-            },
-            {} as Record<EIdentify, string>
-        );
+        ).reduce((tempErrors, key: EIdentify) => {
+            const identity = this.props.identify[key];
+            if (identity.selected && !identity.text) {
+                hasErrors = true;
+                tempErrors[key] = 'Please provide more information.';
+            }
+            return tempErrors;
+        }, {} as Record<EIdentify, string>);
 
         this.setState({
             errors,
@@ -100,7 +93,7 @@ export class IdentifyStep extends React.Component<
                                         style={{ width: '100%' }}
                                         aria-label="empty textarea"
                                         rowsMin={3}
-                                        onChange={onChangeValue(v =>
+                                        onChange={onChangeValue((v) =>
                                             this.props.onChangeIdentityText(
                                                 key,
                                                 v

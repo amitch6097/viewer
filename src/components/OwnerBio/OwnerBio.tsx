@@ -11,10 +11,11 @@ import { onChangeValue } from '../../helpers';
 export interface IOwnerBioProps {
     onChangeOwnerBio: (bio: string) => void;
     owner: IOwner;
+    isEditable?: boolean;
 }
 
 export function OwnerBio(props: IOwnerBioProps) {
-    const { owner } = props;
+    const { owner, isEditable } = props;
     return (
         <div className="bb-owner-bio">
             <div className="bb-owner-bio__meta">
@@ -44,13 +45,17 @@ export function OwnerBio(props: IOwnerBioProps) {
                 </div>
             </div>
             <Typography variant="caption">About</Typography>
-            <TextareaAutosize
-                style={{ width: '100%' }}
-                aria-label="about this owner"
-                rowsMin={3}
-                onChange={onChangeValue(props.onChangeOwnerBio)}
-                value={owner.bio}
-            />
+            {isEditable ? (
+                <TextareaAutosize
+                    style={{ width: '100%' }}
+                    aria-label="about this owner"
+                    rowsMin={3}
+                    onChange={onChangeValue(props.onChangeOwnerBio)}
+                    value={owner.bio}
+                />
+            ) : (
+                <Typography variant="body1">{owner.bio}</Typography>
+            )}
         </div>
     );
 }

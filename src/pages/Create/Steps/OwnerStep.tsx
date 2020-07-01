@@ -30,10 +30,6 @@ export class OwnerStep extends React.Component<
     IOwnerStepProps,
     IOwnerStepState
 > {
-    static Label() {
-        return 'About the Owners';
-    }
-
     state = {
         errors: [
             {

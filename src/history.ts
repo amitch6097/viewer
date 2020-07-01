@@ -9,7 +9,7 @@ export function goToBusinessLookup(historyProp) {
     historyProp.push('/business-look-up');
 }
 
-export function gotToHome(historyProp) {
+export function goToHome(historyProp) {
     historyProp.push('/');
 }
 

@@ -34,10 +34,6 @@ export interface IInfoStepState {
 }
 
 export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
-    static Label() {
-        return 'Basic Information';
-    }
-
     state: IInfoStepState = {
         categoryError: '',
         phoneError: '',

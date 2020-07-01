@@ -1,6 +1,11 @@
 import { FBStorage } from '../services/FBStorage';
 import { Functions } from '../services/Functions';
-import { IBusinessListing, IOwner } from '../../typings/types';
+import {
+    IBusinessListing,
+    IOwner,
+    IBusinessDocument,
+} from '../../typings/types';
+import { IGetBusinessResponse } from '../../typings/functions';
 import { localURLtoBlob, generateGUID } from '../helpers';
 
 export class Business {
@@ -33,5 +38,16 @@ export class Business {
                 owners,
             },
         });
+    }
+
+    static async getBusiness({
+        id,
+    }: {
+        id: string;
+    }): Promise<IBusinessDocument> {
+        const response: IGetBusinessResponse = await Functions.getBusiness({
+            id,
+        });
+        return response.result;
     }
 }

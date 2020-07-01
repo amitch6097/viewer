@@ -5,12 +5,12 @@ import AppBar_M from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
 
 import { Auth } from '../../services/Auth';
 import { useUser } from '../../hooks/useUser';
-import { goToCreate } from '../../history';
+import { goToCreate, goToHome } from '../../history';
+
+import { strings } from '../../strings';
 
 export interface IAppBarProps {
     onClickAddBusiness?: () => void;
@@ -23,18 +23,46 @@ export function AppBar(props: IAppBarProps) {
         <div className="bb-app-bar">
             <AppBar_M position="static">
                 <Toolbar>
-                    <Typography variant="h6">Common Good</Typography>
                     <Button
-                        onClick={user ? () => goToCreate(props.history) : Auth.signInWithGoogle}
                         color="inherit"
+                        onClick={() => goToHome(props.history)}
                     >
-                        Add A Business
+                        <Typography variant="h6">Common Good</Typography>
                     </Button>
-                    {!user && (
-                        <Button color="inherit" onClick={Auth.signInWithGoogle}>
-                            Login
-                        </Button>
-                    )}
+                    <div className="bb-app-bar__controls">
+                        {user ? (
+                            <>
+                                <Button
+                                    onClick={
+                                        user
+                                            ? () => goToCreate(props.history)
+                                            : Auth.signInWithGoogle
+                                    }
+                                    color="inherit"
+                                >
+                                    {strings.appBar.addBusiness}
+                                </Button>
+                                <Button color="inherit" onClick={Auth.signOut}>
+                                    {strings.appBar.logout}
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    color="inherit"
+                                    onClick={Auth.signInWithGoogle}
+                                >
+                                    {strings.appBar.signUp}
+                                </Button>
+                                <Button
+                                    color="inherit"
+                                    onClick={Auth.signInWithGoogle}
+                                >
+                                    {strings.appBar.login}
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </Toolbar>
             </AppBar_M>
         </div>

@@ -15,4 +15,5 @@ export interface IGetBusinessProps {
 
 export interface IGetBusinessResponse {
     result: IBusinessDocument;
+    fromCache?: boolean;
 }

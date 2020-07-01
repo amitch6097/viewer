@@ -2,6 +2,12 @@ import { EIdentify } from '../typings/types';
 
 export const strings = {
     create: {
+        stepLabels: {
+            info: 'Basic Information',
+            identify: 'Identify your Business',
+            details: 'Fill in the Details',
+            owner: 'About the Owners',
+        },
         info: {
             labels: {
                 website: 'Website',
@@ -70,6 +76,13 @@ export const strings = {
         home: 'Home Improvement',
         insurance: 'Insurance',
         web: 'Internet & Web Services',
+    },
+
+    appBar: {
+        login: 'Login',
+        logout: 'Logout',
+        addBusiness: 'Add A Business',
+        signUp: 'Sign Up',
     },
 
     login: {
