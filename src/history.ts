@@ -9,6 +9,10 @@ export function goToBusinessLookup(historyProp) {
     historyProp.push('/business-look-up');
 }
 
+export function goToBusiness(historyProp, id) {
+    historyProp.push('/business/' + id);
+}
+
 export function goToHome(historyProp) {
     historyProp.push('/');
 }

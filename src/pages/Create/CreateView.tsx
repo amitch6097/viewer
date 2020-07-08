@@ -27,6 +27,7 @@ export interface ICreateViewProps {
     step: number;
     business: IBusinessListing;
     exists: boolean;
+    creating: boolean;
     onClickStepLink: (index: number) => void;
     onChangeBusinessValue: (key: string) => (value: string) => void;
     setStep: (index: number) => void;
@@ -41,6 +42,7 @@ export interface ICreateViewProps {
     onChangeOwnerBio: (index: number) => (bio: string) => void;
     onCreateListing: () => void;
     onSetExists: (exists: boolean) => void;
+    onStartCreate: (businessName: string) => void;
 }
 
 export class CreateView extends React.Component<ICreateViewProps> {
@@ -63,8 +65,12 @@ export class CreateView extends React.Component<ICreateViewProps> {
         return (
             <div className="bb-pages bb-pages-create">
                 <div className="bb-pages-create__content">
-                    {exists === undefined && <CheckExistsStep />}
-                    {exists === true && (
+                    {exists === undefined && (
+                        <CheckExistsStep
+                            onStartCreate={this.props.onStartCreate}
+                        />
+                    )}
+                    {exists === false && (
                         <>
                             <Stepper activeStep={step}>
                                 {[
@@ -139,6 +145,7 @@ export class CreateView extends React.Component<ICreateViewProps> {
                             )}
                             {step === 3 && (
                                 <DetailsStep
+                                    creating={this.props.creating}
                                     business={this.props.business}
                                     onChangeAbout={this.props.onChangeBusinessValue(
                                         'about'

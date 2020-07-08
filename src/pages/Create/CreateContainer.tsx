@@ -11,14 +11,18 @@ import { CreateView } from './CreateView';
 import { generateGUID } from '../../helpers';
 import { Business } from '../../lib/Business';
 
+export interface ICreateContainerProps {
+    goToBusiness: (id: string) => void;
+}
 export interface ICreateContainerState {
     step: number;
     business: IBusinessListing;
     exists: boolean;
+    creating: boolean;
 }
 
 export class CreateContainer extends React.Component<
-    {},
+    ICreateContainerProps,
     ICreateContainerState
 > {
     static LocalStorageId = 'bb-create-state';
@@ -31,6 +35,7 @@ export class CreateContainer extends React.Component<
         this.state = localStorageState || {
             step: 0,
             exists: undefined,
+            creating: false,
             business: {
                 guid: generateGUID(),
                 about: '',
@@ -70,9 +75,14 @@ export class CreateContainer extends React.Component<
     };
 
     onCreateListing = async () => {
+        this.setState({
+            creating: true,
+        });
         const response = await Business.createBusiness({
             business: this.state.business,
         });
+        LocalStorage.clear(CreateContainer.LocalStorageId);
+        this.props.goToBusiness(response.id);
         console.log(response);
     };
 
@@ -206,10 +216,21 @@ export class CreateContainer extends React.Component<
         this.setStep(index);
     };
 
+    onStartCreate = (businessName: string) => {
+        this.setState({
+            exists: false,
+            business: {
+                ...this.state.business,
+                name: businessName,
+            },
+        });
+    };
+
     render() {
         return (
             <CreateView
                 step={this.state.step}
+                creating={this.state.creating}
                 business={this.state.business}
                 onClickStepLink={this.onClickStepLink}
                 onChangeBusinessValue={this.onChangeBusinessValue}
@@ -224,6 +245,7 @@ export class CreateContainer extends React.Component<
                 onCreateListing={this.onCreateListing}
                 onSetExists={this.onSetExists}
                 exists={this.state.exists}
+                onStartCreate={this.onStartCreate}
             />
         );
     }

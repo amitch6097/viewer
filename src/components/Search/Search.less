@@ -1,0 +1,59 @@
+.bb-search {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    * {
+        font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    }
+
+    .bb-search__button {
+        button {
+            height: 100%;
+            border-radius: 0px 10px 10px 0px;
+            .bb-search__button-icon-button-search-icon {
+                margin-right: 0px;
+            }
+        }
+    }
+
+    .bb-search__inputs {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        height: 40px;
+        padding: 10px;
+
+        input {
+            height: 40px;
+        }
+
+        .bb-search__inputs-find,
+        .bb-search__inputs-location {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 50%;
+            * {
+                border: none;
+            }
+            label {
+                font-weight: bolder;
+            }
+            .bb-business-autocomplete,
+            .bb-location-autocomplete {
+                flex: 1;
+            }
+        }
+        .bb-search__inputs-find {
+            border-right: 1px solid lightgrey;
+            input {
+                padding: 0px;
+            }
+        }
+        .bb-search__inputs-location {
+            padding-left: 10px;
+        }
+    }
+}

@@ -1,12 +1,13 @@
 import React from 'react';
 import algoliasearch from 'algoliasearch/lite';
 import { goToCreate } from '../../history';
-
 import './Home.less';
 
 import { AppBar } from '../../components/AppBar';
 import { ListItem } from '../../components/ListItem';
 import { Filter } from '../../components/Filter';
+import { SearchInput } from '../../components/SearchInput';
+import { Search } from '../../components/Search';
 
 import {
     InstantSearch,
@@ -28,7 +29,7 @@ export function Home(props: any) {
     const data = new Array(5).fill(undefined);
     return (
         <div className="bb-pages bb-pages-home">
-            <AppBar onClickAddBusiness={() => goToCreate(props.history)} />
+            <Search />
             <InstantSearch indexName="common-good" searchClient={searchClient}>
                 {/* <div className="left-panel">
                     <ClearRefinements />

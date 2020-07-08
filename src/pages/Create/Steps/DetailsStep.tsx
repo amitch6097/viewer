@@ -1,5 +1,6 @@
 import React from 'react';
 import './DetailsStep.less';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Button from '@material-ui/core/Button';
@@ -16,6 +17,7 @@ import { Listing } from '../../../components/Listing';
 
 export interface IDetailsStepProps {
     business: IBusinessListing;
+    creating: boolean;
     onChangeAbout: (about: string) => void;
     onChangeOwnerBio: (index: number) => (bio: string) => void;
     onNextStep: () => void;
@@ -50,8 +52,13 @@ export class DetailsStep extends React.Component<IDetailsStepProps> {
                         variant="contained"
                         color="primary"
                     >
-                        {strings.buttons.createListing}
+                        {this.props.creating ? (
+                            <CircularProgress />
+                        ) : (
+                            strings.buttons.createListing
+                        )}
                     </Button>
+                    {this.props.creating && <CircularProgress />}
                 </Grid>
             </div>
         );

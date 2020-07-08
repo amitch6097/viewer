@@ -96,7 +96,7 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                         name="phone"
                         error={Boolean(this.state.phoneError)}
                         // helperText={this.state.phoneError}
-                        label={strings.create.info.labels.phone + '&nbsp;*'}
+                        label={strings.create.info.labels.phone + ' &nbsp;*'}
                         inputComponent={PhoneMask}
                     />
                     <OutlinedInput
@@ -108,7 +108,7 @@ export class InfoStep extends React.Component<IInfoStepProps, IInfoStepState> {
                         value={this.props.email}
                         onChange={onChangeValue(this.props.onChangeEmail)}
                         name="email"
-                        label={strings.create.info.labels.email + '&nbsp;*'}
+                        label={strings.create.info.labels.email + ' &nbsp;*'}
                         inputComponent={EmailMask}
                     />
                     <TextField

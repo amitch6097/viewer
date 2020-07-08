@@ -15,9 +15,23 @@ import { OwnerBio } from '../../../components/OwnerBio';
 import { Listing } from '../../../components/Listing';
 import { SearchInput } from '../../../components/SearchInput';
 
-export interface IDetailsStepProps {}
+export interface IDetailsStepProps {
+    onStartCreate: (businessName: string) => void;
+}
 
 export class CheckExistsStep extends React.Component<IDetailsStepProps> {
+    searchRef: React.RefObject<unknown>;
+
+    constructor(props) {
+        super(props);
+        this.searchRef = React.createRef();
+    }
+
+    onContinueClicked = () => {
+        //@ts-ignore
+        this.props.onStartCreate(this.searchRef.current.value);
+    };
+
     render() {
         return (
             <div className="bb-check-exists-step">
@@ -27,13 +41,14 @@ export class CheckExistsStep extends React.Component<IDetailsStepProps> {
                     justify="flex-start"
                     alignItems="flex-start"
                 >
-                    <SearchInput />
+                    <SearchInput searchRef={this.searchRef} />
                     <Button
                         classes={{
                             root: 'bb-check-exists-step__continue continue',
                         }}
                         variant="contained"
                         color="primary"
+                        onClick={this.onContinueClicked}
                     >
                         {strings.buttons.continue}
                     </Button>
