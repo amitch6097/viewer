@@ -6,6 +6,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select_M from '@material-ui/core/Select';
 import { onChangeValue } from '../../helpers';
+import { strings } from '../../strings';
 
 export interface ISelectProps {
     error?: string;
@@ -17,6 +18,7 @@ export interface ISelectProps {
         id: string;
         label: string;
     }>;
+    withNoSelection?: boolean;
 }
 
 export function Select(props: ISelectProps) {
@@ -34,9 +36,14 @@ export function Select(props: ISelectProps) {
                 onChange={onChangeValue(props.onChange)}
                 // inputProps={{ 'aria-label': 'Without label' }}
             >
+                {props.withNoSelection && (
+                    <MenuItem key={'_'} value="">
+                        <em>None</em>
+                    </MenuItem>
+                )}
                 {props.options.map((option) => {
                     return (
-                        <MenuItem key={option.id} value={option.id}>
+                        <MenuItem key={option.id || '_'} value={option.id}>
                             {option.label}
                         </MenuItem>
                     );

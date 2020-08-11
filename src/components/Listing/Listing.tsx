@@ -69,7 +69,7 @@ export function Listing({
                                     <ActionButton
                                         label={strings.actions[key]}
                                         icon={getActionIcon(key)}
-                                        subLabel={business[key]}
+                                        subLabel={business[key].value}
                                     />
                                 )
                             );

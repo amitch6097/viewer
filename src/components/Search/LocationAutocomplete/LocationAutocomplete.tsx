@@ -5,6 +5,7 @@ import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch } from 'react-instantsearch-dom';
 import { createConnector } from 'react-instantsearch-dom';
 import { LocationAutocompleteView } from './LocationAutocompleteView';
+import { IAlgoliaLocationSearchEvent } from '../../../../typings/algolia';
 
 const searchClient = algoliasearch(
     'MQBBVGG94P',
@@ -19,6 +20,7 @@ const connector = createConnector({
     },
 
     refine(props, searchState, nextValue) {
+        console.log(searchState);
         return {
             ...searchState,
             aroundLatLng: nextValue,
@@ -31,13 +33,18 @@ const LocationAutocompleteViewConnected = connector(LocationAutocompleteView);
 
 export interface ILocationAutocompleteProps {
     onChange?: (value: string) => void;
-    onClickSuggestion?: (event: any) => void;
+    onClickSuggestion?: (event: IAlgoliaLocationSearchEvent) => void;
     onClear?: () => void;
+    useTextField?: boolean;
+    label?: string;
+    placeholder?: string;
+    className?: string;
+    value?: string;
 }
 
 export function LocationAutocomplete(props: ILocationAutocompleteProps) {
     return (
-        <div className="bb-location-autocomplete">
+        <div className={`bb-location-autocomplete ${props.className || ''}`}>
             <InstantSearch indexName="common-good" searchClient={searchClient}>
                 <LocationAutocompleteViewConnected {...props} />
             </InstantSearch>

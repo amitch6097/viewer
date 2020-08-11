@@ -32,6 +32,15 @@ export const strings = {
         },
     },
 
+    filters: {
+        [EIdentify.MINORITY]: {
+            label: 'Minority Owned Business',
+        },
+        [EIdentify.FEMALE]: {
+            label: 'Female Owned Business',
+        },
+    },
+
     actions: {
         address: 'Get Directions',
         website: 'Website',
@@ -45,6 +54,7 @@ export const strings = {
     },
 
     labels: {
+        noSelection: 'No Selection',
         website: 'Website',
         address: 'Address',
         email: 'Business Email',

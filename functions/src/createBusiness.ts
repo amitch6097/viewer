@@ -2,7 +2,11 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import algoliasearch from 'algoliasearch';
 
-import { IOwner, IBusinessDocument } from '../../typings/types';
+import {
+    IBusinessDocument,
+    EIdentify,
+    BusinessTagDescriptors,
+} from '../../typings/types';
 
 import {
     ICreateBusinessProps,
@@ -42,21 +46,55 @@ export const createBusiness = functions.https.onCall(
                 `Could not create business without business name. ${data}`
             );
         try {
-            const ownersIds = await Promise.all(
-                data.business.owners.map((owner) => {
-                    return createOwner(owner);
-                })
-            );
-            const writeResult = await firestore.collection('business').add({
+            let businessDocument: IBusinessDocument = {
                 data: {
                     ...data.business,
-                    owners: ownersIds,
                 },
                 meta: {
                     createdAt: Number(new Date()),
-                    createdBy: null,
+                    createdBy: context?.auth?.uid ?? undefined,
                 },
-            });
+            };
+
+            if (data?.business?.address?.latlng) {
+                businessDocument = {
+                    ...businessDocument,
+                    _geoloc: {
+                        lat: data.business.address.latlng.lat,
+                        lng: data.business.address.latlng.lng,
+                    },
+                };
+            }
+
+            let tags = Object.keys(data.business.identify)
+                .filter((key) => {
+                    // only the selected identities
+                    return data.business.identify[key as EIdentify].selected;
+                })
+                .map((key) => {
+                    return `${BusinessTagDescriptors.IDENTITY}:${key}`;
+                });
+
+            if (data.business.category) {
+                tags.push(
+                    `${BusinessTagDescriptors.CATEGORY}:${data.business.category}`
+                );
+            }
+
+            if (data.business.hashtags) {
+                data.business.hashtags.forEach((tag) => {
+                    tags.push(`${BusinessTagDescriptors.HASHTAG}:${tag}`);
+                });
+            }
+
+            businessDocument = {
+                ...businessDocument,
+                _tags: tags,
+            };
+
+            const writeResult = await firestore
+                .collection('business')
+                .add(businessDocument);
             const result = await writeResult.get();
             return {
                 id: writeResult.id,
@@ -90,19 +128,19 @@ export const onBusinessCreated = functions.firestore
         }
     });
 
-async function createOwner(owner: IOwner): Promise<{ id: string }> {
-    if (!owner || typeof owner !== 'object') {
-        throw new functions.https.HttpsError(
-            'failed-precondition',
-            'The function must be called with a data object.'
-        );
-    }
-    const result = await firestore.collection('owner').add({
-        name: owner.name,
-        bio: owner.bio,
-        position: owner.position,
-        imageId: owner.imageId,
-    });
+// async function createOwner(owner: IOwner): Promise<{ id: string }> {
+//     if (!owner || typeof owner !== 'object') {
+//         throw new functions.https.HttpsError(
+//             'failed-precondition',
+//             'The function must be called with a data object.'
+//         );
+//     }
+//     const result = await firestore.collection('owner').add({
+//         name: owner.name,
+//         bio: owner.bio,
+//         position: owner.position,
+//         imageId: owner.imageId,
+//     });
 
-    return { id: result.id };
-}
+//     return { id: result.id };
+// }

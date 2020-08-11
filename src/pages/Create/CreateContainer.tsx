@@ -1,10 +1,7 @@
 import React from 'react';
-import {
-    EIdentify,
-    IIdentify,
-    IOwner,
-    IBusinessListing,
-} from '../../../typings/types';
+import { EIdentify, IIdentify, IOwner, IBusinessListing } from 'typings/types';
+
+import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
 
 import { LocalStorage } from '../../services/LocalStorage';
 import { CreateView } from './CreateView';
@@ -16,7 +13,7 @@ export interface ICreateContainerProps {
 }
 export interface ICreateContainerState {
     step: number;
-    business: IBusinessListing;
+    business: Business;
     exists: boolean;
     creating: boolean;
 }
@@ -29,43 +26,21 @@ export class CreateContainer extends React.Component<
 
     constructor(props) {
         super(props);
-        const localStorageState = LocalStorage.get(
-            CreateContainer.LocalStorageId
-        ) as ICreateContainerState;
-        this.state = localStorageState || {
+        // const localStorageState = LocalStorage.get(
+        //     CreateContainer.LocalStorageId
+        // ) as ICreateContainerState;
+        this.state =  {
             step: 0,
             exists: undefined,
             creating: false,
-            business: {
-                guid: generateGUID(),
-                about: '',
-                name: '',
-                category: '',
-                phone: '',
-                email: '',
-                address: '',
-                website: '',
-                identify: {
-                    [EIdentify.MINORITY]: {
-                        selected: false,
-                        text: '',
-                    },
-                    [EIdentify.FEMALE]: {
-                        selected: false,
-                        text: '',
-                    },
-                },
-                owners: [
-                    {
-                        name: '',
-                        bio: '',
-                        position: '',
-                        image: undefined,
-                        imageId: undefined,
-                    },
-                ],
-            },
+            business: new Business()
         };
+    }
+
+    onChangeBusiness = (business: Business) => {
+        this.setState({
+            business
+        });
     }
 
     onSetExists = (exists: boolean) => {
@@ -78,136 +53,72 @@ export class CreateContainer extends React.Component<
         this.setState({
             creating: true,
         });
-        const response = await Business.createBusiness({
-            business: this.state.business,
+        const response = await this.state.business.onCreateListing();
+        this.setState({
+            creating: false,
         });
-        LocalStorage.clear(CreateContainer.LocalStorageId);
+        // LocalStorage.clear(CreateContainer.LocalStorageId);
         this.props.goToBusiness(response.id);
         console.log(response);
     };
 
     addOwner = () => {
-        const { owners } = this.state.business;
-
         this.setState({
-            business: {
-                ...this.state.business,
-                owners: [
-                    ...owners,
-                    {
-                        name: '',
-                        bio: '',
-                        position: '',
-                        image: undefined,
-                        imageId: undefined,
-                    },
-                ],
-            },
+            business: this.state.business.onAddOwner()
         });
     };
 
     removeOwner = (index) => () => {
-        const { owners } = this.state.business;
-        const ownersCopy = [...owners];
-        ownersCopy.splice(index, 1);
-
         this.setState({
-            business: {
-                ...this.state.business,
-                owners: ownersCopy,
-            },
+            business: this.state.business.onRemoveOwner(index)
         });
     };
 
-    onChangeOwnerValue = (index: number) => (key: string) => (
+    onChangeOwnerValue = (index: number) => (key: keyof IOwner) => (
         value: string
     ) => {
-        const { owners } = this.state.business;
-        owners[index] = {
-            ...owners[index],
-            [key]: value,
-        };
         this.setState({
-            business: {
-                ...this.state.business,
-                owners: [...owners],
-            },
+            business: this.state.business.onChangeOwnerValue(index, key, value)
         });
     };
 
     onAddOwnerImage = (index) => (e) => {
-        const { owners } = this.state.business;
-
         const file = e.target.files[0];
-        console.log(file);
         const url = URL.createObjectURL(file);
-        console.log(url);
-        owners[index] = {
-            ...owners[index],
-            image: url,
-        };
         this.setState({
-            business: {
-                ...this.state.business,
-                owners: [...owners],
-            },
+            business: this.state.business.onAddOwnerImage(index, url)
         });
     };
 
     setStep = (step: number) => {
-        LocalStorage.set(CreateContainer.LocalStorageId, this.state);
+        // LocalStorage.set(CreateContainer.LocalStorageId, this.state);
         this.setState({
             step,
         });
     };
 
-    onChangeBusinessValue = (key: string) => (value: string) => {
+    onChangeBusinessValue = (key: keyof IBusinessListing) => (value: string) => {
         this.setState({
-            business: {
-                ...this.state.business,
-                [key]: value,
-            },
+            business: this.state.business.onChangeBusinessValue(key, value)
         });
     };
 
     onChangeIdentitySelected = (identity: EIdentify, selected: boolean) => {
         this.setState({
-            business: {
-                ...this.state.business,
-                identify: {
-                    ...this.state.business.identify,
-                    [identity]: {
-                        ...this.state.business.identify[identity],
-                        selected,
-                    },
-                },
-            },
+            business: this.state.business.onChangeIdentitySelected(identity, selected)
         });
     };
 
     onChangeIdentityText = (identity: EIdentify, text: string) => {
         this.setState({
-            business: {
-                ...this.state.business,
-                identify: {
-                    ...this.state.business.identify,
-                    [identity]: {
-                        ...this.state.business.identify[identity],
-                        text,
-                    },
-                },
-            },
+            business: this.state.business.onChangeIdentityText(identity, text)
         });
     };
 
     onChangeOwnerBio = (index: number) => (bio: string) => {
-        const { owners } = this.state.business;
-        owners[index].bio = bio;
         this.setState({
-            business: {
-                ...this.state.business,
-                owners: [...owners],
-            },
+            business: this.state.business.onChangeOwnerValue(index, 'bio', bio)
+
         });
     };
 
@@ -219,10 +130,15 @@ export class CreateContainer extends React.Component<
     onStartCreate = (businessName: string) => {
         this.setState({
             exists: false,
-            business: {
-                ...this.state.business,
-                name: businessName,
-            },
+            business: this.state.business.onChangeBusinessValue('name', businessName)
+        });
+    };
+
+    onChangeAddress = (event: IAlgoliaLocationSearchEvent) => {
+        const address = event.suggestion;
+        this.setState({
+            exists: false,
+            business: this.state.business.onChangeBusinessValue('address', address)
         });
     };
 
@@ -231,7 +147,7 @@ export class CreateContainer extends React.Component<
             <CreateView
                 step={this.state.step}
                 creating={this.state.creating}
-                business={this.state.business}
+                business={this.state.business.getData()}
                 onClickStepLink={this.onClickStepLink}
                 onChangeBusinessValue={this.onChangeBusinessValue}
                 setStep={this.setStep}
@@ -246,6 +162,9 @@ export class CreateContainer extends React.Component<
                 onSetExists={this.onSetExists}
                 exists={this.state.exists}
                 onStartCreate={this.onStartCreate}
+                onChangeAddress={this.onChangeAddress}
+                businessClass={this.state.business}
+                onChangeBusiness={this.onChangeBusiness}
             />
         );
     }

@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import places from 'places.js';
 import TextField from '@material-ui/core/TextField';
+import { IAlgoliaLocationSearchEvent } from '../../../../typings/algolia';
 
 export interface ILocationAutocompleteViewProps {
     refine: (props: any, searchState?: any, nextValue?: any) => any;
     defaultRefinement: any;
     onChange?: (value: string) => void;
-    onClickSuggestion?: (event: any) => void;
+    onClickSuggestion?: (event: IAlgoliaLocationSearchEvent) => void;
     onClear?: () => void;
+    useTextField?: boolean;
+    label?: string;
+    placeholder?: string;
+
+    value?:string;
 }
 
 export class LocationAutocompleteView extends Component<
     ILocationAutocompleteViewProps
 > {
     element: any;
+    timeout: number;
 
     createRef = (c) => (this.element = c);
 
@@ -25,7 +32,7 @@ export class LocationAutocompleteView extends Component<
             type: 'address',
         });
 
-        autocomplete.on('change', (event) => {
+        autocomplete.on('change', (event: IAlgoliaLocationSearchEvent) => {
             if (this.props.onClickSuggestion) {
                 this.props.onClickSuggestion(event);
             }
@@ -41,20 +48,42 @@ export class LocationAutocompleteView extends Component<
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
         if (this.props.onChange) {
-            this.props.onChange(event.target.value);
+            if (this.timeout) {
+                clearTimeout(this.timeout);
+            }
+            //@ts-ignore
+            this.timeout = setTimeout(() => {
+                this.props.onChange(value);
+            }, 500);
         }
     };
 
     render() {
         return (
             <div className="bb-location-autocomplete-view">
-                <input
-                    onChange={this.onChange}
-                    ref={this.createRef}
-                    id="address-input"
-                    placeholder="Where are we going?"
-                />
+                {this.props.useTextField ? (
+                    <TextField
+                        classes={{
+                            root: 'bb-location-autocomplete-view__text-field',
+                        }}
+                        onChange={this.onChange}
+                        inputRef={this.createRef}
+                        id="address-input"
+                        placeholder={this.props.placeholder}
+                        label={this.props.label}
+                        variant="outlined"
+                    />
+                ) : (
+                    <input
+                        value={this.props.value}
+                        onChange={this.onChange}
+                        ref={this.createRef}
+                        id="address-input"
+                        placeholder={this.props.placeholder}
+                    />
+                )}
             </div>
         );
     }

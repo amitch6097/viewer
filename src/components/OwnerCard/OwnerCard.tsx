@@ -43,7 +43,7 @@ export function OwnerCard(props: IOwnerCardProps) {
                         classes={{
                             root: 'bb-owner-card__avatar-container-avatar',
                         }}
-                        src={props.owner.image}
+                        src={props.owner.image?.url}
                     />
                     <div className="bb-owner-card__avatar-upload">
                         <input

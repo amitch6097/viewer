@@ -16,6 +16,8 @@ export interface IBusinessAutocompleteProps {
     refine: (props: any, searchState?: any, nextValue?: any) => any;
     currentRefinement: any;
     hits: any;
+    disable?: boolean;
+    value?: string;
 }
 
 export class BusinessAutocompleteView extends Component<
@@ -33,8 +35,11 @@ export class BusinessAutocompleteView extends Component<
 
     onClickSuggestion = (event: React.ChangeEvent<HTMLInputElement>) => {
         const index = event.currentTarget.value;
-        const suggestion = this.props.hits[index];
-        if (this.props.onChange) {
+        if(index === "" && this.props.onClear) {
+            this.onClear();
+        }
+        if (this.props.onChange && this.props.onClickSuggestion) {
+            const suggestion = this.props.hits[index];
             this.props.onClickSuggestion(suggestion);
         }
         return this.props.refine(index);
@@ -50,12 +55,12 @@ export class BusinessAutocompleteView extends Component<
         return (
             <div className="bb-business-autocomplete-view">
                 <Autocomplete
-                    options={this.props.hits}
-                    value={this.props.currentRefinement}
+                    options={this.props.disable ? [] : this.props.hits}
+                    value={this.props.currentRefinement || ''}
                     freeSolo
                     onChange={this.onClickSuggestion}
                     getOptionLabel={(option) => {
-                        return option?.data?.name || generateGUID();
+                        return option?.data?.name || this.props.value;
                     }}
                     renderInput={(params) => (
                         <TextField
@@ -65,6 +70,7 @@ export class BusinessAutocompleteView extends Component<
                             onChange={this.onChange}
                             {...params}
                             variant="outlined"
+                            value={this.props.value}
                         />
                     )}
                 />

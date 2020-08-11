@@ -14,6 +14,8 @@ export interface IBusinessAutocompleteProps {
     onChange?: (value: string) => void;
     onClickSuggestion?: (event: any) => void;
     onClear?: () => void;
+    disable?: boolean;
+    value?: string;
 }
 
 const BusinessAutocompleteViewConnected = connectAutoComplete(

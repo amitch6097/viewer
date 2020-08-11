@@ -29,21 +29,7 @@ export function Home(props: any) {
     const data = new Array(5).fill(undefined);
     return (
         <div className="bb-pages bb-pages-home">
-            <Search />
-            <InstantSearch indexName="common-good" searchClient={searchClient}>
-                {/* <div className="left-panel">
-                    <ClearRefinements />
-                    <h2>Brands</h2>
-                    <RefinementList attribute="brand" />
-                    <Configure hitsPerPage={8} />
-                </div> */}
-                <div className="right-panel">
-                    <SearchBox />
-                    <Hits hitComponent={Hit} />
-                    <Pagination />
-                </div>
-            </InstantSearch>
-
+            HOME
             <div className="bb-pages-home__content">
                 <Filter />
                 {data.map(() => {

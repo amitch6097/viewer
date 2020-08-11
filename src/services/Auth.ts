@@ -5,7 +5,7 @@ export class Auth {
     static async signOut() {
         try {
             await firebase.auth().signOut();
-            history.goToHome();
+            // history.goToHome();
         } catch (err) {
             console.warn(`Error Login out! ${err}`);
         }

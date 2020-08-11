@@ -23,7 +23,7 @@ export function OwnerBio(props: IOwnerBioProps) {
                     classes={{
                         root: 'bb-owner-bio__avatar',
                     }}
-                    src={owner.image}
+                    src={owner.image?.url}
                 />
                 <div className="bb-owner-bio__meta-text">
                     <Typography

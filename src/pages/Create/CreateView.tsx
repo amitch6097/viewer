@@ -22,8 +22,11 @@ import { IdentifyStep } from './Steps/IdentifyStep';
 import { DetailsStep } from './Steps/DetailsStep';
 import { OwnerStep } from './Steps/OwnerStep';
 import { CheckExistsStep } from './Steps/CheckExistsStep';
+import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
+import { Business } from 'src/lib/Business';
 
 export interface ICreateViewProps {
+    
     step: number;
     business: IBusinessListing;
     exists: boolean;
@@ -43,6 +46,10 @@ export interface ICreateViewProps {
     onCreateListing: () => void;
     onSetExists: (exists: boolean) => void;
     onStartCreate: (businessName: string) => void;
+    onChangeAddress: (value: IAlgoliaLocationSearchEvent) => void;
+
+    businessClass: Business;
+    onChangeBusiness: (business: Business) => void;
 }
 
 export class CreateView extends React.Component<ICreateViewProps> {
@@ -96,10 +103,12 @@ export class CreateView extends React.Component<ICreateViewProps> {
                             </Stepper>
                             {step === 0 && (
                                 <InfoStep
+                                    business={this.props.businessClass}
+                                    onChangeBusiness={this.props.onChangeBusiness}
                                     category={category}
                                     phone={phone}
                                     email={email}
-                                    address={address}
+                                    address={address?.value ?? ''}
                                     website={website}
                                     onChangeCategory={this.props.onChangeBusinessValue(
                                         'category'
@@ -110,9 +119,16 @@ export class CreateView extends React.Component<ICreateViewProps> {
                                     onChangeEmail={this.props.onChangeBusinessValue(
                                         'email'
                                     )}
-                                    onChangeAddress={this.props.onChangeBusinessValue(
-                                        'address'
-                                    )}
+                                    onClickAddressSuggestion={
+                                        this.props.onChangeAddress
+                                    }
+                                    onChangeAddress={(value: string) =>
+                                        this.props.onChangeAddress({
+                                            suggestion: {
+                                                value,
+                                            },
+                                        } as IAlgoliaLocationSearchEvent)
+                                    }
                                     onChangeWebsite={this.props.onChangeBusinessValue(
                                         'website'
                                     )}

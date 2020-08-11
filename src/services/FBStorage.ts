@@ -10,12 +10,15 @@ export class FBStorage {
         businessGUID: string;
         id: string;
     }) {
-        return firebase
+        const response = await firebase
             .storage()
             .ref()
             .child('images')
             .child(businessGUID)
             .child(id)
             .put(blob);
+
+        const url = await response.ref.getDownloadURL();
+        return url;
     }
 }
