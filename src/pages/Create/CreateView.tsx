@@ -23,7 +23,7 @@ import { DetailsStep } from './Steps/DetailsStep';
 import { OwnerStep } from './Steps/OwnerStep';
 import { CheckExistsStep } from './Steps/CheckExistsStep';
 import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
-import { Business } from 'src/lib/Business';
+import { Business } from '../../lib/Business'
 
 export interface ICreateViewProps {
     

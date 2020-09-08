@@ -1,46 +1,39 @@
 import React from 'react';
-import algoliasearch from 'algoliasearch/lite';
-import { goToCreate } from '../../history';
-import './Home.less';
+import { Grid } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { SearchContainer } from '../../components/Search/SearchContainer';
 
-import { AppBar } from '../../components/AppBar';
-import { ListItem } from '../../components/ListItem';
-import { Filter } from '../../components/Filter';
-import { SearchInput } from '../../components/SearchInput';
-import { Search } from '../../components/Search';
-
-import {
-    InstantSearch,
-    Hits,
-    SearchBox,
-    Pagination,
-    Highlight,
-    ClearRefinements,
-    RefinementList,
-    Configure,
-} from 'react-instantsearch-dom';
-
-const searchClient = algoliasearch(
-    'MQBBVGG94P',
-    'd68c847f05c3ef5ddce1b1890080a35b'
-);
+const useStyles = makeStyles({
+    root: {},
+    searchContainer: {
+        backgroundImage:
+            'url("https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2852&q=80")',
+        width: '100%',
+        height: '500px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    searchItem: {
+        width: '60%',
+        minWidth: '600px'
+    },
+});
 
 export function Home(props: any) {
-    const data = new Array(5).fill(undefined);
-    return (
-        <div className="bb-pages bb-pages-home">
-            HOME
-            <div className="bb-pages-home__content">
-                <Filter />
-                {data.map(() => {
-                    return <ListItem />;
-                })}
-            </div>
-        </div>
-    );
-}
+    const classes = useStyles(props);
 
-function Hit(props) {
-    console.log(props);
-    return <div>Text</div>;
+    return (
+        <Grid>
+            <Grid container className={classes.searchContainer}>
+                <Grid item className={classes.searchItem}>
+                    <SearchContainer />
+                </Grid>
+            </Grid>
+            <Grid container>
+            </Grid>
+
+        </Grid>
+    );
 }

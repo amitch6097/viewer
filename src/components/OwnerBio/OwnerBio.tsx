@@ -9,7 +9,7 @@ import { IOwner } from '../../../typings/types';
 import { onChangeValue } from '../../helpers';
 
 export interface IOwnerBioProps {
-    onChangeOwnerBio: (bio: string) => void;
+    onChangeOwnerBio?: (bio: string) => void;
     owner: IOwner;
     isEditable?: boolean;
 }

@@ -4,7 +4,7 @@ import { Search, BusinessAutocomplete, LocationAutocomplete } from '../../src/co
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 
 export default {
-    title: 'Search',
+    title: 'Components|Search',
     component: Search,
     decorators: [withKnobs],
 };
@@ -14,6 +14,7 @@ export const SearchStory = () => (
         onSearch={console.log}
         onChangeBusiness={console.log}
         onChangeLocationSuggestion={console.log}
+        onChangeLocationValue={console.log}
         locationValue={text('locationValue','location')}
         businessValue={text('businessValue','business')}
     />
@@ -27,10 +28,31 @@ export const BusinessAutocompleteStory = () => (
     />
 );
 
-export const LocationAutocompleteStory = () => (
-    <LocationAutocomplete 
-        onChange={console.log}
+export const LocationAutocompleteStory = () => {
+    const [state, setState] = React.useState('location');
+    return (<LocationAutocomplete 
+        onChange={setState}
         onClear={console.log}
-        value={text('value','location')}
-    />
-);
+        value={state}
+    />)
+}
+
+export const LocationAutocompleteUseTextFieldStory = () => {
+    const [state, setState] = React.useState('location');
+    return (<LocationAutocomplete 
+        onChange={setState}
+        onClear={console.log}
+        value={state}
+        useTextField={true}
+    />)
+}
+
+export const LocationAutocompleteCityOnlyStory = () => {
+    const [state, setState] = React.useState('location');
+    return (<LocationAutocomplete 
+        onChange={setState}
+        onClear={console.log}
+        value={state}
+        cityResultsOnly={true}
+    />)
+}

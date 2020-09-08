@@ -32,6 +32,11 @@ export const strings = {
         },
     },
 
+    createReview: {
+        submitText: 'Submit Review',
+        placeholder: "Always my go to place when I have guests in town! Love trying their wide variety ..."
+    },
+
     filters: {
         [EIdentify.MINORITY]: {
             label: 'Minority Owned Business',

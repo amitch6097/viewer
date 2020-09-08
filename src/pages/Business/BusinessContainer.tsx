@@ -1,13 +1,14 @@
 import React from 'react';
 import { Business } from '../../lib/Business';
 import { BusinessView } from './BusinessView';
-import { IBusinessListing } from '../../../typings/types';
+import { API } from '../../services';
+
 export interface IBusinessContainerProps {
     id: string;
 }
 
 export interface IBusinessContainerState {
-    business: string;
+    business: Business;
 }
 
 export class BusinessContainer extends React.Component<
@@ -23,9 +24,9 @@ export class BusinessContainer extends React.Component<
     }
 
     fetchBusiness = async () => {
-        const businessDoc = await Business.getBusiness({ id: this.props.id });
+        const business = await API.getBusiness(this.props.id);
         this.setState({
-            business: businessDoc.data,
+            business,
         });
     };
 

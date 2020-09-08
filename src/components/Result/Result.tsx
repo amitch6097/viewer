@@ -11,19 +11,23 @@ import { strings } from '../../strings';
 
 export interface IResultProps {
     business: IBusinessListing;
+    minimal?: boolean;
+    imageSize?: number;
     onClick: () => void;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     root: {},
     card: {},
     cardActionArea: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'end',
     },
     cardMedia: {
-        width: 200,
-        height: 200,
+        width: (props: IResultProps) => props?.imageSize || 200,
+        height: (props: IResultProps) => props?.imageSize || 200,
+        alignSelf: 'center',
     },
     cardContent: {
         display: 'flex',
@@ -35,7 +39,15 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    cardContentTopLeft: {},
+    cardContentTopLeft: {
+        width: '100%',
+    },
+    cardTitle: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        maxWidth: '80%',
+    },
     cardContentTopRight: {},
     cardContentBottom: {},
     cardContentBottomTags: {
@@ -46,24 +58,34 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
     },
-}));
+});
 
 export function Result(props: IResultProps) {
-    const classes = useStyles();
+    const classes = useStyles(props);
 
     return (
         <div className={classes.root}>
             <Card className={classes.card}>
-                <CardActionArea onClick={props.onClick} className={classes.cardActionArea}>
+                <CardActionArea
+                    onClick={props.onClick}
+                    className={classes.cardActionArea}
+                >
                     <CardMedia
                         className={classes.cardMedia}
-                        image={props.business?.image?.url ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg"}
+                        image={
+                            props.business?.image?.url ??
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg'
+                        }
                         title=""
                     />
                     <CardContent className={classes.cardContent}>
                         <div className={classes.cardContentTop}>
                             <div className={classes.cardContentTopLeft}>
-                                <Typography component="h5" variant="h5">
+                                <Typography
+                                    className={classes.cardTitle}
+                                    component="h5"
+                                    variant="h5"
+                                >
                                     {props.business.name}
                                 </Typography>
                                 <Typography
@@ -92,36 +114,44 @@ export function Result(props: IResultProps) {
                                 </Typography>
                             </div>
                         </div>
-                        <div className={classes.cardContentBottom}>
-                            <div className={classes.cardContentBottomTags}>
-                                {Object.keys(props.business.identify)
-                                    .filter((key) => {
-                                        return props.business.identify[key]
-                                            .selected;
-                                    })
-                                    .map((key) => {
-                                        return (
-                                            <div
-                                                className={
-                                                    classes.cardContentBottomTag
-                                                }
-                                            >
-                                                <DoneIcon />
-                                                <Typography
-                                                    variant="body2"
-                                                    color="textSecondary"
+                        {!props.minimal && (
+                            <div className={classes.cardContentBottom}>
+                                <div className={classes.cardContentBottomTags}>
+                                    {Object.keys(props.business.identify)
+                                        .filter((key) => {
+                                            return props.business.identify[key]
+                                                .selected;
+                                        })
+                                        .map((key) => {
+                                            return (
+                                                <div
+                                                    className={
+                                                        classes.cardContentBottomTag
+                                                    }
                                                 >
-                                                    {strings.filters[key].label}
-                                                </Typography>
-                                            </div>
-                                        );
-                                    })}
-                            </div>
+                                                    <DoneIcon />
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="textSecondary"
+                                                    >
+                                                        {
+                                                            strings.filters[key]
+                                                                .label
+                                                        }
+                                                    </Typography>
+                                                </div>
+                                            );
+                                        })}
+                                </div>
 
-                            <Typography variant="body1" color="textSecondary">
-                                {props.business.about}
-                            </Typography>
-                        </div>
+                                <Typography
+                                    variant="body1"
+                                    color="textSecondary"
+                                >
+                                    {props.business.about}
+                                </Typography>
+                            </div>
+                        )}
                     </CardContent>
                 </CardActionArea>
             </Card>

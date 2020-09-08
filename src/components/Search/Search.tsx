@@ -13,6 +13,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 export interface ISearchProps {
     onSearch?: () => void;
     onChangeBusiness: (value: string) => void;
+    onChangeLocationValue: (value: string) => void;
     onChangeLocationSuggestion: (suggestion: any) => void;
     locationValue?: string;
     businessValue?: string;
@@ -21,6 +22,7 @@ export interface ISearchProps {
 export function Search({
     onChangeBusiness,
     onChangeLocationSuggestion,
+    onChangeLocationValue,
     onSearch,
     locationValue,
     businessValue
@@ -40,7 +42,7 @@ export function Search({
                 <div className="bb-search__inputs-location">
                     <label className="bb-search__inputs-label">Near</label>
                     <LocationAutocomplete
-                        onChange={() => onChangeLocationSuggestion(undefined)}
+                        onChange={onChangeLocationValue}
                         onClear={() => onChangeLocationSuggestion(undefined)}
                         onClickSuggestion={onChangeLocationSuggestion}
                         placeholder={'Where are we going?'}

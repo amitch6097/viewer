@@ -13,14 +13,13 @@ module.exports = {
         modules: [
             path.resolve(),
             'node_modules/',
-            'src/components/',
-            'src/libs/',
         ],
     },
     module: {
         rules: [
             {
                 test: /\.(png|jpe?g|gif)$/i,
+                exclude:path.resolve(__dirname, "node_modules"),
                 use: [
                     {
                         loader: 'file-loader',
@@ -29,6 +28,7 @@ module.exports = {
             },
             {
                 test: /\.js$/,
+                exclude:path.resolve(__dirname, "node_modules"),
                 use: [
                     {
                         loader: 'babel-loader',
@@ -40,6 +40,7 @@ module.exports = {
             },
             {
                 test: /\.jsx$/,
+                exclude:path.resolve(__dirname, "node_modules"),
                 use: [
                     {
                         loader: 'babel-loader',
@@ -51,6 +52,7 @@ module.exports = {
             },
             {
                 test: /\.tsx?$/,
+                exclude:path.resolve(__dirname, "node_modules"),
                 loader: 'awesome-typescript-loader',
             },
             {

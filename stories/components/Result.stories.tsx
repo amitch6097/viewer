@@ -1,43 +1,38 @@
 import React from 'react';
-import { EIdentify } from '../../typings/types';
-import { Result } from '../../src/components/Result';
+import { BUSINESS_DATA } from '../../__mock__/business-data';
+import { Result, Results } from '../../src/components/Result';
+import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 
 export default {
-    title: 'Result',
+    title: 'Components|Result',
     component: Result,
+    decorators: [withKnobs],
 };
 
-export const Main = () => (
+export const ResultStory = () => (
     <Result
+        imageSize={number('imageSize', 200)}
         onClick={console.log}
-        business={{
-            image:
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg',
-            guid: '1',
-            name: 'Hungry Howie’s Pizza',
-            category: 'Restaurant',
-            phone: '(123) 456 780',
-            email: 'pizza@pizza.com',
-            address: {
-                name: '343 Pizza Ave',
-            },
-            website: 'pizza.com',
-            identify: {
-                [EIdentify.FEMALE]: {
-                    selected: true,
-                },
-                [EIdentify.MINORITY]: {
-                    selected: true,
-                },
-            },
-            about: `                            Hungry Howie's Pizza Claimed 21 reviews $ PizzaEdit
-    Open10:30 AM - 11:00 PM Hours updated 2 months ago
-    COVID-19 Updates "We know that you're concerned
-    about COVID-19. We are too. Hungry Howie's has been
-    making pizza for our customers for almost 50 years.
-    The health and safety of our customers has always
-    been our top priority. During this pandemic, we are
-    even more concerned. Visit our websi`,
-        }}
+        minimal={boolean('minimal', false)}
+        business={BUSINESS_DATA}
     />
 );
+
+export const ResultsStory = () => {
+    const businesses = new Array(10)
+        .fill(undefined)
+        .map(() => BUSINESS_DATA)
+        .reduce((_, business, index) => {
+            _[index] = business;
+            return _;
+        }, {});
+    return (
+        <Results
+            imageSize={number('imageSize', 200)}
+            onClick={console.log}
+            minimal={boolean('minimal', false)}
+            businesses={businesses}
+            spacing={number('spacing', 2)}
+        />
+    );
+};

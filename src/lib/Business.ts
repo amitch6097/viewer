@@ -6,23 +6,10 @@ import {
     IBusinessDocument,
     EIdentify,
 } from '../../typings/types';
-import { IGetBusinessResponse } from '../../typings/functions';
 import { localURLtoBlob, generateGUID } from '../helpers';
 
-export class Business {
-
-    static async getBusiness({
-        id,
-    }: {
-        id: string;
-    }): Promise<IBusinessDocument> {
-        const response: IGetBusinessResponse = await Functions.getBusiness({
-            id,
-        });
-        return response.result;
-    }
-
-    public data: Readonly<IBusinessDocument>;
+export class Business implements IBusinessListing {
+    private data: Readonly<IBusinessDocument>;
 
     constructor(data?: IBusinessDocument) {
         this.data = Object.freeze(
@@ -58,7 +45,59 @@ export class Business {
         );
     }
 
+    get name() {
+        return this.data.data.name;
+    }
+
+    get image() {
+        return this.data.data.image;
+    }
+
+    get category() {
+        return this.data.data.category;
+    }
+
+    get phone() {
+        return this.data.data.phone;
+    }
+
+    get email() {
+        return this.data.data.email;
+    }
+
+    get address() {
+        return this.data.data.address;
+    }
+
+    get website() {
+        return this.data.data.website;
+    }
+
+    get about() {
+        return this.data.data.about;
+    }
+
+    get identify() {
+        return this.data.data.identify;
+    }
+
+    get owners() {
+        return this.data.data.owners;
+    }
+
+    get guid() {
+        return this.data.data.guid;
+    }
+
+    get hashtags() {
+        return this.data.data.hashtags;
+    }
+
     public getData(): IBusinessListing {
+        return this.data.data;
+    }
+
+    public getListing(): IBusinessListing {
         return this.data.data;
     }
 
@@ -69,11 +108,11 @@ export class Business {
                 ...this.data.data,
                 image: {
                     id: generateGUID(),
-                    url
-                }
-            }
-        })
-    }
+                    url,
+                },
+            },
+        });
+    };
 
     onAddOwner = () => {
         const { owners } = this.data.data;
@@ -128,7 +167,10 @@ export class Business {
         });
     };
 
-    onChangeBusinessValue = (key: keyof IBusinessListing, value: IBusinessListing[keyof IBusinessListing]) => {
+    onChangeBusinessValue = (
+        key: keyof IBusinessListing,
+        value: IBusinessListing[keyof IBusinessListing]
+    ) => {
         return new Business({
             ...this.data,
             data: {
@@ -169,7 +211,6 @@ export class Business {
         });
     };
 
-
     onChangeIdentityText = (identity: EIdentify, text: string) => {
         return new Business({
             ...this.data.data,
@@ -186,6 +227,7 @@ export class Business {
         });
     };
 
+    onAddReview = async () => {};
 
     onCreateListing = async () => {
         const owners: IOwner[] = await Promise.all(

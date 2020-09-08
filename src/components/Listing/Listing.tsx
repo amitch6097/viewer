@@ -9,125 +9,92 @@ import * as Icons from '@material-ui/icons';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Divider from '@material-ui/core/Divider';
 
-import { IBusinessListing } from '../../../typings/types';
+import { IBusinessListing, IReview } from '../../../typings/types';
 import { onChangeValue } from '../../helpers';
 import { strings } from '../../strings';
 import { config } from '../../config';
 
 import { OwnerBio } from '../../components/OwnerBio';
 import { IdentityDisplay } from '../../components/IdentityDisplay';
-import { ActionButton } from 'src/components/ActionButton';
-
+import { ActionButton } from '../../components/ActionButton';
+import { ListingTitleCard } from './ListingTitleCard';
+import { ListingAbout } from './ListingAbout';
+import { ListingOwners } from './ListingOwners';
+import {
+    Theme,
+    createStyles,
+    makeStyles,
+    useTheme,
+} from '@material-ui/core/styles';
+import { List } from '@material-ui/core';
+import { ListingActions } from './ListingActions';
+import { ListingReviews } from './ListingReviews';
 export interface IListingProps {
     business: IBusinessListing;
-    isEditable: boolean;
+    reviews: IReview[];
+    pages: number;
+    page: number;
+    onChangePage: (page: number) => void;
+    isEditable?: boolean;
     onChangeAbout?: (about: string) => void;
     onChangeOwnerBio?: (index: number) => (bio: string) => void;
 }
 
-function getActionIcon(key) {
-    const Icon = Icons[config.actions[key].icon];
-    return <Icon />;
-}
+const useStyles = makeStyles({
+    root: {},
+    content: {
+        maxWidth: 700,
+    },
+    aside: {
+        position: 'sticky',
+        top: 0
+    },
+    divider: {
+        marginTop: 20,
+        marginBottom: 20
+    }
+});
 
-export function Listing({
-    business,
-    isEditable,
-    onChangeOwnerBio,
-    onChangeAbout,
-}: IListingProps) {
+export function Listing(props: IListingProps) {
+    const classes = useStyles(props);
+
     return (
         <Grid
-            classes={{ root: 'bb-listing' }}
+            className={classes.root}
             container
-            direction="column"
+            direction="row"
             justify="flex-start"
             alignItems="flex-start"
+            spacing={3}
         >
-            <section className="bb-listing__section bb-listing__header">
-                <div className="bb-listing__header-text">
-                    <Typography variant="h2" gutterBottom>
-                        {business.name}
-                    </Typography>
-                    <Typography variant="h4" gutterBottom>
-                        {strings.categories[business.category]}
-                    </Typography>
-                </div>
-                <div className="bb-listing__header-actions">
-                    <ButtonGroup
-                        classes={{
-                            root: 'bb-listing__header-actions-button-group',
-                        }}
-                        orientation="vertical"
-                        color="primary"
-                        aria-label="vertical outlined primary button group"
-                    >
-                        {' '}
-                        {['address', 'website', 'phone', 'email'].map((key) => {
-                            return (
-                                business[key] && (
-                                    <ActionButton
-                                        label={strings.actions[key]}
-                                        icon={getActionIcon(key)}
-                                        subLabel={business[key].value}
-                                    />
-                                )
-                            );
-                        })}
-                    </ButtonGroup>
-                </div>
-            </section>
-
-            <section>
-                <Typography variant="h3" gutterBottom>
-                    About
-                </Typography>
-                {isEditable ? (
-                    <TextareaAutosize
-                        style={{ width: '100%' }}
-                        aria-label="about the business"
-                        rowsMin={3}
-                        onChange={onChangeValue(onChangeAbout)}
-                        value={business.about}
-                    />
-                ) : (
-                    <Typography variant="body1" gutterBottom>
-                        {business.about}
-                    </Typography>
-                )}
-                {Object.keys(business.identify).map((key) => {
-                    const identity = business.identify[key];
-                    return (
-                        identity.selected && (
-                            <div className="bb-listing__identify">
-                                <IdentityDisplay
-                                    src={identity.image}
-                                    label={strings.create.identify[key].label}
-                                    text={identity.text}
-                                />
-                            </div>
-                        )
-                    );
-                })}
-            </section>
-            <section>
-                <Typography variant="h3" gutterBottom>
-                    Owners
-                </Typography>
-                {business.owners.map((owner, index) => {
-                    return (
-                        <div className="bb-listing__owner">
-                            <OwnerBio
-                                owner={owner}
-                                onChangeOwnerBio={
-                                    onChangeOwnerBio && onChangeOwnerBio(index)
-                                }
-                                isEditable={isEditable}
-                            />
-                        </div>
-                    );
-                })}
-            </section>
+            <Grid
+                className={classes.content}
+                item
+                direction="column"
+                justify="flex-start"
+                alignItems="flex-start"
+            >
+                <section id="bb-listing-header">
+                    <ListingTitleCard business={props.business} />
+                </section>
+                <Divider className={classes.divider}/>
+                <section id="bb-listing-about">
+                    <ListingAbout business={props.business} />
+                </section>
+                <Divider className={classes.divider} />
+                <section id="bb-listing-owners">
+                    <ListingOwners business={props.business} />
+                </section>
+                <Divider className={classes.divider} />
+                <section id="bb-listing-reviews">
+                    <ListingReviews reviews={props.reviews} />
+                </section>
+            </Grid>
+            <Grid className={classes.aside} item>
+                <aside>
+                    <ListingActions business={props.business} />
+                </aside>
+            </Grid>
         </Grid>
     );
 }

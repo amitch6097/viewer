@@ -17,7 +17,17 @@ const fb = !firebase.apps.length
     ? firebase.initializeApp(firebaseConfig)
     : firebase.app();
 
+
 //@ts-ignore
-window.fb = fb;
+window.__firebase = fb
 
 export default fb;
+
+
+/**
+ * Firebase console helpers
+ * - Get UserId
+ * fb.auth().currentUser.uid
+ * - Get Business Document 
+ * fb.database().ref('/business/' + "ux1sAyjkyNoKT7jdMxD5").once('value').then(function(snapshot) { console.log(snapshot.val() && snapshot.val()) })
+ */

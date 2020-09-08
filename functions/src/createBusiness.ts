@@ -54,6 +54,7 @@ export const createBusiness = functions.https.onCall(
                     createdAt: Number(new Date()),
                     createdBy: context?.auth?.uid ?? undefined,
                 },
+                reviews: [],
             };
 
             if (data?.business?.address?.latlng) {
@@ -66,7 +67,7 @@ export const createBusiness = functions.https.onCall(
                 };
             }
 
-            let tags = Object.keys(data.business.identify)
+            const tags = Object.keys(data.business.identify)
                 .filter((key) => {
                     // only the selected identities
                     return data.business.identify[key as EIdentify].selected;

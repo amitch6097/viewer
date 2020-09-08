@@ -3,7 +3,7 @@ import {
     IIdentify,
     IBusinessDocument,
     BusinessTagDescriptors,
-} from 'typings/types';
+} from '../../typings/types';
 import { RequestOptions } from '@algolia/transporter';
 import { SearchOptions } from '@algolia/client-search';
 import { SearchResponse } from '@algolia/client-search';
@@ -27,8 +27,10 @@ export interface ISearch {
         lng: number;
     };
     locationValue: string;
+    locationDistance: number; // in km
     filters: Record<EIdentify, boolean>;
     category: string;
+    page: number;
 }
 
 export class Search {
@@ -43,6 +45,8 @@ export class Search {
             [EIdentify.MINORITY]: false,
             [EIdentify.FEMALE]: false,
         },
+        locationDistance: 1000, // km
+        page: 0
     }
 
     static createFromSearchURL(url: string) {
@@ -72,7 +76,16 @@ export class Search {
             data || Search.InitialState);
     }
 
+
+
     /** Actions */
+
+    onChangeLocationDistance = (locationDistance: number): Search => {
+        return new Search({
+            ...this.data,
+            locationDistance,
+        });
+    }
 
     onChangeLocationValue = (locationValue: string): Search => {
         return new Search({
@@ -113,7 +126,22 @@ export class Search {
         });
     };
 
+    onChangePage = (page: number) => {
+        return new Search({
+            ...this.data,
+            page
+        });
+    }
+
     /** Getters */
+
+    getPage() {
+        return this.data.page;
+    }
+
+    getLocationDistance() {
+        return this.data.locationDistance;
+    }
 
     getSearchValue() {
         return this.data.searchValue;
@@ -138,6 +166,7 @@ export class Search {
         }, {});
 
         let json = {
+            page: this.data.page,
             searchValue: this.data.searchValue,
             locationValue: this.data.locationValue,
             category: this.data.category,
@@ -169,13 +198,16 @@ export class Search {
     }
 
     private getSearchAttributes(): SearchAttributes {
-        let searchAttributes: any = {};
+        let searchAttributes: any = {
+            hitsPerPage: 10,
+            page: this.data.page,
+        };
 
         // add location
         if (this.data.locationSuggestion) {
             const {lat, lng} = this.data.locationSuggestion;
             searchAttributes.aroundLatLng = `${lat}, ${lng}`;
-            searchAttributes.aroundRadius = 100000; // 100 km
+            searchAttributes.aroundRadius = this.data.locationDistance * 1000 ; // 1000 * km = m;
         }
 
         // add tags

@@ -29,9 +29,9 @@ export function IdentityDisplay(props: IIdentityDisplayProps) {
                     >
                         {props.label}
                     </Typography>
+                    <Typography variant="body1">{props.text}</Typography>
                 </div>
             </div>
-            <Typography variant="body1">{props.text}</Typography>
         </div>
     );
 }

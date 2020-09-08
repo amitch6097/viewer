@@ -4,8 +4,13 @@ import * as admin from 'firebase-admin';
 admin.initializeApp(functions.config().firebase);
 
 import { onBusinessCreated, createBusiness } from './createBusiness';
-import { getBusiness } from './getBusiness';
+import { onReviewCreated, createReview } from './createReview';
+import { favoriteBusiness } from './favoriteBusiness';
 
-export { getBusiness, onBusinessCreated, createBusiness };
-
-export const x = () => {};
+export {
+    onBusinessCreated,
+    createBusiness,
+    onReviewCreated,
+    createReview,
+    favoriteBusiness,
+};

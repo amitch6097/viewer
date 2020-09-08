@@ -3,16 +3,18 @@ const baseConfig = require('./webpack.config.js');
 
 let devConfig = {
     mode: 'development',
-    devtool: 'inline-source-map',
+    devtool: 'eval-source-map',
 };
 
 if (process.env.HOT === 'true') {
     devConfig = {
         ...devConfig,
         devServer: {
-            contentBase: './',
+            contentBase: './public',
             historyApiFallback: true,
             hot: true,
+            port: 8080,
+            https: false,
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods':

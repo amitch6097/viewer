@@ -12,6 +12,35 @@ export interface IBusinessDocument {
         lng: number;
     };
     _tags?: string[];
+    reviews?: string[]; //review id list
+}
+
+export interface IUserDocument extends IUser {
+    reviews?: string[];
+    favorites?: string[];
+    createdAt?: number;
+}
+
+export interface IReviewDocument {
+    text: string;
+    rating: number;
+    businessId: string;
+    createdAt?: number;
+    createdBy?: string;
+}
+
+export interface IReview {
+    text: string;
+    rating: number;
+    businessId: string;
+    createdAt?: number;
+    user?: IUserDocument;
+}
+
+export interface IUser {
+    name: string;
+    image?: string;
+    email: string;
 }
 
 export enum BusinessTagDescriptors {
@@ -32,7 +61,6 @@ export interface IImage {
 
 export interface IBusinessListing {
     image?: IImage;
-    imageId?: string;
     category: string;
     phone: string;
     email: string;
@@ -48,7 +76,7 @@ export interface IBusinessListing {
 
 export interface IOwner {
     name: string;
-    bio: string;
+    bio?: string;
     position: string;
     image?: IImage;
 }

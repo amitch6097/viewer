@@ -15,7 +15,7 @@ import { Select } from '../../../components/Select';
 import { getCategories } from '../../../helpers';
 import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
 import { IImage } from 'typings/types';
-import { Business } from 'src/lib/Business';
+import { Business } from '../../../lib/Business'
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';

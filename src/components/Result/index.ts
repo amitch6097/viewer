@@ -1,3 +1,3 @@
-export {
-    Result
-} from './Result'
+export { Result } from './Result';
+
+export { Results } from './Results';

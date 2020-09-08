@@ -4,59 +4,55 @@ import TextField from '@material-ui/core/TextField';
 import { IAlgoliaLocationSearchEvent } from '../../../../typings/algolia';
 
 export interface ILocationAutocompleteViewProps {
-    refine: (props: any, searchState?: any, nextValue?: any) => any;
-    defaultRefinement: any;
     onChange?: (value: string) => void;
     onClickSuggestion?: (event: IAlgoliaLocationSearchEvent) => void;
     onClear?: () => void;
     useTextField?: boolean;
     label?: string;
     placeholder?: string;
-
     value?:string;
+    cityResultsOnly?: boolean;
 }
 
 export class LocationAutocompleteView extends Component<
     ILocationAutocompleteViewProps
 > {
     element: any;
-    timeout: number;
 
     createRef = (c) => (this.element = c);
 
     componentDidMount() {
-        const { refine, defaultRefinement } = this.props;
-
         const autocomplete = places({
             container: this.element,
             type: 'address',
+        }).configure({
+            countries: ['us'],
+            language: 'en',
+            postcodeSearch: true,
+            type: this.props.cityResultsOnly ? 'city' : 'address'
+        });
+
+        autocomplete.on('autocomplete:updated', function(...args) {
+            console.log("ARGS", args);
         });
 
         autocomplete.on('change', (event: IAlgoliaLocationSearchEvent) => {
             if (this.props.onClickSuggestion) {
                 this.props.onClickSuggestion(event);
             }
-            refine(event.suggestion.latlng);
         });
 
         autocomplete.on('clear', () => {
             if (this.props.onClear) {
                 this.props.onClear();
             }
-            refine(defaultRefinement);
         });
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         if (this.props.onChange) {
-            if (this.timeout) {
-                clearTimeout(this.timeout);
-            }
-            //@ts-ignore
-            this.timeout = setTimeout(() => {
-                this.props.onChange(value);
-            }, 500);
+            this.props.onChange(value)
         }
     };
 

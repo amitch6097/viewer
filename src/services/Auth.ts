@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import { history } from '../history';
+import { IUserDocument, IUser } from 'typings/types';
 
 export class Auth {
     static async signOut() {
@@ -11,8 +12,21 @@ export class Auth {
         }
     }
 
+    static getCurrentUserId(): string {
+        return firebase.auth().currentUser.uid;
+    }
+
     static async isLoggedIn(): Promise<Boolean> {
         return Boolean(firebase.auth().currentUser);
+    }
+
+    static getCurrentUser(): IUser {
+        const user = firebase.auth().currentUser;
+        return {
+            name: user.displayName,
+            image: user.photoURL,
+            email: user.email
+        }
     }
 
     static async signInWithGoogle() {

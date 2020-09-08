@@ -14,4 +14,8 @@ export class SearchResult {
             return results;
         }, {});
     }
+
+    getPages(): number {
+        return this.data.nbPages;
+    }
 }

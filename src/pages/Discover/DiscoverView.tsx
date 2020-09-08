@@ -1,103 +1,126 @@
 import React from 'react';
-import './Discover.less';
 import { strings } from '../../strings';
 
-import { Search } from '../../components/Search';
-import { EIdentify, IIdentify, IBusinessListing } from 'typings/types';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import { Select } from '../../components/Select';
-import { getCategories } from '../../helpers';
-
-import { Result } from '../../components/Result';
+import { ResultsContainer } from '../../components/Result/ResultsContainer';
+import { ResultPagination } from '../../components/Result/ResultPagination';
+import { FiltersContainer } from '../../components/Filters/FiltersContainer';
+import { Grid, Container, Hidden } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
+import FilterListIcon from '@material-ui/icons/FilterList';
+import { purple } from '@material-ui/core/colors';
+import { FormatListBulletedRounded } from '@material-ui/icons';
 
 export interface IDiscoverViewProps {
-    onChangeFilterSelected: (key: EIdentify, selected: boolean) => void;
-    onChangeLocationSuggestion: (locationSuggestion: any) => void;
-    onChangeSearchValue: (value: string) => void;
-    onSearch: () => void;
-    onChangeCategory: (category: string) => void;
     onClickBusiness: (id: string) => void;
-
-    results: Record<string, IBusinessListing>;
-    filters: Record<EIdentify, boolean>;
-    category: string;
-    locationValue: string;
-    businessValue: string;
+    isMobile?: boolean;
 }
 
+const useStyles = makeStyles({
+    root: {
+        flexWrap: 'nowrap',
+    },
+    filters: {
+        width: '300px',
+        position: 'sticky',
+        top: 'var(--app-bar-height)',
+    },
+    filtersContent: {},
+    filterContainer: {
+        position: 'fixed',
+        height: '100%',
+        display: 'flex',
+        width: '100%',
+        transition: 'top linear .5s',
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+        top: 'calc(100% - 60px)',
+        pointerEvents: 'none'
+    },
+    'filterContainer--open': {
+        top: 0,
+        pointerEvents: 'all'
+
+        // transform: 'translate(0px, calc(100% - 60px)'
+    },
+    filterContent: {
+        background: 'purple',
+        paddingTop: '20px',
+        borderRadius: '20px 20px 0px 0px',
+        display: 'flex',
+        width: '100%',
+        height: 'calc(100% - 60px)',
+    },
+    filterContentContainer: {
+        background: 'white',
+        width: '99%',
+        borderRadius: '20px 20px 0px 0px',
+        margin: '0 auto'
+    },
+    filterFab: {
+        pointerEvents: 'all',
+        marginBottom: '10px',
+        height: '50px',
+    },
+    results: {
+        // width: 'calc(100% - 300px)',
+    },
+});
+
 export function DiscoverView(props: IDiscoverViewProps) {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+
     return (
-        <div className="bb-pages bb-pages-discover">
-            <div className="bb-pages-discover__header">
-                <Search
-                    onChangeBusiness={props.onChangeSearchValue}
-                    onChangeLocationSuggestion={
-                        props.onChangeLocationSuggestion
-                    }
-                    onSearch={props.onSearch}
-                    businessValue={props.businessValue}
-                    locationValue={props.locationValue}
-                />
-            </div>
-            <div className="bb-pages-discover__content">
-                <div className="bb-pages-discover__content__filter">
-                    <h2>Filters</h2>
-                    <div className="bb-pages-discover__content__filters">
-                        {Object.keys(props.filters).map((key) => {
-                            const selected = props.filters[key];
-                            return (
-                                <div
-                                    key={key}
-                                    className="bb-pages-discover__content__filter__filters__filter"
-                                >
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={selected}
-                                                onChange={() =>
-                                                    props.onChangeFilterSelected(
-                                                        key as EIdentify,
-                                                        !selected
-                                                    )
-                                                }
-                                                name={key}
-                                                color="primary"
-                                            />
-                                        }
-                                        label={strings.filters[key].label}
-                                    />
-                                </div>
-                            );
-                        })}
-                        <Select
-                            className={
-                                'bb-pages-discover__content__filters__category'
-                            }
-                            withNoSelection={true}
-                            value={props.category}
-                            label={strings.create.info.labels.category}
-                            onChange={props.onChangeCategory}
-                            options={getCategories()}
-                        />
-                    </div>
-                </div>
-                <div className="bb-pages-discover__content__results">
-                    {Object.keys(props.results).map((id) => {
-                        return (
-                            <div
-                                key={id}
-                                className="bb-pages-discover__content__results"
-                            >
-                                <Result
-                                    onClick={() => props.onClickBusiness(id)}
-                                    business={props.results[id]}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        </div>
+        <Grid
+            className={classes.root}
+            container
+            direction="row"
+            alignItems="flex-start"
+        >
+            <Hidden only={['xs', 'sm']}>
+                <Grid className={classes.filters} item md={3}>
+                    <aside className={classes.filtersContent}>
+                        <FiltersContainer />
+                    </aside>
+                </Grid>
+            </Hidden>
+            <Grid item className={classes.results} md={9} style={open ? {
+                position: 'fixed'
+            }: {}}>
+                <ResultsContainer onClick={props.onClickBusiness} />
+                <ResultPagination />
+            </Grid>
+            <Hidden only={['md', 'lg']}>
+                <Grid
+                    className={`${classes.filterContainer} ${
+                        open ? classes['filterContainer--open'] : ''
+                    }`}
+                    container
+                    direction="column"
+                >
+                    <Fab
+                        onClick={() => setOpen(!open)}
+                        className={classes.filterFab}
+                        variant="extended"
+                    >
+                        <FilterListIcon />
+                        Filter
+                    </Fab>
+
+                    <aside
+                        className={classes.filterContent}
+                    >
+                        <Grid
+                            className={classes.filterContentContainer}
+                            container
+                            direction="column"
+                        >
+                            <FiltersContainer />
+                        </Grid>
+                    </aside>
+                </Grid>
+            </Hidden>
+        </Grid>
     );
 }
