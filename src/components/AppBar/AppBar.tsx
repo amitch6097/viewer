@@ -21,6 +21,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import List from '@material-ui/core/List';
 import MenuIcon from '@material-ui/icons/Menu';
+import {AppBarUser} from './AppBarUser';
 
 export interface IAppBarProps {
     history: any;
@@ -46,6 +47,10 @@ const useStyles = makeStyles({
     drawerPaper: {
         width: '30%',
     },
+    userButtons: {
+        display: 'flex',
+        flexDirection: 'row'
+    }
 });
 
 export function AppBar(props: IAppBarProps) {
@@ -148,7 +153,7 @@ export function AppBar(props: IAppBarProps) {
                         <AppBarDrawerButton />
                     </Hidden>
                     <Hidden only={['xs', 'sm']}>
-                        <Grid item>
+                        <Grid item className={classes.userButtons}>
                             {props.user ? (
                                 <>
                                     <Button
@@ -164,14 +169,15 @@ export function AppBar(props: IAppBarProps) {
                                     >
                                         {strings.appBar.addBusiness}
                                     </Button>
-                                    <Button
+                                    <AppBarUser />
+                                    {/* <Button
                                         className={classes.button}
                                         onClick={Auth.signOut}
                                         color="inherit"
                                         variant="outlined"
                                     >
                                         {strings.appBar.logout}
-                                    </Button>
+                                    </Button> */}
                                 </>
                             ) : (
                                 <>

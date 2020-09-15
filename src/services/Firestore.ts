@@ -33,6 +33,7 @@ export class Firestore {
         return userDoc.data() as IUserDocument;
     }
 
+
     static async getInitialReviewsForBusiness({
         businessId,
         count,
