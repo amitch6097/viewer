@@ -18,7 +18,6 @@ export interface IUnfavoriteBusinessResponse {
 
 export interface ICreateReviewProps {
     review: IReviewDocument;
-    user: IUser;
 }
 
 export interface ICreateReviewResponse {

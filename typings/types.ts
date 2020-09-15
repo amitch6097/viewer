@@ -37,10 +37,18 @@ export interface IReview {
     user?: IUserDocument;
 }
 
+export interface IReviews {
+    businessId: string;
+    reviews?: IReview[];
+    size?: number;
+    count: number;
+    lastId?: string;
+}
+
 export interface IUser {
-    name: string;
+    name: string | undefined;
     image?: string;
-    email: string;
+    email: string | undefined;
 }
 
 export enum BusinessTagDescriptors {

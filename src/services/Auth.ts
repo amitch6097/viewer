@@ -3,6 +3,11 @@ import { history } from '../history';
 import { IUserDocument, IUser } from 'typings/types';
 
 export class Auth {
+
+    static async subscribeOnAuthChange(fn: any) {
+        firebase.auth().onAuthStateChanged(fn);
+    }
+
     static async signOut() {
         try {
             await firebase.auth().signOut();
@@ -13,20 +18,11 @@ export class Auth {
     }
 
     static getCurrentUserId(): string {
-        return firebase.auth().currentUser.uid;
+        return firebase.auth()?.currentUser?.uid;
     }
 
     static async isLoggedIn(): Promise<Boolean> {
         return Boolean(firebase.auth().currentUser);
-    }
-
-    static getCurrentUser(): IUser {
-        const user = firebase.auth().currentUser;
-        return {
-            name: user.displayName,
-            image: user.photoURL,
-            email: user.email
-        }
     }
 
     static async signInWithGoogle() {

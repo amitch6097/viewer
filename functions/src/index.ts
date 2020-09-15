@@ -3,9 +3,15 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp(functions.config().firebase);
 
+
+const firestore = admin.firestore();
+firestore.settings({ ignoreUndefinedProperties: true })
+
 import { onBusinessCreated, createBusiness } from './createBusiness';
 import { onReviewCreated, createReview } from './createReview';
 import { favoriteBusiness } from './favoriteBusiness';
+import { onUserCreate } from './onUserCreate';
+import { unfavoriteBusiness } from './unfavoriteBusiness';
 
 export {
     onBusinessCreated,
@@ -13,4 +19,6 @@ export {
     onReviewCreated,
     createReview,
     favoriteBusiness,
+    unfavoriteBusiness,
+    onUserCreate,
 };

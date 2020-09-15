@@ -9,7 +9,7 @@ import * as Icons from '@material-ui/icons';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Divider from '@material-ui/core/Divider';
 
-import { IBusinessListing, IReview } from '../../../typings/types';
+import { IBusinessListing, IReviews } from '../../../typings/types';
 import { onChangeValue } from '../../helpers';
 import { strings } from '../../strings';
 import { config } from '../../config';
@@ -31,13 +31,14 @@ import { ListingActions } from './ListingActions';
 import { ListingReviews } from './ListingReviews';
 export interface IListingProps {
     business: IBusinessListing;
-    reviews: IReview[];
-    pages: number;
-    page: number;
-    onChangePage: (page: number) => void;
+    reviews?: IReviews;
+    isFavorited: boolean;
+    onToggleFavorite: () => void;
+    onLoadMoreReviews?: () => void;
     isEditable?: boolean;
     onChangeAbout?: (about: string) => void;
     onChangeOwnerBio?: (index: number) => (bio: string) => void;
+    id: string;
 }
 
 const useStyles = makeStyles({
@@ -47,12 +48,12 @@ const useStyles = makeStyles({
     },
     aside: {
         position: 'sticky',
-        top: 0
+        top: 0,
     },
     divider: {
         marginTop: 20,
-        marginBottom: 20
-    }
+        marginBottom: 20,
+    },
 });
 
 export function Listing(props: IListingProps) {
@@ -75,9 +76,14 @@ export function Listing(props: IListingProps) {
                 alignItems="flex-start"
             >
                 <section id="bb-listing-header">
-                    <ListingTitleCard business={props.business} />
+                    <ListingTitleCard
+                        id={props.id}
+                        business={props.business}
+                        isFavorited={props.isFavorited}
+                        onToggleFavorite={props.onToggleFavorite}
+                    />
                 </section>
-                <Divider className={classes.divider}/>
+                <Divider className={classes.divider} />
                 <section id="bb-listing-about">
                     <ListingAbout business={props.business} />
                 </section>
@@ -86,9 +92,14 @@ export function Listing(props: IListingProps) {
                     <ListingOwners business={props.business} />
                 </section>
                 <Divider className={classes.divider} />
-                <section id="bb-listing-reviews">
-                    <ListingReviews reviews={props.reviews} />
-                </section>
+                {props.reviews && (
+                    <section id="bb-listing-reviews">
+                        <ListingReviews
+                            reviews={props.reviews}
+                            onLoadMoreReviews={props.onLoadMoreReviews}
+                        />
+                    </section>
+                )}
             </Grid>
             <Grid className={classes.aside} item>
                 <aside>

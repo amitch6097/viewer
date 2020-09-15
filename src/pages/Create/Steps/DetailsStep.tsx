@@ -39,10 +39,13 @@ export class DetailsStep extends React.Component<IDetailsStepProps> {
                     alignItems="flex-start"
                 >
                     <Listing
+                        id={undefined}
                         business={business}
                         isEditable={true}
                         onChangeOwnerBio={this.props.onChangeOwnerBio}
                         onChangeAbout={this.props.onChangeAbout}
+                        isFavorited={false}
+                        onToggleFavorite={console.log}
                     />
                     <Button
                         onClick={this.checkFields}

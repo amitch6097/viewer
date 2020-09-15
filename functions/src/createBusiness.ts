@@ -29,26 +29,42 @@ export const createBusiness = functions.https.onCall(
         data: ICreateBusinessProps,
         context
     ): Promise<ICreateBusinessResponse> => {
-        // if (!context.auth) throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
+        if (!context.auth)
+            throw new functions.https.HttpsError(
+                'unauthenticated',
+                'The function must be called while authenticated.'
+            );
         if (!data || typeof data !== 'object')
             throw new functions.https.HttpsError(
-                'failed-precondition',
+                'invalid-argument',
                 `The function must be called with a data object. ${data}`
             );
         if (!data.business)
             throw new functions.https.HttpsError(
-                'failed-precondition',
+                'invalid-argument',
                 `Could not create business without business object. ${data}`
             );
         if (!data.business.name)
             throw new functions.https.HttpsError(
-                'failed-precondition',
+                'invalid-argument',
                 `Could not create business without business name. ${data}`
             );
         try {
             let businessDocument: IBusinessDocument = {
                 data: {
                     ...data.business,
+                    address: {
+                        name: data.business.address.name,
+                        administrative: data.business.address.administrative,
+                        county: data.business.address.county,
+                        city: data.business.address.city,
+                        country: data.business.address.country,
+                        countryCode: data.business.address.countryCode,
+                        type: data.business.address.type,
+                        latlng: data.business.address.latlng,
+                        postcode: data.business.address.postcode,
+                        value: data.business.address.value,
+                    }
                 },
                 meta: {
                     createdAt: Number(new Date()),
@@ -105,7 +121,7 @@ export const createBusiness = functions.https.onCall(
             };
         } catch (err) {
             throw new functions.https.HttpsError(
-                'failed-precondition',
+                'unknown',
                 `Failed to add business with error ${err}`
             );
         }
@@ -116,32 +132,14 @@ export const onBusinessCreated = functions.firestore
     .document('business/{id}')
     .onCreate(async (snap, context) => {
         try {
-            // Get the note document
             const business = snap.data();
             // Add an 'objectID' field which Algolia requires
             business.objectID = context.params.id;
             return index.saveObject(business);
         } catch (err) {
             throw new functions.https.HttpsError(
-                'failed-precondition',
+                'unknown',
                 `Failed to run onBusinessCreated with error ${err}`
             );
         }
     });
-
-// async function createOwner(owner: IOwner): Promise<{ id: string }> {
-//     if (!owner || typeof owner !== 'object') {
-//         throw new functions.https.HttpsError(
-//             'failed-precondition',
-//             'The function must be called with a data object.'
-//         );
-//     }
-//     const result = await firestore.collection('owner').add({
-//         name: owner.name,
-//         bio: owner.bio,
-//         position: owner.position,
-//         imageId: owner.imageId,
-//     });
-
-//     return { id: result.id };
-// }

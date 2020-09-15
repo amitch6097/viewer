@@ -13,7 +13,6 @@ export interface IAlgoliaLocationSearchEventSuggestion {
     type: string;
     latlng: ILatlng;
     postcode: string;
-    postcodes: string[];
     value: string;
 }
 

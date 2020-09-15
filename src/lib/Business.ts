@@ -7,6 +7,7 @@ import {
     EIdentify,
 } from '../../typings/types';
 import { localURLtoBlob, generateGUID } from '../helpers';
+import { API } from '../services/API';
 
 export class Business implements IBusinessListing {
     private data: Readonly<IBusinessDocument>;
