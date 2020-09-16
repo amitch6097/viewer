@@ -7,3 +7,5 @@ public/
 **.cache
 **.log
 **.jpg
+
+functions/.runtimeconfig.json
