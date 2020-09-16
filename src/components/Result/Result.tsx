@@ -6,7 +6,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DoneIcon from '@material-ui/icons/Done';
-import { IBusinessListing } from 'typings/types';
+import { IBusinessListing } from '../../../typings/types';
 import { strings } from '../../strings';
 
 export interface IResultProps {

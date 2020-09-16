@@ -1,24 +1,22 @@
-import React from 'react';
-import './InfoStep.less';
-
-import TextField from '@material-ui/core/TextField';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-
-import { strings } from '../../../strings';
-import { onChangeValue } from '../../../helpers';
+import TextField from '@material-ui/core/TextField';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import React from 'react';
+import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
 import { EmailMask, PhoneMask } from '../../../components/Masks';
-
 import { LocationAutocomplete } from '../../../components/Search';
 import { Select } from '../../../components/Select';
-import { getCategories } from '../../../helpers';
-import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
-import { IImage } from 'typings/types';
-import { Business } from '../../../lib/Business'
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import { getCategories, onChangeValue } from '../../../helpers';
+import { Business } from '../../../lib/Business';
+import { strings } from '../../../strings';
+import './InfoStep.less';
+
+
+
 
 export interface IInfoStepProps {
     category: string;

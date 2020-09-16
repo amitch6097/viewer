@@ -2,7 +2,7 @@ import React from 'react';
 import { Business } from '../../lib/Business';
 import { BusinessView } from './BusinessView';
 import { API } from '../../services';
-import { Reviews } from '../../lib/Reviews';
+import { BusinessReviews } from '../../lib/BusinessReviews';
 
 export interface IBusinessContainerProps {
     id: string;
@@ -10,7 +10,7 @@ export interface IBusinessContainerProps {
 
 export interface IBusinessContainerState {
     business: Business;
-    reviews: Reviews;
+    reviews: BusinessReviews;
     isFavorited: boolean;
 }
 
@@ -84,7 +84,7 @@ export class BusinessContainer extends React.Component<
             <BusinessView
                 id={this.props.id}
                 business={this.state.business}
-                reviews={this.state.reviews}
+                reviews={this.state.reviews.reviews}
                 onLoadMoreReviews={this.handleLoadMoreReviews}
                 isFavorited={this.state.isFavorited}
                 onToggleFavorite={this.handleToggleFavorited}

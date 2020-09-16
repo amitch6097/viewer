@@ -4,13 +4,13 @@ import { Functions } from './Functions';
 
 import { Business } from '../lib/Business';
 import { Review } from '../lib/Review';
-import { Reviews } from '../lib/Reviews';
+import { UserReviews } from '../lib/UserReviews';
+import { BusinessReviews } from '../lib/BusinessReviews';
 
 import { IBusinessListing, IReview } from '../../typings/types';
 import { User } from '../lib/User';
 
 export class API {
-
     static subscribeOnAuthChange(fn: () => void) {
         Auth.subscribeOnAuthChange(async () => {
             fn();
@@ -25,47 +25,101 @@ export class API {
         }
         return undefined;
     }
-    
+
     static async getBusiness(id: string): Promise<Business> {
         const business = await Firestore.getBusiness(id);
         return new Business(business);
     }
 
-    static async getReviewsForBusiness(
-        {
-            businessId,
-            startAfterId,
-            count = 1,
-        }: {
-            businessId: string;
-            startAfterId?: string;
-            count?: number;
-        }
-    ): Promise<Reviews> {
-        if(!startAfterId) {
-            const {reviews, size, lastId} = await Firestore.getInitialReviewsForBusiness({
-                businessId,
-                count
-            });
-            return new Reviews({
-                businessId,
+    static async getReviewsForUser({
+        userId,
+        startAfterId,
+        count = 1,
+    }: {
+        userId: string;
+        startAfterId?: string;
+        count?: number;
+    }): Promise<UserReviews> {
+        if (!startAfterId) {
+            const {
+                reviews,
                 size,
-                count,
                 lastId,
-                reviews: reviews.map((review) => new Review(review)),
-            })
+            } = await Firestore.getInitialReviewsForUser({
+                userId,
+                count,
+            });
+            return new UserReviews({
+                userId,
+                reviews: {
+                    size,
+                    count,
+                    lastId,
+                    reviews: reviews.map((review) => new Review(review)),
+                }
+            });
         } else {
-            const {reviews, lastId} = await Firestore.getNextReviewsForBusiness({
+            const { reviews, lastId } = await Firestore.getNextReviewsForUser({
+                userId,
+                startAfterId,
+                count,
+            });
+            return new UserReviews({
+                userId,
+                reviews: {
+                    count,
+                    lastId,
+                    reviews: reviews.map((review) => new Review(review)),
+                }
+            });
+        }
+    }
+
+    static async getReviewsForBusiness({
+        businessId,
+        startAfterId,
+        count = 1,
+    }: {
+        businessId: string;
+        startAfterId?: string;
+        count?: number;
+    }): Promise<BusinessReviews> {
+        if (!startAfterId) {
+            const {
+                reviews,
+                size,
+                lastId,
+            } = await Firestore.getInitialReviewsForBusiness({
+                businessId,
+                count,
+            });
+            return new BusinessReviews({
+                businessId,
+                reviews: {
+                    size,
+                    count,
+                    lastId,
+                    reviews: reviews.map((review) => new Review(review)),
+                }
+
+            });
+        } else {
+            const {
+                reviews,
+                lastId,
+            } = await Firestore.getNextReviewsForBusiness({
                 businessId,
                 startAfterId,
-                count
-            });
-            return new Reviews({
-                businessId,
                 count,
-                lastId,
-                reviews: reviews.map((review) => new Review(review)),
-            })
+            });
+            return new BusinessReviews({
+                businessId,
+                reviews: {
+                    count,
+                    lastId,
+                    reviews: reviews.map((review) => new Review(review)),
+                }
+            });
         }
     }
 
@@ -85,7 +139,7 @@ export class API {
         review: IReview
     ): Promise<{ id: string; review: Review }> {
         const response = await Functions.createReview({
-            review
+            review,
         });
         return {
             id: response.id,
@@ -98,7 +152,7 @@ export class API {
 
     static async isBusinessFavorited(businessId: string): Promise<boolean> {
         const user = await API.getMyUser();
-        const isFavorited  = user.favorites.includes(businessId);
+        const isFavorited = user.favorites.includes(businessId);
         return isFavorited;
     }
 
@@ -120,5 +174,7 @@ export class API {
 }
 
 
-// @ts-ignore
-window._API = API
+if(typeof window !== "undefined") {
+    // @ts-ignore
+    window._API = API;
+}

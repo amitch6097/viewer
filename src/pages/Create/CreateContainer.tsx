@@ -1,5 +1,5 @@
 import React from 'react';
-import { EIdentify, IIdentify, IOwner, IBusinessListing } from 'typings/types';
+import { EIdentify, IIdentify, IOwner, IBusinessListing } from '../../../typings/types';
 
 import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
 

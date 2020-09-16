@@ -12,7 +12,7 @@ import {
     BusinessAutocomplete,
 } from '../../components/Search';
 import { Results } from '../../components/Result';
-import { IBusinessListing } from 'typings/types';
+import { IBusinessListing } from '../../../typings/types';
 
 export interface ICheckExistsViewProps {
     onContinueClicked: () => void;

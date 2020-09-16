@@ -1,5 +1,5 @@
 import { SearchResponse } from '@algolia/client-search';
-import { IBusinessDocument, IBusinessListing } from 'typings/types';
+import { IBusinessDocument, IBusinessListing } from '../../typings/types';
 
 export class SearchResult {
     data: SearchResponse<IBusinessDocument>;

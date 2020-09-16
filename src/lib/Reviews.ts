@@ -1,5 +1,4 @@
-import { API } from '../services/API';
-import { IReview, IReviews } from 'typings/types';
+import { IReviews } from '../../typings/types';
 
 export class Reviews implements IReviews {
     private data: Readonly<IReviews>;
@@ -10,10 +9,6 @@ export class Reviews implements IReviews {
             count: 1,
             ...data,
         });
-    }
-
-    get businessId() {
-        return this.data.businessId;
     }
 
     get size() {
@@ -38,13 +33,5 @@ export class Reviews implements IReviews {
             reviews: this.reviews.concat(reviews.reviews),
             lastId: reviews.lastId,
         });
-    }
-
-    async fetchMore(): Promise<Reviews> {
-        const moreReviews = await API.getReviewsForBusiness({
-            businessId: this.businessId,
-            startAfterId: this.lastId,
-        });
-        return this.concat(moreReviews);
     }
 }

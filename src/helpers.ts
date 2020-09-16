@@ -12,7 +12,7 @@ import { ICategory } from '../typings/types';
  * @param fn a function to run on an event
  * @param fn an event, should be a change event with a value
  */
-export const onChangeValue = (fn) => (e: any) => {
+export const onChangeValue = (fn: (str: any) => void) => (e: any) => {
     return fn(e.target.value);
 };
 
@@ -21,7 +21,7 @@ export function getCategories(): Array<ICategory> {
 
     const keys = Object.keys(config.categories);
     for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
+        const key: string = keys[i];
         const value = config.categories[key];
         if (value && value.enabled) {
             categories.push({
@@ -38,7 +38,7 @@ export async function localURLtoBlob(url: string): Promise<Blob> {
     return blob;
 }
 
-export function getB64FromFile(file): Promise<string> {
+export function getB64FromFile(file: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -69,8 +69,3 @@ export function generateGUID() {
         S4()
     );
 }
-
-//@ts-ignore
-window.helpers = {
-    getB64FromFile,
-};

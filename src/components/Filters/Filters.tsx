@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { strings } from '../../strings';
-import { EIdentify, IIdentify, IBusinessListing } from 'typings/types';
+import { EIdentify, IIdentify, IBusinessListing } from '../../../typings/types';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
