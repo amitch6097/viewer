@@ -1,6 +1,4 @@
 import * as firebase from 'firebase';
-import { history } from '../history';
-import { IUserDocument, IUser } from 'typings/types';
 
 export class Auth {
 

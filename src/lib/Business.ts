@@ -1,13 +1,10 @@
+import {
+    EIdentify, IBusinessDocument, IBusinessListing,
+    IOwner
+} from '../../typings/types';
+import { generateGUID, localURLtoBlob } from '../helpers';
 import { FBStorage } from '../services/FBStorage';
 import { Functions } from '../services/Functions';
-import {
-    IBusinessListing,
-    IOwner,
-    IBusinessDocument,
-    EIdentify,
-} from '../../typings/types';
-import { localURLtoBlob, generateGUID } from '../helpers';
-import { API } from '../services/API';
 
 export class Business implements IBusinessListing {
     private data: Readonly<IBusinessDocument>;

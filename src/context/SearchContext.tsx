@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Search } from '../lib/Search';
 import { SearchResult } from '../lib/SearchResult';
-import { EIdentify, IIdentify } from 'typings/types';
+import { EIdentify, IIdentify } from '../../typings/types';
 import { withRouter } from 'react-router-dom';
 
 export interface ISearchContextState {

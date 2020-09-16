@@ -1,16 +1,12 @@
-import firebase from '../firebase';
-import { Business } from '../lib/Business';
 import {
     IBusinessDocument,
-    IReviewDocument,
-    IUserDocument,
-    IReview,
+
+
+    IReview, IReviewDocument, IUserDocument
 } from '../../typings/types';
+import firebase from '../firebase';
 
 const firestore = firebase.firestore();
-
-//@ts-ignore
-window.firestore = firestore;
 
 export class Firestore {
     static async getBusiness(id: string): Promise<IBusinessDocument> {
@@ -33,6 +29,76 @@ export class Firestore {
         return userDoc.data() as IUserDocument;
     }
 
+    static async getInitialReviewsForUser({
+        userId,
+        count,
+    }: {
+        userId: string;
+        count: number;
+    }): Promise<{
+        reviews: IReview[];
+        size?: number;
+        lastId?: string;
+    }> {
+        const user = await Firestore.getUser(userId);
+        const size = user?.reviews?.length || 0;
+        if (size === 0) {
+            return { reviews: [], size };
+        } else {
+            const reviewIds = user.reviews.slice(0, count);
+            const docs = await Promise.all(
+                reviewIds.map((id) =>
+                    firestore.collection('review').doc(id).get()
+                )
+            );
+            const reviews = (
+                await Promise.all(docs.map(getReviewFromDoc))
+            ).filter((x) => x);
+            const lastId = docs[docs.length - 1].id;
+            return {
+                reviews,
+                size,
+                lastId,
+            };
+        }
+    }
+
+    static async getNextReviewsForUser({
+        userId,
+        count,
+        startAfterId
+    }: {
+        userId: string;
+        count: number;
+        startAfterId: string;
+    }): Promise<{
+        reviews: IReview[];
+        size?: number;
+        lastId?: string;
+    }> {
+        const user = await Firestore.getUser(userId);
+        const size = user?.reviews?.length || 0;
+        if (size === 0) {
+            return { reviews: [], size };
+        } else {
+            const startAfterIndex = user.reviews.indexOf(startAfterId) + 1;
+            const reviewIds = user.reviews.slice(startAfterIndex, startAfterIndex + count);
+            const docs = await Promise.all(
+                reviewIds.map((id) =>
+                    firestore.collection('review').doc(id).get()
+                )
+            );
+            const reviews = (
+                await Promise.all(docs.map(getReviewFromDoc))
+            ).filter((x) => x);
+            const lastId = docs[docs.length - 1].id;
+            return {
+                reviews,
+                size,
+                lastId,
+            };
+        }
+    }
 
     static async getInitialReviewsForBusiness({
         businessId,
@@ -65,7 +131,7 @@ export class Firestore {
             }
 
             const reviews = (
-                await Promise.all(ref.docs.map(getReviewForBusiness))
+                await Promise.all(ref.docs.map(getReviewFromDoc))
             ).filter((x) => x);
             const lastId = ref.docs[ref.docs.length - 1].id;
             return {
@@ -105,7 +171,7 @@ export class Firestore {
         }
 
         const reviews = (
-            await Promise.all(ref.docs.map(getReviewForBusiness))
+            await Promise.all(ref.docs.map(getReviewFromDoc))
         ).filter((x) => x);
         const lastId = ref.docs[ref.docs.length - 1].id;
         return {
@@ -115,10 +181,11 @@ export class Firestore {
     }
 }
 
-async function getReviewForBusiness(doc): Promise<IReview> {
+async function getReviewFromDoc(doc: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>): Promise<IReview | undefined> {
     if (!doc.exists) {
-        return;
+        return undefined;
     }
+
     const data = doc.data();
     if (!data.createdBy) {
         console.warn(
@@ -129,7 +196,7 @@ async function getReviewForBusiness(doc): Promise<IReview> {
 
     const user = await Firestore.getUser(data.createdBy);
     const review: IReview = {
-        ...data,
+        ...data as IReviewDocument,
         user,
     };
     return review;

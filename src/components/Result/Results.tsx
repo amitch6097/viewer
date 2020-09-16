@@ -1,5 +1,5 @@
 import React from 'react';
-import { IBusinessListing } from 'typings/types';
+import { IBusinessListing } from '../../../typings/types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import { Result } from './Result';

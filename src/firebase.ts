@@ -18,8 +18,10 @@ const fb = !firebase.apps.length
     : firebase.app();
 
 
-//@ts-ignore
-window.__firebase = fb
+if(typeof window !== "undefined") {
+    //@ts-ignore
+    window.__firebase = fb
+}
 
 export default fb;
 

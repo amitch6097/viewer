@@ -37,11 +37,20 @@ export interface IReview {
     user?: IUserDocument;
 }
 
-export interface IReviews {
+export interface IUserReviews {
+    userId: string;
+    reviews: IReviews;
+}
+
+export interface IBusinessReviews {
     businessId: string;
+    reviews: IReviews;
+}
+
+export interface IReviews {
     reviews?: IReview[];
     size?: number;
-    count: number;
+    count?: number;
     lastId?: string;
 }
 
