@@ -1,3 +1,13 @@
 # Dependency directories
 node_modules/
 .DS_Store
+
+public/
+dist/
+
+
+**.cache
+**.log
+**.jpg
+
+functions/.runtimeconfig.json
