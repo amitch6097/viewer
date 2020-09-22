@@ -44,6 +44,14 @@ describe('my functions', () => {
 
     it('should let a user favorite and unfavorite a business by id', async (resolve) => {
         await createMockUser(api, tests, admin);
+        
+        const wrappedGetUserFavorites = tests.wrap(api.getUserFavorites);
+
+        const firstGetUserFavoritesResponse = await wrappedGetUserFavorites({}, {auth: MOCK_USER});
+        expect(firstGetUserFavoritesResponse.favorites.length).toEqual(0);
+        expect(firstGetUserFavoritesResponse.size).toEqual(0);
+        expect(firstGetUserFavoritesResponse.lastId).toEqual(undefined);
+
         const wrappedFavoriteBusiness = tests.wrap(api.favoriteBusiness);
         const data = {
             businessId: '__mock-business-id',
@@ -62,6 +70,12 @@ describe('my functions', () => {
         expect(
             mockUser.data().favorites.includes(data.businessId)
         ).toBeTruthy();
+
+        const secondGetUserFavoritesResponse = await wrappedGetUserFavorites({}, {auth: MOCK_USER});
+        expect(secondGetUserFavoritesResponse.favorites.length).toEqual(1);
+        expect(secondGetUserFavoritesResponse.favorites[0].id).toEqual(data.businessId);
+        expect(secondGetUserFavoritesResponse.size).toEqual(1);
+        expect(secondGetUserFavoritesResponse.lastId).toEqual(data.businessId);
 
         /** unfavorite */
         const wrappedUnfavoriteBusiness = tests.wrap(api.unfavoriteBusiness);

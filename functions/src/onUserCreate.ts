@@ -8,6 +8,23 @@ export const onUserCreate = functions.auth.user().onCreate(async (user) => {
     return await createUser(user);
 });
 
+export async function getOrCreateUserDocument(uid: string): Promise<FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>> {
+    let userDoc = await firestore
+        .collection('user')
+        .doc(uid).get();
+
+    if (!userDoc.exists) {
+        await createUser({
+            uid
+        });
+        userDoc = await firestore
+            .collection('user')
+            .doc(uid)
+            .get()
+    }
+    return userDoc;
+}
+
 export async function createUser(
     user: admin.auth.UserRecord | { uid: string }
 ) {

@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { createUser } from './onUserCreate';
-
+import { IFavoriteDocument } from '../../typings/types';
 import {
     IFavoriteBusinessProps,
     IFavoriteBusinessResponse,
@@ -36,6 +36,13 @@ export const favoriteBusiness = functions.https.onCall(
             );
 
         try {
+
+            const favoriteDocument: IFavoriteDocument = {
+                businessId: businessId,
+                createdAt: Number(new Date()),
+                createdBy: context?.auth?.uid ?? undefined,
+            };
+
             // update user
             const userDoc = await firestore
                 .collection('user')
@@ -54,6 +61,8 @@ export const favoriteBusiness = functions.https.onCall(
                         businessId
                     ),
                 });
+
+        
 
             const user = await firestore
                 .collection('user')
