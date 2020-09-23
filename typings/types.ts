@@ -29,6 +29,15 @@ export interface IReviewDocument {
     createdBy?: string;
 }
 
+export interface IFavoriteGroupDocument {
+    label: string;
+    favorites: string[]; //favorite document ids
+    updatedAt?: number;
+    createdAt?: number;
+    createdBy?: string;
+    users: string[];
+}
+
 export interface IReview {
     text: string;
     rating: number;
