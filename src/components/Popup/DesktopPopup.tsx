@@ -9,14 +9,13 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             position: 'fixed',
-            width: 400,
-            height: 400,
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             border: `1px solid ${theme.palette.primary.main}`,
             backgroundColor: theme.palette.background.paper,
-            borderRadius: '10px'
+            borderRadius: '10px',
+            minWidth: '200px'
         },
         header: {
             borderRadius: '10px 10px 0px 0px',
@@ -25,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
             color: theme.palette.primary.contrastText,
             textAlign: 'center'
         },
+        content: {}
     })
 );
 
@@ -36,7 +36,9 @@ export function DesktopPopup(props) {
                 <div className={classes.header}>
                     <Typography>{props.label}</Typography>
                 </div>
-                {props.children}
+                <div className={classes.content}>
+                    {props.children}
+                </div>
             </Grid>
         </Portal>
     );

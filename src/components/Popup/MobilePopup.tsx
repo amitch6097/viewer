@@ -10,8 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             position: 'fixed',
             width: 'calc(100% - 5px)',
-            height: '85%',
-            top: '50%',
+            bottom: '0%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             border: `5px solid ${theme.palette.primary.main}`,
@@ -22,8 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: 10,
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText,
-            textAlign: 'center'
+            textAlign: 'center',
         },
+        content: {},
     })
 );
 
@@ -35,7 +35,7 @@ export function MobilePopup(props) {
                 <div className={classes.header}>
                     <Typography>{props.label}</Typography>
                 </div>
-                {props.children}
+                <div className={classes.content}>{props.children}</div>
             </Grid>
         </Portal>
     );
