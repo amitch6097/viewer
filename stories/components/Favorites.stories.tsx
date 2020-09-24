@@ -8,6 +8,7 @@ import {
 } from '../../src/components/Favorites';
 
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
+import { Popup } from '../../src/components/Popup';
 
 export default {
     title: 'Components|Favorites',
@@ -62,6 +63,18 @@ export const FavoriteStory = () => {
             favoriteGroups={FAVORITE_GROUPS}
             onSaveGroup={console.log}
         />
+    );
+};
+
+export const FavoriteAsPopupStory = () => {
+    return (
+        <Popup label={'My Pop Up'}>
+            <Favorite
+                business={BUSINESS}
+                favoriteGroups={FAVORITE_GROUPS}
+                onSaveGroup={console.log}
+            />
+        </Popup>
     );
 };
 
