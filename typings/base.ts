@@ -4,6 +4,7 @@ export interface IFavoriteGroup {
     createdAt?: number;
     length: number;
     favoriteIds: string[];
+    images?: string[];
 }
 
 export interface IBusiness {
