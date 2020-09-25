@@ -68,7 +68,7 @@ export const FavoriteStory = () => {
 
 export const FavoriteAsPopupStory = () => {
     return (
-        <Popup label={'My Pop Up'}>
+        <Popup label={'My Pop Up'} actionRight="Save" >
             <Favorite
                 business={BUSINESS}
                 favoriteGroups={FAVORITE_GROUPS}
