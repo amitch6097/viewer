@@ -3,9 +3,11 @@ import * as admin from 'firebase-admin';
 
 const firestore = admin.firestore();
 import { IUserDocument } from '../../typings/types';
+import { UserCollection } from './collections/UserCollection';
 
 export const onUserCreate = functions.auth.user().onCreate(async (user) => {
-    return await createUser(user);
+    const userCollection = new UserCollection();
+    return await userCollection.createUser(user);
 });
 
 export async function createUser(
