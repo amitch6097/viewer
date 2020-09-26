@@ -42,48 +42,6 @@ describe('my functions', () => {
         resolve();
     });
 
-    it('should let a user favorite and unfavorite a business by id', async (resolve) => {
-        await createMockUser(api, tests, admin);
-        const wrappedFavoriteBusiness = tests.wrap(api.favoriteBusiness);
-        const data = {
-            businessId: '__mock-business-id',
-        };
-
-        await wrappedFavoriteBusiness(data, {
-            auth: MOCK_USER,
-        });
-
-        const mockUser = await admin
-            .firestore()
-            .collection('user')
-            .doc(MOCK_USER.uid)
-            .get();
-
-        expect(
-            mockUser.data().favorites.includes(data.businessId)
-        ).toBeTruthy();
-
-        /** unfavorite */
-        const wrappedUnfavoriteBusiness = tests.wrap(api.unfavoriteBusiness);
-        await wrappedUnfavoriteBusiness(data, {
-            auth: MOCK_USER,
-        });
-
-        const mockUserUpdated = await admin
-            .firestore()
-            .collection('user')
-            .doc(MOCK_USER.uid)
-            .get();
-
-        expect(
-            mockUserUpdated.data().favorites.includes(data.businessId)
-        ).toBeFalsy();
-
-        /** clean up */
-        await clearMockUser(admin);
-        resolve();
-    });
-
     it('should let users create a review', async (resolve) => {
         await createMockUser(api, tests, admin);
         const wrappedCreateReview = tests.wrap(api.createReview);
