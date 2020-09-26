@@ -12,6 +12,10 @@ import { onReviewCreated, createReview } from './createReview';
 import { favoriteBusiness } from './favoriteBusiness';
 import { onUserCreate } from './onUserCreate';
 import { unfavoriteBusiness } from './unfavoriteBusiness';
+import {getBusinessesForFavoriteGroup} from './getBusinessesForFavoriteGroup';
+import {getFavoriteGroups} from './getFavoriteGroups';
+import {createFavoriteGroup} from './createFavoriteGroup';
+import {setBusinessAsFavorite} from './setBusinessAsFavorite';
 
 export {
     onBusinessCreated,
@@ -21,4 +25,8 @@ export {
     favoriteBusiness,
     unfavoriteBusiness,
     onUserCreate,
+    getBusinessesForFavoriteGroup,
+    getFavoriteGroups,
+    createFavoriteGroup,
+    setBusinessAsFavorite
 };
