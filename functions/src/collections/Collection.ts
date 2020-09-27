@@ -1,18 +1,27 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-const firestore = admin.firestore();
-
 export abstract class Collection {
-    protected collection: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>;
+    protected collection: FirebaseFirestore.CollectionReference<
+        FirebaseFirestore.DocumentData
+    >;
 
     constructor(collectionId: string) {
+        const firestore = admin.firestore();
         this.collection = firestore.collection(collectionId);
     }
 
     async getData(id: string) {
         const document = await this.getDocument(id);
-        return document ? document.data() : undefined;
+        return document
+            ? {
+                  id: document.id,
+                  ...document.data(),
+              }
+            : undefined;
+    }
+
+    async deleteDocument(id: string) {
+        return await this.collection.doc(id).delete();
     }
 
     async getDocument(id: string) {
@@ -40,7 +49,10 @@ export abstract class Collection {
                     FirebaseFirestore.DocumentData
                 >
             ) => {
-                return snapshot.data();
+                return {
+                    id: snapshot.id,
+                    ...snapshot.data(),
+                };
             }
         );
         return favoriteGroups;

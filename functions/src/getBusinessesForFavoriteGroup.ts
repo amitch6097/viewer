@@ -40,7 +40,7 @@ export const getBusinessesForFavoriteGroup = functions.https.onCall(
                 page,
                 count,
             });
-            const businesses =await businessCollection.getAll(businessIds);
+            const businesses = await businessCollection.getAll(businessIds);
             
             return {
                 businesses,

@@ -1,16 +1,12 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import { UserCollection } from './Collections/UserCollection';
-import { FavoriteGroupCollection } from './Collections/FavoriteGroupCollection';
-
 import {
     ICreateFavoriteGroupProps,
-    ICreateFavoriteGroupResponse,
+    ICreateFavoriteGroupResponse
 } from '../../typings/functions';
+import { FavoriteGroupCollection } from './Collections/FavoriteGroupCollection';
+import { UserCollection } from './Collections/UserCollection';
 import { expectAuthAndData } from './helpers';
-import { IUserDocument, IFavoriteGroupDocument } from '../../typings/documents';
 
-const firestore = admin.firestore();
 
 export const createFavoriteGroup = functions.https.onCall(
     async (
@@ -29,31 +25,22 @@ export const createFavoriteGroup = functions.https.onCall(
 
             const userCollection = new UserCollection();
             const favoriteGroupCollection = new FavoriteGroupCollection();
-            const ref = await favoriteGroupCollection.addFavoriteGroup({
+            const favoriteGroup = await favoriteGroupCollection.addFavoriteGroup({
                 label,
                 uid: context.auth.uid,
             });
-            const id = ref.id;
-            const userDoc = await userCollection.getOrCreateUserDocument(
-                context.auth.uid
-            );
-            const currentUserFavoriteGroups = (userDoc.data() as IUserDocument)
-                .favoriteGroups;
+            const dotNotation = `favoriteGroups.${favoriteGroup.id}`;
             await userCollection.updateUser({
                 uid: context.auth.uid,
                 document: {
-                    favoriteGroups: {
-                        ...currentUserFavoriteGroups,
-                        [id]: {
-                            createdAt: Number(new Date()),
-                        },
+                    [dotNotation]: {
+                        createdAt: Number(new Date()),
                     },
                 },
             });
-            const favoriteGroupDoc = await ref.get();
             return {
-                id,
-                favoriteGroup: favoriteGroupDoc.data() as IFavoriteGroupDocument,
+                id: favoriteGroup.id,
+                favoriteGroup,
             };
         } catch (err) {
             throw new functions.https.HttpsError(
