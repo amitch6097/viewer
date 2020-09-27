@@ -157,19 +157,13 @@ export class API {
     }
 
     static async favoriteBusiness(businessId: string): Promise<boolean> {
-        const response = await Functions.favoriteBusiness({
-            businessId,
-        });
-        const isFavorited = response.favorites.includes(businessId);
-        return isFavorited;
+        // empty out old api
+        return false;
     }
 
     static async unfavoriteBusiness(businessId: string): Promise<boolean> {
-        const response = await Functions.unfavoriteBusiness({
-            businessId,
-        });
-        const isFavorited = response.favorites.includes(businessId);
-        return isFavorited;
+        // empty out old api
+        return false;
     }
 }
 

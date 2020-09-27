@@ -45,22 +45,6 @@ export interface IGetBusinessesForFavoriteGroupsResponse {
     businesses: IBusinessDocument[];
 }
 
-export interface IFavoriteBusinessProps {
-    businessId: string;
-}
-
-export interface IFavoriteBusinessResponse {
-    favorites: string[];
-}
-
-export interface IUnfavoriteBusinessProps {
-    businessId: string;
-}
-
-export interface IUnfavoriteBusinessResponse {
-    favorites: string[];
-}
-
 export interface ICreateReviewProps {
     review: IReviewDocument;
 }
