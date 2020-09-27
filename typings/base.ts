@@ -1,10 +1,16 @@
 export interface IFavoriteGroup {
+    id: string;
     label: string;
     updatedAt?: number;
     createdAt?: number;
     length: number;
     favoriteIds: string[];
     images?: string[];
+}
+
+export interface IFavoriteGroups {
+    favoriteGroups: IFavoriteGroup[];
+    length: number;
 }
 
 export interface IBusiness {
