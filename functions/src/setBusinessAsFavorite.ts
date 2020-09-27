@@ -1,13 +1,10 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
 import {
     ISetBusinessAsFavoriteProps,
-    ISetBusinessAsFavoriteResponse,
+    ISetBusinessAsFavoriteResponse
 } from '../../typings/functions';
+import { FavoriteGroupCollection } from './Collections/FavoriteGroupCollection';
 import { expectAuthAndData } from './helpers';
-import { IFavoriteGroupDocument } from '../../typings/documents';
-
-const firestore = admin.firestore();
 
 export const setBusinessAsFavorite = functions.https.onCall(
     async (
@@ -17,54 +14,18 @@ export const setBusinessAsFavorite = functions.https.onCall(
         expectAuthAndData(functions, data, context);
         try {
             const { businessId, setByFavoriteGroupId } = data;
-            const messages = [];
+            const favoirteGroupCollection = new FavoriteGroupCollection();
 
-            async function set(id: string, add: boolean) {
-                const favoriteGroupDoc = firestore
-                    .collection('favoriteGroup')
-                    .doc(id);
-                const favoriteGroupSnapshot = await favoriteGroupDoc.get();
-                if (!favoriteGroupSnapshot.exists) {
-                    messages.push(
-                        `Could not add favorite to group with id ${id}, because it does not exist`
-                    );
-                    return;
-                }
-                const favoriteGroup = favoriteGroupSnapshot.data() as IFavoriteGroupDocument;
-                const isOwnedByThisUser =
-                    favoriteGroup.createdBy === context.auth.uid;
-                if (!isOwnedByThisUser) {
-                    messages.push(
-                        `Could not add favorite to group with id ${id}, because the user does not have write access`
-                    );
-                    return;
-                }
-                const business = favoriteGroup.business || {};
-                if (add) {
-                    await favoriteGroupDoc.update({
-                        business: {
-                            ...business,
-                            [businessId]: {
-                                createdAt: Number(new Date()),
-                            },
-                        },
-                    });
-                } else {
-                    // remove
-                    delete business[businessId];
-                    await favoriteGroupDoc.update({
-                        business: {
-                            ...business,
-                        },
-                    });
-                }
-            }
-
-            await Promise.all(
+            const messages = await Promise.all(
                 Object.keys(setByFavoriteGroupId).map(
                     (favoriteGroupId: string) => {
                         const add = setByFavoriteGroupId[favoriteGroupId];
-                        return set(favoriteGroupId, add);
+                        return favoirteGroupCollection.setBusinessAsFavorite({
+                            businessId,
+                            favoriteGroupId,
+                            add,
+                            uid: context.auth.uid,
+                        });
                     }
                 )
             );
