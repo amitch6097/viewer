@@ -1,11 +1,11 @@
-import {
-    IBusinessListing,
-    IBusinessDocument,
-    IReviewDocument,
-    IUser,
-    IUserDocument,
-} from './types';
 import { IFavoriteGroupDocument } from './documents';
+import {
+    IBusinessDocument, IBusinessListing,
+
+    IReviewDocument,
+
+    IUserDocument
+} from './types';
 
 export interface ICreateFavoriteGroupProps {
     label: string;

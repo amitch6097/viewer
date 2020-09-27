@@ -3,12 +3,14 @@
     "scripts": {
         "test": "jest --watchAll --verbose=false --runInBand --detectOpenHandles",
         "lint": "tslint --project tsconfig.json",
-        "build": "tsc",
+        "build": "rimraf ./lib && tsc",
         "serve": "npm run build && firebase emulators:start --only functions",
         "shell": "npm run build && firebase functions:shell",
         "start": "npm run shell",
         "deploy": "npm run build && firebase deploy --only functions",
-        "logs": "firebase functions:log"
+        "logs": "firebase functions:log",
+        "test-functions": "jest  -- ./__tests__/functions.test.ts",
+        "test-only": "jest -t 'should let a user get favorite groups'"
     },
     "engines": {
         "node": "8"
@@ -17,7 +19,8 @@
     "dependencies": {
         "algoliasearch": "^4.2.0",
         "firebase-admin": "^8.13.0",
-        "firebase-functions": "^3.7.0"
+        "firebase-functions": "^3.7.0",
+        "rimraf": "^3.0.2"
     },
     "devDependencies": {
         "@types/jest": "^26.0.13",

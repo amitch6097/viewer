@@ -36,8 +36,7 @@ export class UserCollection extends Collection {
         uid: string;
         document: Partial<IUserDocument>;
     }): Promise<FirebaseFirestore.WriteResult> {
-        const userDoc = await this.getOrCreateUserDocument(uid);
-        return await userDoc.ref.update(document);
+        return await this.collection.doc(uid).update(document);
     }
 
     async createUser(

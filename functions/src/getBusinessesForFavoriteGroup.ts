@@ -7,7 +7,7 @@ import { BusinessCollection } from './collections/BusinessCollection';
 import { FavoriteGroupCollection } from './Collections/FavoriteGroupCollection';
 import { paginate } from './helpers';
 
-export const getFavoriteGroups = functions.https.onCall(
+export const getBusinessesForFavoriteGroup = functions.https.onCall(
     async (
         data: IGetBusinessesForFavoriteGroupsProps,
         context: functions.https.CallableContext
@@ -40,7 +40,7 @@ export const getFavoriteGroups = functions.https.onCall(
                 page,
                 count,
             });
-            const businesses =await businessCollection.getAll(businessIds);
+            const businesses = await businessCollection.getAll(businessIds);
             
             return {
                 businesses,

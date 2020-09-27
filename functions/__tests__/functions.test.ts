@@ -1,6 +1,15 @@
-import * as functions from 'firebase-functions-test';
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions-test';
 import * as path from 'path';
+import {
+    BusinessTagDescriptors,
+    EIdentify,
+    IBusinessDocument
+} from '../../typings/types';
+import { BUSINESS_DATA } from '../../__mock__/business-data';
+import { MOCK_USER } from '../../__mock__/user-data';
+import { FavoriteGroupCollection } from '../src/collections/FavoriteGroupCollection';
+import { clearMockUser, createMockUser, testTimeCreated } from './helpers';
 
 const projectConfig = {
     projectId: 'common-good-68b0b',
@@ -8,16 +17,8 @@ const projectConfig = {
 };
 
 const tests = functions(projectConfig, path.resolve('common-good-key.json'));
-import { BUSINESS_DATA } from '../../__mock__/business-data';
-import { MOCK_USER } from '../../__mock__/user-data';
-import {
-    BusinessTagDescriptors,
-    EIdentify,
-    IBusinessDocument,
-} from '../../typings/types';
 
-import { testTimeCreated, clearMockUser, createMockUser } from './helpers';
-
+jest.setTimeout(20000);
 describe('my functions', () => {
     let adminStub: any, api: any;
 
@@ -42,44 +43,121 @@ describe('my functions', () => {
         resolve();
     });
 
-    it('should let a user favorite and unfavorite a business by id', async (resolve) => {
+    it('should let a user create a favorite groups', async (resolve) => {
         await createMockUser(api, tests, admin);
-        const wrappedFavoriteBusiness = tests.wrap(api.favoriteBusiness);
+        const wrappedCreateFavoriteGroup = tests.wrap(api.createFavoriteGroup);
         const data = {
-            businessId: '__mock-business-id',
+            label: 'My New Favorite Group',
         };
 
-        await wrappedFavoriteBusiness(data, {
+        const createdAfterTime = new Date();
+        const response = await wrappedCreateFavoriteGroup(data, {
             auth: MOCK_USER,
         });
+        const createdBeforeTime = new Date();
 
-        const mockUser = await admin
-            .firestore()
-            .collection('user')
-            .doc(MOCK_USER.uid)
-            .get();
+        expect(response.id).toBeTruthy();
+        expect(response.favoriteGroup).toBeTruthy();
+        expect(response.favoriteGroup.name).toEqual('My New Favorite Group');
+        testTimeCreated(
+            response.favoriteGroup.updatedAt,
+            createdAfterTime,
+            createdBeforeTime
+        );
+        testTimeCreated(
+            response.favoriteGroup.createdAt,
+            createdAfterTime,
+            createdBeforeTime
+        );
+        expect(response.favoriteGroup.createdBy).toEqual(MOCK_USER.uid);
+        expect(response.favoriteGroup.images).toBeTruthy();
+        expect(response.favoriteGroup.images.length).toEqual(0);
+        expect(response.favoriteGroup.access).toEqual('private');
+        expect(response.favoriteGroup.business).toBeTruthy();
+        expect(Object.keys(response.favoriteGroup.business).length).toEqual(0);
 
-        expect(
-            mockUser.data().favorites.includes(data.businessId)
-        ).toBeTruthy();
+        const favoriteGroupCollection = new FavoriteGroupCollection();
+        const newFavoriteGroupDocument = await favoriteGroupCollection.getDocument(
+            response.id
+        );
+        expect(newFavoriteGroupDocument.exists).toBeTruthy();
 
-        /** unfavorite */
-        const wrappedUnfavoriteBusiness = tests.wrap(api.unfavoriteBusiness);
-        await wrappedUnfavoriteBusiness(data, {
-            auth: MOCK_USER,
-        });
+        const newFavoriteGroupData = newFavoriteGroupDocument.data();
+        expect(newFavoriteGroupData.name).toEqual('My New Favorite Group');
+        testTimeCreated(
+            newFavoriteGroupData.updatedAt,
+            createdAfterTime,
+            createdBeforeTime
+        );
+        testTimeCreated(
+            newFavoriteGroupData.createdAt,
+            createdAfterTime,
+            createdBeforeTime
+        );
+        expect(newFavoriteGroupData.createdBy).toEqual(MOCK_USER.uid);
+        expect(newFavoriteGroupData.images).toBeTruthy();
+        expect(newFavoriteGroupData.images.length).toEqual(0);
+        expect(newFavoriteGroupData.access).toEqual('private');
+        expect(newFavoriteGroupData.business).toBeTruthy();
+        expect(Object.keys(newFavoriteGroupData.business).length).toEqual(0);
 
-        const mockUserUpdated = await admin
-            .firestore()
-            .collection('user')
-            .doc(MOCK_USER.uid)
-            .get();
+        await favoriteGroupCollection.deleteDocument(response.id);
+        await clearMockUser(admin);
+        resolve();
+    });
 
-        expect(
-            mockUserUpdated.data().favorites.includes(data.businessId)
-        ).toBeFalsy();
+    it('should let a user get favorite groups', async (resolve) => {
+        await createMockUser(api, tests, admin);
+        const favoriteGroupCollection = new FavoriteGroupCollection();
+        const wrappedCreateFavoriteGroup = tests.wrap(api.createFavoriteGroup);
+        const wrappedGetFavoriteGroups = tests.wrap(api.getFavoriteGroups);
+        const newFavoriteGroups = [
+            {
+                label: 'My New Favorite Group 1',
+            },
+            {
+                label: 'My New Favorite Group 2',
+            },
+            {
+                label: 'My New Favorite Group 3',
+            },
+        ];
 
-        /** clean up */
+        const responses = [];
+        for (const data of newFavoriteGroups) {
+            responses.push(
+                await wrappedCreateFavoriteGroup(data, {
+                    auth: MOCK_USER,
+                })
+            );
+        }
+
+        const response1 = await wrappedGetFavoriteGroups(
+            {},
+            {
+                auth: MOCK_USER,
+            }
+        );
+
+        expect(response1.favoriteGroups).toBeTruthy();
+        console.log(response1.favoriteGroups);
+        expect(response1.favoriteGroups.length).toBe(3);
+        // should be in order of creation
+        expect(response1.favoriteGroups[0].name).toBe(
+            'My New Favorite Group 1'
+        );
+        expect(response1.favoriteGroups[1].name).toBe(
+            'My New Favorite Group 2'
+        );
+        expect(response1.favoriteGroups[2].name).toBe(
+            'My New Favorite Group 3'
+        );
+
+        await Promise.all(
+            (await responses).map((response) => {
+                return favoriteGroupCollection.deleteDocument(response.id);
+            })
+        );
         await clearMockUser(admin);
         resolve();
     });
@@ -135,7 +213,7 @@ describe('my functions', () => {
         resolve();
     });
 
-    it('should let users create a business', async (resolve) => {
+    it('should let users create a business (and add it to favorites)', async (resolve) => {
         await createMockUser(api, tests, admin);
         const wrappedCreateBusiness = tests.wrap(api.createBusiness);
         const data = {
@@ -155,6 +233,7 @@ describe('my functions', () => {
             .collection('business')
             .doc(id)
             .get();
+
 
         const businessData = business.data() as IBusinessDocument;
 
@@ -195,8 +274,80 @@ describe('my functions', () => {
             )
         ).toBeTruthy();
 
+        // add to favorites
+        const favoriteGroupCollection = new FavoriteGroupCollection();
+        const wrappedCreateFavoriteGroup = tests.wrap(api.createFavoriteGroup);
+        const wrappedSetBusinessAsFavorite = tests.wrap(
+            api.setBusinessAsFavorite
+        );
+        const wrappedGetBusinessesForFavoriteGroup = tests.wrap(
+            api.getBusinessesForFavoriteGroup
+        );
+        const createFavoriteGroupResponse = await wrappedCreateFavoriteGroup(
+            {
+                label: 'My New Favorite Group',
+            },
+            {
+                auth: MOCK_USER,
+            }
+        );
+
+        await wrappedSetBusinessAsFavorite(
+            {
+                businessId: id,
+                setByFavoriteGroupId: {
+                    [createFavoriteGroupResponse.id]: true,
+                },
+            },
+            {
+                auth: MOCK_USER,
+            }
+        );
+
+        const getBusinessesForFavoriteGroupResponse1 = await wrappedGetBusinessesForFavoriteGroup(
+            {
+                favoriteGroupId: createFavoriteGroupResponse.id,
+            },
+            {
+                auth: MOCK_USER,
+            }
+        );
+
+        expect(getBusinessesForFavoriteGroupResponse1.businesses).toBeTruthy();
+        expect(getBusinessesForFavoriteGroupResponse1.businesses.length).toBe(1);
+        expect(getBusinessesForFavoriteGroupResponse1.businesses[0].id).toBe(
+            id
+        );
+
+        await wrappedSetBusinessAsFavorite(
+            {
+                businessId: id,
+                setByFavoriteGroupId: {
+                    [createFavoriteGroupResponse.id]: false,
+                },
+            },
+            {
+                auth: MOCK_USER,
+            }
+        );
+
+        const getBusinessesForFavoriteGroupResponse2 = await wrappedGetBusinessesForFavoriteGroup(
+            {
+                favoriteGroupId: createFavoriteGroupResponse.id,
+            },
+            {
+                auth: MOCK_USER,
+            }
+        );
+
+        expect(getBusinessesForFavoriteGroupResponse2.businesses).toBeTruthy();
+        expect(getBusinessesForFavoriteGroupResponse2.businesses.length).toBe(0);
+
         /** clean up */
         await clearMockUser(admin);
+        await favoriteGroupCollection.deleteDocument(
+            createFavoriteGroupResponse.id
+        );
         await admin.firestore().collection('business').doc(id).delete();
         resolve();
     });
