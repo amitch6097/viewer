@@ -15,6 +15,7 @@ const timeAgo = new TimeAgo('en-US');
 
 export interface IFavoritesListCardProps {
     group: IFavoriteGroup;
+    onClick: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
