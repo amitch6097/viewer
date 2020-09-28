@@ -9,7 +9,6 @@ export interface IFavoriteGroup {
 }
 
 export interface IFavoriteGroups {
-    favoriteGroups: IFavoriteGroup[];
     length: number;
 }
 

@@ -153,8 +153,7 @@ export class API {
 
     static async isBusinessFavorited(businessId: string): Promise<boolean> {
         const user = await API.getMyUser();
-        const isFavorited = user.favorites.includes(businessId);
-        return isFavorited;
+        return false;
     }
 
     static async favoriteBusiness(businessId: string): Promise<boolean> {

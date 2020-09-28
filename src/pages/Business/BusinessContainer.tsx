@@ -12,6 +12,7 @@ export interface IBusinessContainerState {
     business: Business;
     reviews: BusinessReviews;
     isFavorited: boolean;
+    favoritesPopupOpen: boolean;
 }
 
 export class BusinessContainer extends React.Component<
@@ -22,6 +23,7 @@ export class BusinessContainer extends React.Component<
         business: undefined,
         reviews: undefined,
         isFavorited: false,
+        favoritesPopupOpen: false
     };
 
     componentDidMount() {
@@ -36,10 +38,10 @@ export class BusinessContainer extends React.Component<
     }
 
     fetchIsFavorited = async () => {
-        const isFavorited = await API.isBusinessFavorited(this.props.id);
-        this.setState({
-            isFavorited,
-        });
+        // const isFavorited = await API.isBusinessFavorited(this.props.id);
+        // this.setState({
+        //     isFavorited,
+        // });
     }
 
     fetchReviews = async () => {
@@ -66,17 +68,9 @@ export class BusinessContainer extends React.Component<
     };
 
     handleToggleFavorited = async () => {
-        if (this.state.isFavorited) {
-            const isFavorited = await API.unfavoriteBusiness(this.props.id);
-            this.setState({
-                isFavorited,
-            });
-        } else {
-            const isFavorited = await API.favoriteBusiness(this.props.id);
-            this.setState({
-                isFavorited,
-            });
-        }
+        this.setState({
+            favoritesPopupOpen: !this.state.favoritesPopupOpen,
+        });
     };
 
     render() {
@@ -84,10 +78,11 @@ export class BusinessContainer extends React.Component<
             <BusinessView
                 id={this.props.id}
                 business={this.state.business}
-                reviews={this.state.reviews.reviews}
+                reviews={this.state.reviews?.reviews}
                 onLoadMoreReviews={this.handleLoadMoreReviews}
                 isFavorited={this.state.isFavorited}
                 onToggleFavorite={this.handleToggleFavorited}
+                favoritesPopupOpen={this.state.favoritesPopupOpen}
             />
         ) : (
             <div></div>

@@ -28,6 +28,7 @@ const BUSINESS = {
 
 const FAVORITE_GROUPS = {
     '1': {
+        id: '1',
         label: 'My First Group',
         createdAt: Number(new Date()),
         updatedAt: Number(new Date()),
@@ -35,6 +36,7 @@ const FAVORITE_GROUPS = {
         favoriteIds: [],
     },
     '2': {
+        id: '2',
         label: 'My Next Group',
         createdAt: Number(new Date()),
         updatedAt: Number(new Date()),
@@ -42,6 +44,7 @@ const FAVORITE_GROUPS = {
         favoriteIds: [],
     },
     '3': {
+        id: '3',
         label: 'My Next Next Group',
         createdAt: Number(new Date()),
         updatedAt: Number(new Date()),
@@ -49,6 +52,7 @@ const FAVORITE_GROUPS = {
         favoriteIds: [],
     },
     '4': {
+        id: '4',
         label: 'My Last Group',
         createdAt: Number(new Date()),
         updatedAt: Number(new Date(new Date().getDate() - 2)),

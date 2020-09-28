@@ -4,7 +4,7 @@ import {
     IGetFavoriteGroupsResponse
 } from '../../typings/functions';
 import { FavoriteGroupCollection } from './Collections/FavoriteGroupCollection';
-import { UserCollection } from './collections/UserCollection';
+import { UserCollection } from './Collections/UserCollection';
 import { expectAuthAndData, paginate } from './helpers';
 
 export const getFavoriteGroups = functions.https.onCall(

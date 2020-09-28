@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 
 const firestore = admin.firestore();
 import { IUserDocument } from '../../typings/types';
-import { UserCollection } from './collections/UserCollection';
+import { UserCollection } from './Collections/UserCollection';
 
 export const onUserCreate = functions.auth.user().onCreate(async (user) => {
     const userCollection = new UserCollection();

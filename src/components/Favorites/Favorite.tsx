@@ -11,7 +11,9 @@ import { IBusiness, IFavoriteGroup } from 'typings/base';
 export interface IFavoriteProps {
     onSaveGroup: (text: string) => void;
     business: IBusiness;
-    favoriteGroups: Record<string, IFavoriteGroup>;
+    favoriteGroups: IFavoriteGroup[];
+    selected: Record<string, boolean>;
+    onClickFavoriteGroup: (groupId: string) => void;
 }
 
 const useStyles = makeStyles({
@@ -26,7 +28,11 @@ export function Favorite(props: IFavoriteProps) {
             <Divider />
             <FavoriteAddGroup onSave={props.onSaveGroup} />
             <Divider />
-            <FavoriteGroupsList favoriteGroups={props.favoriteGroups} />
+            <FavoriteGroupsList
+                selected={props.selected}
+                onClickFavoriteGroup={props.onClickFavoriteGroup}
+                favoriteGroups={props.favoriteGroups}
+            />
         </Grid>
     );
 }

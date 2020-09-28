@@ -61,7 +61,20 @@ export class Functions {
     static async getFavoriteGroups(
         props: IGetFavoriteGroupsProps
     ): Promise<IGetFavoriteGroupsResponse> {
-        return await call('getFavoriteGroups', props);
+        try {
+            const response = await call('getFavoriteGroups', props);
+            if(!response || !response.favoriteGroups) {
+                return {
+                    favoriteGroups: []
+                }
+            }
+            return response;
+        } catch(err) {
+            return {
+                favoriteGroups: []
+            }
+        }
+
     }
 
     static async setBusinessAsFavorite(
