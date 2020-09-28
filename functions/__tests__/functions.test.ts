@@ -8,7 +8,7 @@ import {
 } from '../../typings/types';
 import { BUSINESS_DATA } from '../../__mock__/business-data';
 import { MOCK_USER } from '../../__mock__/user-data';
-import { FavoriteGroupCollection } from '../src/collections/FavoriteGroupCollection';
+import { FavoriteGroupCollection } from '../src/Collections/FavoriteGroupCollection';
 import { clearMockUser, createMockUser, testTimeCreated } from './helpers';
 
 const projectConfig = {

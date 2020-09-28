@@ -46,6 +46,7 @@ export function DesktopPopup(props) {
                         variant="contained"
                         color="primary"
                         disableElevation={true}
+                        onClick={props.onActionLeft}
                         className={`${props.actionLeft ? '' : classes.hidden}`}
                     >
                         {props.actionLeft}
@@ -55,6 +56,7 @@ export function DesktopPopup(props) {
                         variant="contained"
                         color="primary"
                         disableElevation={true}
+                        onClick={props.onActionRight}
                         className={`${props.actionRight ? '' : classes.hidden}`}
                     >
                         {props.actionRight}

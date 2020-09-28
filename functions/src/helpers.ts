@@ -20,6 +20,9 @@ export function paginate({
     page: number;
     count: number;
 }): string[] {
+    if (!data) {
+        return [];
+    }
     const ordered = Object.keys(data).sort((key1, key2) => {
         const data1 = data[key1];
         const data2 = data[key2];

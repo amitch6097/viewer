@@ -6,9 +6,11 @@ import { Business } from '../lib/Business';
 import { Review } from '../lib/Review';
 import { UserReviews } from '../lib/UserReviews';
 import { BusinessReviews } from '../lib/BusinessReviews';
+import { FavoriteGroups } from '../lib/FavoriteGroups';
 
 import { IBusinessListing, IReview } from '../../typings/types';
 import { User } from '../lib/User';
+import { FavoriteGroup } from 'src/lib/FavoriteGroup';
 
 export class API {
     static subscribeOnAuthChange(fn: () => void) {
@@ -56,7 +58,7 @@ export class API {
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                }
+                },
             });
         } else {
             const { reviews, lastId } = await Firestore.getNextReviewsForUser({
@@ -70,7 +72,7 @@ export class API {
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                }
+                },
             });
         }
     }
@@ -100,8 +102,7 @@ export class API {
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                }
-
+                },
             });
         } else {
             const {
@@ -118,7 +119,7 @@ export class API {
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                }
+                },
             });
         }
     }
@@ -152,29 +153,55 @@ export class API {
 
     static async isBusinessFavorited(businessId: string): Promise<boolean> {
         const user = await API.getMyUser();
-        const isFavorited = user.favorites.includes(businessId);
-        return isFavorited;
+        return false;
     }
 
     static async favoriteBusiness(businessId: string): Promise<boolean> {
-        const response = await Functions.favoriteBusiness({
-            businessId,
-        });
-        const isFavorited = response.favorites.includes(businessId);
-        return isFavorited;
+        // empty out old api
+        return false;
     }
 
     static async unfavoriteBusiness(businessId: string): Promise<boolean> {
-        const response = await Functions.unfavoriteBusiness({
-            businessId,
+        // empty out old api
+        return false;
+    }
+
+    static async getBusinessesForFavoriteGroup(
+        favoriteGroupId: string
+    ): Promise<Business[]> {
+        const response = await Functions.getBusinessesForFavoriteGroup({
+            favoriteGroupId,
         });
-        const isFavorited = response.favorites.includes(businessId);
-        return isFavorited;
+        return response.businesses.map((data) => new Business(data));
+    }
+
+    static async setBusinessAsFavorite(
+        businessId: string,
+        setByFavoriteGroupId: Record<string, boolean>
+    ): Promise<boolean> {
+        const response = await Functions.setBusinessAsFavorite({
+            businessId,
+            setByFavoriteGroupId,
+        });
+        return true;
+    }
+
+    static async getFavoriteGroups(): Promise<FavoriteGroups> {
+        const response = await Functions.getFavoriteGroups({});
+        return new FavoriteGroups(
+            response.favoriteGroups.map((data) =>
+                FavoriteGroup.fromDocument(data)
+            )
+        );
+    }
+
+    static async createFavoriteGroup(label: string): Promise<FavoriteGroup> {
+        const response = await Functions.createFavoriteGroup({ label });
+        return FavoriteGroup.fromDocument(response.favoriteGroup);
     }
 }
 
-
-if(typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
     // @ts-ignore
     window._API = API;
 }

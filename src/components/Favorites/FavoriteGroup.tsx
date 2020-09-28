@@ -17,24 +17,61 @@ export interface IFavoriteGroupProps {
     selected: boolean;
 }
 
-export function FavoriteGroup(props: IFavoriteGroupProps) {
-    const updatedAgo = timeAgo.format(new Date( props.group.updatedAt));
-    const updatedText = props.selected === undefined ? updatedAgo : props.selected ? 'Added To List' : "Removed From List"
-    return (
-        <ListItem button onClick={props.onClick}>
-            <ListItemText
-                primary={props.group.label}
-                secondary={`${props.group.length} businesses - ${updatedText}`}
-            />
-            <ListItemSecondaryAction>
-                <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={props.onClick}
-                >
-                    <FavoriteIcon selected={props.selected} />
-                </IconButton>
-            </ListItemSecondaryAction>
-        </ListItem>
-    );
+export interface IFavoriteGroupState {
+    text: string;
+    number: number;
+    initialSelection: boolean
+}
+
+export class FavoriteGroup  extends React.Component<IFavoriteGroupProps, IFavoriteGroupState> {
+
+    state: IFavoriteGroupState;
+    props: IFavoriteGroupProps;
+
+    constructor(props: IFavoriteGroupProps) {
+        super(props);
+
+        const updatedAgo = timeAgo.format(new Date( this.props.group.updatedAt));
+        this.state = {
+            initialSelection: this.props.selected,
+            number: this.props.group.length,
+            text: updatedAgo
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.selected !== prevProps.selected) {
+            if (this.props.selected) {
+                this.setState({
+                    number: this.state.initialSelection ? this.props.group.length : this.props.group.length + 1,
+                    text: 'Added To List'
+                })
+            } else {
+                this.setState({
+                    number: this.state.initialSelection ? this.props.group.length - 1: this.props.group.length,
+                    text: "Removed From List"
+                })
+            }
+        }
+    }
+
+    render() {
+        return (
+            <ListItem button onClick={this.props.onClick}>
+                <ListItemText
+                    primary={this.props.group.label}
+                    secondary={`${this.state.number} businesses - ${this.state.text}`}
+                />
+                <ListItemSecondaryAction>
+                    <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={this.props.onClick}
+                    >
+                        <FavoriteIcon selected={this.props.selected} />
+                    </IconButton>
+                </ListItemSecondaryAction>
+            </ListItem>
+        );
+    }
 }

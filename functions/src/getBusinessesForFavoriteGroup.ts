@@ -3,7 +3,7 @@ import {
     IGetBusinessesForFavoriteGroupsProps,
     IGetBusinessesForFavoriteGroupsResponse
 } from '../../typings/functions';
-import { BusinessCollection } from './collections/BusinessCollection';
+import { BusinessCollection } from './Collections/BusinessCollection';
 import { FavoriteGroupCollection } from './Collections/FavoriteGroupCollection';
 import { paginate } from './helpers';
 
