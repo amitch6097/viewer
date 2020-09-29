@@ -17,6 +17,7 @@ import { Discover } from './pages/Discover';
 import { CreateReview } from './pages/CreateReview';
 
 import SearchContextProvider from './context/SearchContext';
+import { MyFavorites } from './pages/MyFavorites';
 
 function App() {
     return (
@@ -30,6 +31,8 @@ function App() {
                     <Route exact path="/business/:id" component={Business} />
                     <Route exact path="/business/:id/new-review" component={CreateReview} />
                     <Route path="/discover" component={Discover} />
+                    <Route exact path="/my-favorites/:favoriteGroupId" component={MyFavorites} />
+                    <Route exact path="/my-favorites" component={MyFavorites} />
                 <Footer />
             </SearchContextProvider>
         </HashRouter>

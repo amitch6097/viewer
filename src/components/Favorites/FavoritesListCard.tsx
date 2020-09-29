@@ -4,6 +4,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
@@ -15,13 +16,13 @@ const timeAgo = new TimeAgo('en-US');
 
 export interface IFavoritesListCardProps {
     group: IFavoriteGroup;
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            maxWidth: '345px',
+            width: '345px',
         },
         imageContainer: {
             display: 'flex',
@@ -50,7 +51,7 @@ export function FavoritesListCard(props: IFavoritesListCardProps) {
         : placeholder;
     return (
         <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea onClick={props.onClick}>
                 <Grid className={classes.imageContainer}>
                     <CardMedia
                         className={classes.image}
@@ -75,6 +76,45 @@ export function FavoritesListCard(props: IFavoritesListCardProps) {
                         {props.group.length + ' businesses'}
                     </Typography>
                     <Typography>{`last updated ${updatedAgo}`}</Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
+    );
+}
+
+export function FavoritesListCardSkelton() {
+    const classes = useStyles();
+    return (
+        <Card className={classes.root}>
+            <CardActionArea>
+                <Grid className={classes.imageContainer} spacing={5}>
+                    <Skeleton
+                        height="100%"
+                        className={classes.image}
+                        variant="rect"
+                        style={{ margin: '5px' }}
+                    />
+                    <Grid
+                        spacing={5}
+                        direction="column"
+                        className={classes.imageRight}
+                    >
+                        <Skeleton
+                            style={{ margin: '5px' }}
+                            className={classes.image}
+                            variant="rect"
+                        />
+                        <Skeleton
+                            style={{ margin: '5px' }}
+                            className={classes.image}
+                            variant="rect"
+                        />
+                    </Grid>
+                </Grid>
+                <CardContent>
+                    <Skeleton variant="text" />
+                    <Skeleton variant="text" width="50%" />
+                    <Skeleton variant="text" />
                 </CardContent>
             </CardActionArea>
         </Card>

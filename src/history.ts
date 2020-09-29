@@ -13,6 +13,14 @@ export function goToBusiness(historyProp, id) {
     historyProp.push('/business/' + id);
 }
 
+export function goToMyFavorites(historyProp) {
+    historyProp.push('/my-favorites')
+}
+
+export function goToMyFavoritesFavoriteGroup(historyProp, id) {
+    historyProp.push('/my-favorites/' + id);
+}
+
 export function goToHome(historyProp) {
     historyProp.push('/');
 }
