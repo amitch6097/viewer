@@ -43,6 +43,10 @@ export class Business implements IBusinessListing {
         );
     }
 
+    get id() {
+        return this.guid;
+    }
+
     get name() {
         return this.data.data.name;
     }

@@ -86,6 +86,7 @@ export interface IImage {
 }
 
 export interface IBusinessListing {
+    id?: string;
     image?: IImage;
     category: string;
     phone: string;

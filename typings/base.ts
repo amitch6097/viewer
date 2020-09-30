@@ -21,3 +21,9 @@ export interface IBusiness {
     reviewsLength: number;
     reviewsAverage: number;
 }
+
+export enum EViewState {
+    LOADING = 'loading',
+    EMPTY = 'empty',
+    DONE = 'done'
+}
