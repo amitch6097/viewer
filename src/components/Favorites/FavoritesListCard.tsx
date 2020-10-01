@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             height: '20vh',
             minHeight: '200px',
+            minWidth: '200px',
         },
         image: {
             flex: '1',
