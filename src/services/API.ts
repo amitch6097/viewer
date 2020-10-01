@@ -10,7 +10,7 @@ import { FavoriteGroups } from '../lib/FavoriteGroups';
 
 import { IBusinessListing, IReview } from '../../typings/types';
 import { User } from '../lib/User';
-import { FavoriteGroup } from 'src/lib/FavoriteGroup';
+import { FavoriteGroup } from '../lib/FavoriteGroup';
 
 export class API {
     static subscribeOnAuthChange(fn: () => void) {
