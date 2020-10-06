@@ -8,6 +8,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DoneIcon from '@material-ui/icons/Done';
 import { IBusinessListing } from '../../../typings/types';
 import { strings } from '../../strings';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 export interface IResultProps {
     business: IBusinessListing;
@@ -152,6 +153,31 @@ export function Result(props: IResultProps) {
                                 </Typography>
                             </div>
                         )}
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        </div>
+    );
+}
+
+export function ResultSkeleton() {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <Card className={classes.card}>
+                <CardActionArea
+                    className={classes.cardActionArea}
+                >
+                    <Skeleton
+                        className={classes.cardMedia}
+                        variant="rect"
+                        style={{ margin: '5px' }}
+                    />
+                    <CardContent className={classes.cardContent}>
+                        <Skeleton variant="text" height={30} />
+                        <Skeleton variant="text" width="50%" height={25} />
+                        <Skeleton variant="text" height={25} />
                     </CardContent>
                 </CardActionArea>
             </Card>

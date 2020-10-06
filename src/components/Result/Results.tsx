@@ -2,7 +2,7 @@ import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
-import { Result } from './Result';
+import { Result, ResultSkeleton } from './Result';
 
 export interface IResultsProps {
     businesses: Record<string, IBusinessListing>;
@@ -13,20 +13,20 @@ export interface IResultsProps {
     styles?: {
         root?: object;
         item?: object;
-    }
+    };
 }
 
 const useStyles = makeStyles({
     root: (props: IResultsProps) => {
         return {
-            ...(props?.styles?.root || {})
-        }
+            ...(props?.styles?.root || {}),
+        };
     },
     item: (props: IResultsProps) => {
         return {
             width: '100%',
-            ...(props?.styles?.item || {})
-        }
+            ...(props?.styles?.item || {}),
+        };
     },
 });
 
@@ -42,7 +42,7 @@ export function Results(props) {
             className={classes.root}
         >
             {Object.keys(props.businesses).map((key) => {
-                const business =  props.businesses[key];
+                const business = props.businesses[key];
                 return (
                     <Grid className={classes.item} key={key} item>
                         <Result
@@ -50,6 +50,28 @@ export function Results(props) {
                             onClick={() => props.onClick(key)}
                             business={business}
                         />{' '}
+                    </Grid>
+                );
+            })}
+        </Grid>
+    );
+}
+
+export function ResultsSkeleton() {
+    const classes = useStyles({});
+    return (
+        <Grid
+            container
+            spacing={2}
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.root}
+        >
+            {new Array(3).fill(undefined).map((__, index) => {
+                return (
+                    <Grid className={classes.item} key={index} item>
+                        <ResultSkeleton />
                     </Grid>
                 );
             })}
