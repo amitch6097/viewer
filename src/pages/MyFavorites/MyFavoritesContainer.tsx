@@ -1,3 +1,4 @@
+import { groupEnd } from 'console';
 import React from 'react';
 import { EViewState } from '../../../typings/base';
 import { Business } from '../../lib/Business';
@@ -52,9 +53,11 @@ export class MyFavoritesContainer extends React.Component<
     };
 
     fetchBusinessesForFavoriteGroup = async (groupId: string) => {
+        const favoriteGroups = await API.getFavoriteGroups();
         const businesses = await API.getBusinessesForFavoriteGroup(groupId);
         this.setState({
             businesses,
+            favoriteGroups,
             state: businesses.length ? EViewState.DONE : EViewState.EMPTY,
         });
     };
@@ -65,7 +68,7 @@ export class MyFavoritesContainer extends React.Component<
             state: EViewState.LOADING,
         });
         this.props.onClickFavoriteGroup(groupId);
-        await this.fetchBusinessesForFavoriteGroup(groupId);
+        // await this.fetchBusinessesForFavoriteGroup(groupId);
     };
 
     handleClickBusiness = async (businessId: string) => {
@@ -78,6 +81,7 @@ export class MyFavoritesContainer extends React.Component<
                 businesses={this.state?.businesses}
                 state={this.state.state}
                 onClickBusiness={this.handleClickBusiness}
+                group={this.state.favoriteGroups?.data?.find((group) => group.id === this.state.favoriteGroupId)}
             />
         ) : (
             <MyFavoritesView

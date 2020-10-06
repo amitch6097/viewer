@@ -6,7 +6,9 @@ import {
     FavoriteAddGroup,
     FavoriteBusinessResult,
     FavoritesListCard,
-    FavoritesListHeader
+    FavoritesListHeader,
+    FavoritesListCardSkelton,
+    FavoritesListHeaderSkeleton
 } from '../../src/components/Favorites';
 
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
@@ -62,6 +64,14 @@ const FAVORITE_GROUPS: IFavoriteGroup[] = [
         favoriteIds: [],
     },
 ];
+
+export const FavoritesListHeaderSkeletonStory = () => {
+    return <FavoritesListHeaderSkeleton />
+}
+
+export const FavoritesListCardSkeltonStory = () => {
+    return <FavoritesListCardSkelton />
+}
 
 export const FavoritesListHeaderStore = () => {
     return <FavoritesListHeader group={FAVORITE_GROUPS['1']} />;

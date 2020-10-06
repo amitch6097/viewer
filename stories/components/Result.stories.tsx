@@ -1,6 +1,6 @@
 import React from 'react';
 import { BUSINESS_DATA } from '../../__mock__/business-data';
-import { Result, Results } from '../../src/components/Result';
+import { Result, Results, ResultSkeleton, ResultsSkeleton } from '../../src/components/Result';
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 
 export default {
@@ -17,6 +17,12 @@ export const ResultStory = () => (
         business={BUSINESS_DATA}
     />
 );
+
+export const ResultSkeletonStory = () => {
+    return (
+        <ResultSkeleton />
+    )
+}
 
 export const ResultsStory = () => {
     const businesses = new Array(10)
@@ -36,3 +42,9 @@ export const ResultsStory = () => {
         />
     );
 };
+
+export const ResultsSkeletonStory = () => {
+    return (
+        <ResultsSkeleton />
+    )
+}

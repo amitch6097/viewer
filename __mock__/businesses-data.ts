@@ -1,0 +1,2 @@
+import {BUSINESS_DATA} from './business-data'
+export const BUSINESSES_DATA = [BUSINESS_DATA, BUSINESS_DATA, BUSINESS_DATA, BUSINESS_DATA]

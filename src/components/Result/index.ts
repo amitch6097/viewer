@@ -1,3 +1,3 @@
-export { Result } from './Result';
+export { Result, ResultSkeleton } from './Result';
 
-export { Results } from './Results';
+export { Results, ResultsSkeleton } from './Results';
