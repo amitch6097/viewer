@@ -123,3 +123,25 @@ export function FavoritesListHeader(props: IFavoritesListHeaderProps) {
         </Card>
     );
 }
+
+export function FavoritesListHeaderSkeleton() {
+    const classes = useStyles();
+
+    return (
+        <Card raised={false} elevation={0} className={classes.root}>
+            <Grid className={classes.imageContainer}>
+                <Skeleton
+                    height="100%"
+                    className={classes.image}
+                    variant="rect"
+                    style={{ margin: '5px' }}
+                />
+            </Grid>
+            <CardContent  className={classes.actions}>
+                <Skeleton variant="text" />
+                <Skeleton variant="text" width="50%" />
+                <Skeleton variant="text" />
+            </CardContent>
+        </Card>
+    );
+}
