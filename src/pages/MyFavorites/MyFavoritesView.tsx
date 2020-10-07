@@ -22,12 +22,17 @@ export interface IMyFavoritesViewProps {
 
 const useStyles = makeStyles({
     root: {},
+    container: {
+        minHeight: 'var(--page-height)',
+        paddingTop: 'var(--page-padding',
+        paddingBottom: 'var(--page-padding'
+    },
 });
 
 export function MyFavoritesView(props: IMyFavoritesViewProps) {
     const classes = useStyles();
     return (
-        <Container>
+        <Container className={classes.container}>
             <Grid container spacing={4}>
                 {props.state === EViewState.LOADING && (
                     <MyFavoritesViewLoading />

@@ -11,17 +11,19 @@ export interface IFooterProps {
 
 const useStyles = makeStyles({
     root: {
+        height: 'var(--footer-height)',
         left: 0,
         bottom: 0,
         width: '100%',
         backgroundColor: '#eee',
-        padding: '10px',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column'
     },
     title: {
         fontWeight: 700,
     },
     content: {
-        paddingLeft: '50px',
     },
     ul: {
         listStyleType: 'none',
@@ -30,6 +32,10 @@ const useStyles = makeStyles({
     },
     li: {
         marginBottom: 10
+    },
+    footerRow: {
+        padding: '0px',
+        paddingLeft: '50px'
     }
 });
 
@@ -39,8 +45,8 @@ export function Footer(props: IFooterProps) {
         event.preventDefault();
     return (
         <footer className={classes.root}>
-            <Grid className={classes.content} container spacing={5}>
-                <Grid item>
+            <Grid className={classes.content} container spacing={0}>
+                <Grid item className={classes.footerRow}>
                     <Typography
                         className={classes.title}
                         variant="h6"
@@ -100,7 +106,7 @@ export function Footer(props: IFooterProps) {
 
                     </ul>
                 </Grid>
-                <Grid item>
+                <Grid item className={classes.footerRow}>
                     <Typography
                         className={classes.title}
                         variant="h6"

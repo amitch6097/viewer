@@ -64,6 +64,8 @@ const useStyles = makeStyles({
     },
     results: {
         // width: 'calc(100% - 300px)',
+        width: '100%',
+        margin: '20px'
     },
 });
 

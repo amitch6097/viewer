@@ -29,12 +29,13 @@ export interface IAppBarProps {
     searchComponent?: JSX.Element;
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
         boxShadow: 'none',
         minHeight: 'var(--app-bar-height)',
         position: 'sticky',
         top: '0',
+        background: theme.palette.background.default
     },
     search: {},
     controls: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'row'
     }
-});
+}));
 
 export function AppBar(props: IAppBarProps) {
     const classes = useStyles();

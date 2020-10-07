@@ -65,7 +65,7 @@ export class FavoriteGroup  extends React.Component<IFavoriteGroupProps, IFavori
                 <ListItemSecondaryAction>
                     <IconButton
                         edge="end"
-                        aria-label="delete"
+                        aria-label="toggle favorite"
                         onClick={this.props.onClick}
                     >
                         <FavoriteIcon selected={this.props.selected} />

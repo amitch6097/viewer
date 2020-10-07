@@ -9,6 +9,8 @@ import DoneIcon from '@material-ui/icons/Done';
 import { IBusinessListing } from '../../../typings/types';
 import { strings } from '../../strings';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { Grid, Box, IconButton } from '@material-ui/core';
+import { FavoriteIcon } from '../Favorites';
 
 export interface IResultProps {
     business: IBusinessListing;
@@ -18,22 +20,28 @@ export interface IResultProps {
 }
 
 const useStyles = makeStyles({
-    root: {},
-    card: {},
+    root: {
+        height: 'var(--card-height)',
+    },
+    card: {
+        height: 'var(--card-height)',
+    },
     cardActionArea: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'end',
     },
     cardMedia: {
-        width: (props: IResultProps) => props?.imageSize || 200,
-        height: (props: IResultProps) => props?.imageSize || 200,
+        width: 'var(--card-height)',
+        height: 'var(--card-height)',
         alignSelf: 'center',
     },
     cardContent: {
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
+        height: 'calc(var(--card-height) - 32px)',
+        justifyContent: 'space-between',
     },
     cardContentTop: {
         display: 'flex',
@@ -58,6 +66,12 @@ const useStyles = makeStyles({
     cardContentBottomTag: {
         display: 'flex',
         flexDirection: 'row',
+    },
+    locationDivider: {
+        background: 'black',
+        height: '5px',
+        width: '5px',
+        borderRadius: '100%',
     },
 });
 
@@ -101,22 +115,38 @@ export function Result(props: IResultProps) {
                                 </Typography>
                             </div>
                             <div className={classes.cardContentTopRight}>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
+                                <IconButton
+                                    edge="end"
+                                    aria-label="toggle favorite"
+                                    onClick={console.log}
                                 >
-                                    {props.business.phone}
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    color="textSecondary"
-                                >
-                                    {props.business.address.name}
-                                </Typography>
+                                    <FavoriteIcon selected={false} />
+                                </IconButton>
                             </div>
                         </div>
                         {!props.minimal && (
                             <div className={classes.cardContentBottom}>
+                                <Grid container direction="row">
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                    >
+                                        {props.business.phone}
+                                    </Typography>
+                                    {props.business.address.name && (
+                                        <Box
+                                            className={classes.locationDivider}
+                                            component="span"
+                                            m={1}
+                                        />
+                                    )}
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                    >
+                                        {props.business.address.name}
+                                    </Typography>
+                                </Grid>
                                 <div className={classes.cardContentBottomTags}>
                                     {Object.keys(props.business.identify)
                                         .filter((key) => {
@@ -144,13 +174,6 @@ export function Result(props: IResultProps) {
                                             );
                                         })}
                                 </div>
-
-                                <Typography
-                                    variant="body1"
-                                    color="textSecondary"
-                                >
-                                    {props.business.about}
-                                </Typography>
                             </div>
                         )}
                     </CardContent>
@@ -166,9 +189,7 @@ export function ResultSkeleton() {
     return (
         <div className={classes.root}>
             <Card className={classes.card}>
-                <CardActionArea
-                    className={classes.cardActionArea}
-                >
+                <CardActionArea className={classes.cardActionArea}>
                     <Skeleton
                         className={classes.cardMedia}
                         variant="rect"
