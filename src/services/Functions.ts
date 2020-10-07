@@ -1,5 +1,3 @@
-import firebase from '../firebase';
-
 import {
     ICreateBusinessProps,
     ICreateBusinessResponse,
@@ -9,11 +7,14 @@ import {
     ICreateReviewResponse,
     IGetBusinessesForFavoriteGroupsProps,
     IGetBusinessesForFavoriteGroupsResponse,
+    IGetFavoriteGroupProps,
+    IGetFavoriteGroupResponse,
     IGetFavoriteGroupsProps,
     IGetFavoriteGroupsResponse,
     ISetBusinessAsFavoriteProps,
     ISetBusinessAsFavoriteResponse,
 } from '../../typings/functions';
+import firebase from '../firebase';
 
 interface IProps {
     createBusiness: ICreateBusinessProps;
@@ -22,6 +23,7 @@ interface IProps {
     getBusinessesForFavoriteGroup: IGetBusinessesForFavoriteGroupsProps;
     getFavoriteGroups: IGetFavoriteGroupsProps;
     setBusinessAsFavorite: ISetBusinessAsFavoriteProps;
+    getFavoriteGroup: IGetFavoriteGroupProps;
 }
 
 interface IResponse {
@@ -31,6 +33,7 @@ interface IResponse {
     getBusinessesForFavoriteGroup: IGetBusinessesForFavoriteGroupsResponse;
     getFavoriteGroups: IGetFavoriteGroupsResponse;
     setBusinessAsFavorite: ISetBusinessAsFavoriteResponse;
+    getFavoriteGroup: IGetFavoriteGroupResponse;
 }
 
 export class Functions {
@@ -58,23 +61,35 @@ export class Functions {
         return await call('getBusinessesForFavoriteGroup', props);
     }
 
+    static async getFavoriteGroup(
+        props: IGetFavoriteGroupProps
+    ): Promise<IGetFavoriteGroupResponse> {
+        try {
+            const response = await call('getFavoriteGroup', props);
+            return response;
+        } catch (err) {
+            return {
+                favoriteGroup: undefined,
+            };
+        }
+    }
+
     static async getFavoriteGroups(
         props: IGetFavoriteGroupsProps
     ): Promise<IGetFavoriteGroupsResponse> {
         try {
             const response = await call('getFavoriteGroups', props);
-            if(!response || !response.favoriteGroups) {
+            if (!response || !response.favoriteGroups) {
                 return {
-                    favoriteGroups: []
-                }
+                    favoriteGroups: [],
+                };
             }
             return response;
-        } catch(err) {
+        } catch (err) {
             return {
-                favoriteGroups: []
-            }
+                favoriteGroups: [],
+            };
         }
-
     }
 
     static async setBusinessAsFavorite(
