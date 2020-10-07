@@ -2,18 +2,16 @@ import * as functions from 'firebase-functions';
 import { IFavoriteGroupDocument, IUserDocument } from '../../typings/documents';
 import {
     IGetFavoriteGroupProps,
-    IGetFavoriteGroupResponse
+    IGetFavoriteGroupResponse,
 } from '../../typings/functions';
 import { FavoriteGroupCollection } from './Collections/FavoriteGroupCollection';
 import { UserCollection } from './Collections/UserCollection';
-import { expectAuthAndData } from './helpers';
 
 export const getFavoriteGroup = functions.https.onCall(
     async (
         data: IGetFavoriteGroupProps,
         context: functions.https.CallableContext
     ): Promise<IGetFavoriteGroupResponse> => {
-        expectAuthAndData(functions, data, context);
         try {
             const { id } = data;
             if (!id) {
@@ -24,13 +22,20 @@ export const getFavoriteGroup = functions.https.onCall(
             }
             const userCollection = new UserCollection();
             const favoriteGroupCollection = new FavoriteGroupCollection();
-            const user = await userCollection.getOrCreateUserData(
-                context.auth.uid
+            const user =
+                context?.auth?.uid &&
+                (await userCollection.getOrCreateUserData(context.auth.uid));
+            const favoriteGroup = await favoriteGroupCollection.getData(id);
+            if (!favoriteGroup?.id) {
+                throw new functions.https.HttpsError(
+                    'not-found',
+                    `Favorite group with id ${id} does not exist`
+                );
+            }
+            const userCanViewFavoriteGroup = canUserViewFavoriteGroup(
+                user,
+                favoriteGroup
             );
-            const favoriteGroup = await favoriteGroupCollection.getData(
-                id
-            );
-            const userCanViewFavoriteGroup = canUserViewFavoriteGroup(user, favoriteGroup)
             if (!userCanViewFavoriteGroup) {
                 throw new functions.https.HttpsError(
                     'permission-denied',
@@ -54,8 +59,7 @@ function canUserViewFavoriteGroup(
     favoriteGroup: IFavoriteGroupDocument
 ) {
     if (
-        (favoriteGroup.id &&
-            user.favoriteGroups[favoriteGroup.id] !== undefined) ||
+        user?.favoriteGroups?.[favoriteGroup?.id] ||
         favoriteGroup.access === 'public'
     ) {
         return true;
