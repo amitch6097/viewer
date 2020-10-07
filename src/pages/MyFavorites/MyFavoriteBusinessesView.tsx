@@ -35,6 +35,11 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
     },
+    container: {
+        minHeight: 'var(--page-height)',
+        paddingTop: 'var(--page-padding',
+        paddingBottom: 'var(--page-padding'
+    },
     divider: {
         marginTop: '10px',
         marginBottom: '10px',
@@ -85,7 +90,7 @@ export function MyFavoriteBusinessesView(
     }
 
     return (
-        <Container>
+        <Container className={classes.container}>
             {props.state === EViewState.LOADING && <Loading />}
             {props.state === EViewState.EMPTY && <Empty />}
             {props.state === EViewState.DONE && <Done />}
