@@ -26,6 +26,14 @@ export interface ISetBusinessAsFavoriteResponse {
     messages: string[];
 }
 
+export interface IGetFavoriteGroupProps {
+    id: string;
+}
+
+export interface IGetFavoriteGroupResponse {
+    favoriteGroup: IFavoriteGroupDocument;
+}
+
 export interface IGetFavoriteGroupsProps {
     count?: number;
     page?: number;
