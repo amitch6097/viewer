@@ -13,6 +13,7 @@ import { getBusinessesForFavoriteGroup } from './getBusinessesForFavoriteGroup';
 import { getFavoriteGroups } from './getFavoriteGroups';
 import { createFavoriteGroup } from './createFavoriteGroup';
 import { setBusinessAsFavorite } from './setBusinessAsFavorite';
+import { getFavoriteGroup } from './getFavoriteGroup';
 
 export {
     onBusinessCreated,
@@ -24,4 +25,5 @@ export {
     getFavoriteGroups,
     createFavoriteGroup,
     setBusinessAsFavorite,
+    getFavoriteGroup,
 };

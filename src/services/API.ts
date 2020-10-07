@@ -199,6 +199,11 @@ export class API {
         const response = await Functions.createFavoriteGroup({ label });
         return FavoriteGroup.fromDocument(response.favoriteGroup);
     }
+
+    static async getFavoriteGroup(id: string): Promise<FavoriteGroup> {
+        const response = await Functions.getFavoriteGroup({id});
+        return FavoriteGroup.fromDocument(response.favoriteGroup);
+    }
 }
 
 if (typeof window !== 'undefined') {
