@@ -1,8 +1,6 @@
 import { IFavoriteGroupDocument, IReviewDocument } from './documents';
 import {
-    IBusinessDocument, IBusinessListing,
-
-    IUserDocument
+    IBusinessDocument, IBusinessListing
 } from './types';
 
 export interface ICreateFavoriteGroupProps {
