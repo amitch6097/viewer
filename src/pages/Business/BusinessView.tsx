@@ -1,9 +1,20 @@
 import React from 'react';
 import './BusinessView.less';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { FavoritesPopup } from '../FavoritesPopup/FavoritesPopup';
 import { Listing } from '../../components/Listing';
-import { Slide } from '@material-ui/core';
+import { Slide, Container } from '@material-ui/core';
+
+const useStyles = makeStyles({
+    root: {},
+    container: {
+        minHeight: 'var(--page-height)',
+        paddingTop: 'var(--page-padding)',
+        paddingBottom: 'var(--page-padding)'
+    },
+});
+
 
 export function BusinessView({
     business,
@@ -14,8 +25,9 @@ export function BusinessView({
     onToggleFavorite,
     favoritesPopupOpen,
 }) {
+    const classes = useStyles();
     return (
-        <div className="bb-pages bb-pages-business">
+        <Container className={classes.container}>
             <Listing
                 id={id}
                 isEditable={false}
@@ -37,6 +49,6 @@ export function BusinessView({
                     onClose={onToggleFavorite}
                 />
             </Slide>
-        </div>
+        </Container>
     );
 }

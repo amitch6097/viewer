@@ -26,7 +26,7 @@ import {
     makeStyles,
     useTheme,
 } from '@material-ui/core/styles';
-import { List } from '@material-ui/core';
+import { Hidden, List } from '@material-ui/core';
 import { ListingActions } from './ListingActions';
 import { ListingReviews } from './ListingReviews';
 export interface IListingProps {
@@ -44,7 +44,6 @@ export interface IListingProps {
 const useStyles = makeStyles({
     root: {},
     content: {
-        maxWidth: 700,
     },
     aside: {
         position: 'sticky',
@@ -74,6 +73,8 @@ export function Listing(props: IListingProps) {
                 direction="column"
                 justify="flex-start"
                 alignItems="flex-start"
+                xs={12}
+                md={9}
             >
                 <section id="bb-listing-header">
                     <ListingTitleCard
@@ -82,8 +83,12 @@ export function Listing(props: IListingProps) {
                         isFavorited={props.isFavorited}
                         onToggleFavorite={props.onToggleFavorite}
                     />
+                <Hidden mdUp>
+                    <ListingActions business={props.business} />
+                </Hidden>
                 </section>
                 <Divider className={classes.divider} />
+
                 <section id="bb-listing-about">
                     <ListingAbout business={props.business} />
                 </section>
@@ -101,11 +106,13 @@ export function Listing(props: IListingProps) {
                     </section>
                 )}
             </Grid>
-            <Grid className={classes.aside} item>
-                <aside>
-                    <ListingActions business={props.business} />
-                </aside>
-            </Grid>
+            <Hidden smDown>
+                <Grid className={classes.aside} item md={3}>
+                    <aside>
+                        <ListingActions business={props.business} />
+                    </aside>
+                </Grid>
+            </Hidden>
         </Grid>
     );
 }

@@ -24,8 +24,8 @@ const useStyles = makeStyles({
     root: {},
     container: {
         minHeight: 'var(--page-height)',
-        paddingTop: 'var(--page-padding',
-        paddingBottom: 'var(--page-padding'
+        paddingTop: 'var(--page-padding)',
+        paddingBottom: 'var(--page-padding)'
     },
 });
 

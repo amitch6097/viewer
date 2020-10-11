@@ -37,8 +37,8 @@ const useStyles = makeStyles({
     },
     container: {
         minHeight: 'var(--page-height)',
-        paddingTop: 'var(--page-padding',
-        paddingBottom: 'var(--page-padding'
+        paddingTop: 'var(--page-padding)',
+        paddingBottom: 'var(--page-padding)'
     },
     divider: {
         marginTop: '10px',
