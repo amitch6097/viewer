@@ -29,6 +29,16 @@ export class UserCollection extends Collection {
         return userDoc;
     }
 
+    async addReview(uid: string, reviewId: string) {
+        const userDoc = await this.getOrCreateUserDocument(uid);
+        const writeResult = await userDoc.ref.update({
+            reviews: admin.firestore.FieldValue.arrayUnion(
+                reviewId
+            ),
+        });
+        return writeResult.writeTime;
+    }
+
     async updateUser({
         uid,
         document,

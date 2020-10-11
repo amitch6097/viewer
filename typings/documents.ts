@@ -11,6 +11,15 @@ export interface IUserDocument {
     }>;
 }
 
+export interface IReviewDocument {
+    id: string;
+    text: string;
+    rating: number;
+    businessId: string;
+    createdAt?: number;
+    createdBy?: string;
+}
+
 export interface IFavoriteGroupDocument {
     id: string;
     name: string;
@@ -42,4 +51,5 @@ export interface IBusinessDocument {
     };
     _tags?: string[];
     reviews?: string[]; //review id list
+    reviewsRatingTotal?: number;
 }

@@ -1,5 +1,6 @@
 import { Collection } from './Collection';
 import { IBusinessDocument } from '../../../typings/documents';
+import * as admin from 'firebase-admin';
 
 /**
  * This does not work for some reason on functions but want to keep for FE
@@ -41,5 +42,23 @@ export class BusinessCollection extends Collection {
 
     async getAll(ids: string[]): Promise<IBusinessDocument[]> {
         return (await super.getAll(ids)) as IBusinessDocument[];
+    }
+
+    async addReview({
+        businessId,
+        reviewId,
+        rating
+    }: {
+        businessId: string;
+        reviewId: string;
+        rating: number;
+    }) {
+        const writeResult = await this.collection.doc(businessId).update({
+            reviews: admin.firestore.FieldValue.arrayUnion(
+                reviewId
+            ),
+            reviewsRatingTotal: admin.firestore.FieldValue.increment(rating)
+        });
+        return writeResult;
     }
 }

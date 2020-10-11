@@ -138,16 +138,14 @@ export class API {
 
     static async createReview(
         review: IReview
-    ): Promise<{ id: string; review: Review }> {
+    ): Promise<{ id: string }> {
         const response = await Functions.createReview({
-            review,
+            text: review.text,
+            rating: review.rating,
+            businessId: review.businessId
         });
         return {
             id: response.id,
-            review: new Review({
-                ...response.review,
-                user: response.user,
-            }),
         };
     }
 
