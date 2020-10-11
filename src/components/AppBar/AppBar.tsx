@@ -35,7 +35,9 @@ const useStyles = makeStyles(theme => ({
         minHeight: 'var(--app-bar-height)',
         position: 'sticky',
         top: '0',
-        background: theme.palette.background.default
+        background: theme.palette.background.default,
+        display: 'flex',
+        justifyContent: 'center',
     },
     search: {},
     controls: {

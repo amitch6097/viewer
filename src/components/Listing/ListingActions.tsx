@@ -21,6 +21,7 @@ import { IBusinessListing } from '../../../typings/types';
 import { onChangeValue } from '../../helpers';
 import { strings } from '../../strings';
 import { OwnerBio } from '../../components/OwnerBio';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { ActionButton } from '../../components/ActionButton';
 
@@ -30,9 +31,9 @@ export interface IListingProps {
     onChangeAbout?: (about: string) => void;
 }
 
-const useStyles = makeStyles({
+const useStyles = props => makeStyles({
     root: {
-        minWidth: 300,
+        width: '100%',
     },
 });
 
@@ -42,7 +43,8 @@ function getActionIcon(key) {
 }
 
 export function ListingActions(props: IListingProps) {
-    const classes = useStyles(props);
+    const matches = useMediaQuery('(max-width:960px)');
+    const classes = useStyles({matches})();
 
     return (
         <ButtonGroup

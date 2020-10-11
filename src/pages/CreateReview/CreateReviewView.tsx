@@ -7,7 +7,11 @@ import { AppBar } from '../../components/AppBar';
 import { strings } from '../../strings';
 
 const useStyles = makeStyles((theme) => ({
-    root: {},
+    root: {
+        minHeight: 'var(--page-height)',
+        paddingTop: 'var(--page-padding)',
+        paddingBottom: 'var(--page-padding)'
+    },
     businessLink: {
         fontSize: theme.typography.h3.fontSize,
     },
@@ -22,7 +26,7 @@ export interface ICreateReviewViewProps {
 export function CreateReviewView(props: ICreateReviewViewProps) {
     const classes = useStyles(props);
     return (
-            <Grid container direction="column" className={classes.root}>
+            <Container className={classes.root}>
                 <Link
                     className={classes.businessLink}
                     href={`/business/${props.businessId}`}
@@ -36,6 +40,6 @@ export function CreateReviewView(props: ICreateReviewViewProps) {
                     submitText={strings.createReview.submitText}
                     placeholder={strings.createReview.placeholder}
                 />
-            </Grid>
+            </Container>
     );
 }
