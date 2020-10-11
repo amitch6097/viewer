@@ -1,15 +1,14 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import { createUser } from './onUserCreate';
-
-import { IReviewDocument, IUserDocument } from '../../typings/types';
-
 import {
     ICreateReviewProps,
-    ICreateReviewResponse,
+    ICreateReviewResponse
 } from '../../typings/functions';
+import { IReviewDocument } from '../../typings/types';
+import { BusinessCollection } from './Collections/BusinessCollection';
+import { ReviewCollection } from './Collections/ReviewCollection';
+import { UserCollection } from './Collections/UserCollection';
+import { expectAuthAndData } from './helpers';
 
-const firestore = admin.firestore();
 
 // create business
 export const createReview = functions.https.onCall(
@@ -17,87 +16,37 @@ export const createReview = functions.https.onCall(
         data: ICreateReviewProps,
         context: functions.https.CallableContext
     ): Promise<ICreateReviewResponse> => {
-        const { review } = data;
-
-        if (!context.auth)
-            throw new functions.https.HttpsError(
-                'unauthenticated',
-                'The function must be called while authenticated.'
-            );
-
-        if (!data || typeof data !== 'object')
-            throw new functions.https.HttpsError(
-                'invalid-argument',
-                `The function must be called with a data object. ${data}`
-            );
-
-        if (!review.businessId || !review.text || !review.rating)
-            throw new functions.https.HttpsError(
-                'invalid-argument',
-                `Could not create review without invalid data. ${data}`
-            );
-
-        const businessDocumentExists = (
-            await firestore.collection('business').doc(review.businessId).get()
-        ).exists;
-
-        if (!businessDocumentExists) {
-            throw new functions.https.HttpsError(
-                'failed-precondition',
-                `Business does not exist with business id: ${data.review.businessId} ${data}`
-            );
-        }
-
+        expectAuthAndData(functions, data, context);
         try {
-            const reviewDocument: IReviewDocument = {
-                rating: review.rating,
-                text: review.text,
-                businessId: review.businessId,
-                createdAt: Number(new Date()),
-                createdBy: context?.auth?.uid ?? undefined,
-            };
+            const { text, rating, businessId } = data;
 
-            // write new review
-            const newReview = await firestore
-                .collection('review')
-                .add(reviewDocument);
-
-            if (!newReview.id) {
+            if (!text || !rating || !businessId) {
                 throw new functions.https.HttpsError(
-                    'internal',
-                    `Failed to write review, no id returned ${newReview.id}, with review: ${reviewDocument}`
+                    'failed-precondition',
+                    `Could not create review, all arguments to function are required: ${data}`
                 );
             }
 
-            // update user
-            const doc = await firestore
-                .collection('user')
-                .doc(context.auth.uid)
-                .get();
+            const reviewCollection = new ReviewCollection();
+            const userCollection = new UserCollection();
 
-            if (!doc.exists) {
-                await createUser(context.auth);
+            const reviewDocument = await reviewCollection.addReview({
+                text,
+                rating,
+                businessId,
+                uid: context.auth.uid,
+            });
+            if (!reviewDocument || !reviewDocument.id) {
+                throw new functions.https.HttpsError(
+                    'internal',
+                    `Failed to write review, no id returned ${reviewDocument}, with review: ${data}`
+                );
             }
-
-            await firestore
-                .collection('user')
-                .doc(context.auth.uid)
-                .update({
-                    reviews: admin.firestore.FieldValue.arrayUnion(
-                        newReview.id
-                    ),
-                });
-
-            const userDoc = await firestore
-                .collection('user')
-                .doc(context.auth.uid)
-                .get();
-
-            const result = await newReview.get();
+            // update user
+            await userCollection.addReview(context.auth.uid, reviewDocument.id);
             return {
-                id: newReview.id,
-                review: result.data() as IReviewDocument,
-                user: userDoc.data() as IUserDocument,
+                id: reviewDocument.id,
+                review: reviewDocument,
             };
         } catch (err) {
             throw new functions.https.HttpsError(
@@ -118,15 +67,12 @@ export const onReviewCreated = functions.firestore
             const review = snap.data() as IReviewDocument;
             try {
                 // Get the review document
+                const businessCollection = new BusinessCollection();
                 const businessId = review.businessId;
-                const businessRef = await firestore
-                    .collection('business')
-                    .doc(businessId);
-
-                await businessRef.update({
-                    reviews: admin.firestore.FieldValue.arrayUnion(
-                        context.params.id
-                    ),
+                await businessCollection.addReview({
+                    businessId,
+                    reviewId: context.params.id,
+                    rating: review.rating
                 });
             } catch (err) {
                 throw new functions.https.HttpsError(

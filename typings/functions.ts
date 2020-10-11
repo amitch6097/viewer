@@ -1,8 +1,6 @@
-import { IFavoriteGroupDocument } from './documents';
+import { IFavoriteGroupDocument, IReviewDocument } from './documents';
 import {
     IBusinessDocument, IBusinessListing,
-
-    IReviewDocument,
 
     IUserDocument
 } from './types';
@@ -54,13 +52,14 @@ export interface IGetBusinessesForFavoriteGroupsResponse {
 }
 
 export interface ICreateReviewProps {
-    review: IReviewDocument;
+    text: string;
+    rating: number;
+    businessId: string;
 }
 
 export interface ICreateReviewResponse {
     id: string;
     review: IReviewDocument;
-    user: IUserDocument;
 }
 
 export interface ICreateBusinessProps {
