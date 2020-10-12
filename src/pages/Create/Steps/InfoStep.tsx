@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         flex: 1,
-        flexWrap: 'wrap',
+        flexWrap: 'wrap-reverse',
     },
     inputs: {
         display: 'flex',

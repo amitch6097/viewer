@@ -1,12 +1,11 @@
-import React from 'react';
-import './OwnerStep.less';
-
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-
-import { OwnerCard, OwnerCardAdd } from '../../../components/OwnerCard';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import React from 'react';
 import { IOwner } from '../../../../typings/types';
+import { OwnerCard } from '../../../components/OwnerCard';
 import { strings } from '../../../strings';
 
 export interface IOwnerStepProps {
@@ -26,20 +25,33 @@ export interface IOwnerStepState {
     }>;
 }
 
-export class OwnerStep extends React.Component<
-    IOwnerStepProps,
-    IOwnerStepState
-> {
-    state = {
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        minHeight:
+            'calc(var(--page-height) - var(--page-padding) - var(--page-padding))',
+    },
+    content: {
+        flex: 1,
+    },
+    continue: {
+        alignSelf: 'flex-end',
+    },
+}));
+
+export function OwnerStep(props: IOwnerStepProps) {
+    const classes = useStyles();
+
+    const [state, setState] = React.useState({
         errors: [
             {
                 name: undefined,
             },
         ],
-    };
+    });
 
-    checkFields = () => {
-        const { owners } = this.props;
+    function checkFields() {
+        const { owners } = props;
         let hasErrors = false;
 
         const errors = Object.values(owners).map((owner) => {
@@ -54,71 +66,65 @@ export class OwnerStep extends React.Component<
             };
         });
 
-        this.setState({
+        setState({
             errors,
         });
 
         if (!hasErrors) {
-            this.props.onNextStep();
+            props.onNextStep();
         }
-    };
-
-    render() {
-        const { owners } = this.props;
-        return (
-            <div className="bb-owner-step">
-                <Grid
-                    classes={{ root: 'bb-owner-step-container' }}
-                    container
-                    direction="column"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                >
-                    <Grid
-                        classes={{
-                            root: 'bb-owner-step__owners-container',
-                        }}
-                        container
-                        direction="row"
-                        justify="flex-start"
-                        alignItems="flex-start"
-                    >
-                        {' '}
-                        <div className="bb-owner-step__owners-container-owner-card">
-                            <OwnerCardAdd onAddOwner={this.props.addOwner} />
-                        </div>
-                        {owners.map((owner, index) => {
-                            return (
-                                <div className="bb-owner-step__owners-container-owner-card">
-                                    <OwnerCard
-                                        errors={this.state.errors[index]}
-                                        // key={owner.name || index}
-                                        owner={owner}
-                                        withDelete={owners.length > 1}
-                                        removeOwner={this.props.removeOwner(
-                                            index
-                                        )}
-                                        onChangeValue={this.props.onChangeOwnerValue(
-                                            index
-                                        )}
-                                        onAddOwnerImage={this.props.onAddOwnerImage(
-                                            index
-                                        )}
-                                    />
-                                </div>
-                            );
-                        })}
-                    </Grid>
-                    <Button
-                        onClick={this.checkFields}
-                        classes={{ root: 'bb-owner-step__continue continue' }}
-                        variant="contained"
-                        color="primary"
-                    >
-                        {strings.buttons.continue}
-                    </Button>
-                </Grid>
-            </div>
-        );
     }
+
+    const { owners } = props;
+    return (
+        <Grid className={classes.root} container direction="column">
+            <Grid className={classes.content}>
+                <Grid
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center"
+                    spacing={5}
+                >
+                    {owners.map((owner, index) => {
+                        return (
+                            <Grid item>
+                                <OwnerCard
+                                    errors={state.errors[index]}
+                                    // key={owner.name || index}
+                                    owner={owner}
+                                    withDelete={owners.length > 1}
+                                    removeOwner={props.removeOwner(index)}
+                                    onChangeValue={props.onChangeOwnerValue(
+                                        index
+                                    )}
+                                    onAddOwnerImage={props.onAddOwnerImage(
+                                        index
+                                    )}
+                                />
+                            </Grid>
+                        );
+                    })}
+                    <Grid item>
+                        <IconButton
+                            onClick={props.addOwner}
+                            color="primary"
+                            component="span"
+                        >
+                            <AddIcon fontSize="large" />
+                        </IconButton>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <Button
+                onClick={checkFields}
+                className={classes.continue}
+                variant="contained"
+                color="primary"
+            >
+                {strings.buttons.continue}
+            </Button>
+        </Grid>
+    );
 }
