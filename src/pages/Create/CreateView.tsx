@@ -7,7 +7,9 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import Container from '@material-ui/core/Container';
 import { strings } from '../../strings';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import {
     EIdentify,
@@ -23,10 +25,10 @@ import { DetailsStep } from './Steps/DetailsStep';
 import { OwnerStep } from './Steps/OwnerStep';
 import { CheckExistsStep } from './Steps/CheckExistsStep';
 import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
-import { Business } from '../../lib/Business'
+import { Business } from '../../lib/Business';
+import { CheckExists } from '../CheckExists/CheckExists';
 
 export interface ICreateViewProps {
-    
     step: number;
     business: IBusinessListing;
     exists: boolean;
@@ -50,132 +52,125 @@ export interface ICreateViewProps {
 
     businessClass: Business;
     onChangeBusiness: (business: Business) => void;
+    onClickResult: (id: string) => void;
 }
 
-export class CreateView extends React.Component<ICreateViewProps> {
-    static StepLabel({ completed, label, onClick }) {
+const useStyles = makeStyles({
+    root: {
+        minHeight: 'var(--page-height)',
+        paddingTop: 'var(--page-padding)',
+        paddingBottom: 'var(--page-padding)',
+    },
+});
+
+export function CreateView(props: ICreateViewProps) {
+    function CheckExistsStepLabel({ completed, label, onClick }) {
         return completed ? <Link onClick={onClick}>{label}</Link> : label;
     }
 
-    render() {
-        const { step, exists } = this.props;
+    const classes = useStyles();
+    const { step, exists } = props;
 
-        const {
-            category,
-            phone,
-            email,
-            address,
-            website,
-            identify,
-        } = this.props.business;
+    const {
+        category,
+        phone,
+        email,
+        address,
+        website,
+        identify,
+    } = props.business;
 
-        return (
-            <div className="bb-pages bb-pages-create">
-                <div className="bb-pages-create__content">
-                    {exists === undefined && (
-                        <CheckExistsStep
-                            onStartCreate={this.props.onStartCreate}
+    return (
+        <Container className={classes.root}>
+            {exists === undefined && (
+                <CheckExists
+                    onClickResult={props.onClickResult}
+                    onClickContinue={props.onStartCreate}
+                />
+            )}
+            {exists === false && (
+                <>
+                    <Stepper activeStep={step}>
+                        {[
+                            strings.create.stepLabels.info,
+                            strings.create.stepLabels.owner,
+                            strings.create.stepLabels.identify,
+                            strings.create.stepLabels.details,
+                        ].map((stepLabel, index) => {
+                            return (
+                                <Step completed={step > index}>
+                                    <StepLabel>
+                                        <CheckExistsStepLabel
+                                            onClick={props.onClickStepLink(
+                                                index
+                                            )}
+                                            completed={step > index}
+                                            label={stepLabel}
+                                        />
+                                    </StepLabel>
+                                </Step>
+                            );
+                        })}
+                    </Stepper>
+                    {step === 0 && (
+                        <InfoStep
+                            business={props.businessClass}
+                            onChangeBusiness={props.onChangeBusiness}
+                            category={category}
+                            phone={phone}
+                            email={email}
+                            address={address?.value ?? ''}
+                            website={website}
+                            onChangeCategory={props.onChangeBusinessValue(
+                                'category'
+                            )}
+                            onChangePhone={props.onChangeBusinessValue('phone')}
+                            onChangeEmail={props.onChangeBusinessValue('email')}
+                            onClickAddressSuggestion={props.onChangeAddress}
+                            onChangeAddress={(value: string) =>
+                                props.onChangeAddress({
+                                    suggestion: {
+                                        value,
+                                    },
+                                } as IAlgoliaLocationSearchEvent)
+                            }
+                            onChangeWebsite={props.onChangeBusinessValue(
+                                'website'
+                            )}
+                            onNextStep={() => props.setStep(1)}
                         />
                     )}
-                    {exists === false && (
-                        <>
-                            <Stepper activeStep={step}>
-                                {[
-                                    strings.create.stepLabels.info,
-                                    strings.create.stepLabels.owner,
-                                    strings.create.stepLabels.identify,
-                                    strings.create.stepLabels.details,
-                                ].map((stepLabel, index) => {
-                                    return (
-                                        <Step completed={step > index}>
-                                            <StepLabel>
-                                                <CreateView.StepLabel
-                                                    onClick={this.props.onClickStepLink(
-                                                        index
-                                                    )}
-                                                    completed={step > index}
-                                                    label={stepLabel}
-                                                />
-                                            </StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            {step === 0 && (
-                                <InfoStep
-                                    business={this.props.businessClass}
-                                    onChangeBusiness={this.props.onChangeBusiness}
-                                    category={category}
-                                    phone={phone}
-                                    email={email}
-                                    address={address?.value ?? ''}
-                                    website={website}
-                                    onChangeCategory={this.props.onChangeBusinessValue(
-                                        'category'
-                                    )}
-                                    onChangePhone={this.props.onChangeBusinessValue(
-                                        'phone'
-                                    )}
-                                    onChangeEmail={this.props.onChangeBusinessValue(
-                                        'email'
-                                    )}
-                                    onClickAddressSuggestion={
-                                        this.props.onChangeAddress
-                                    }
-                                    onChangeAddress={(value: string) =>
-                                        this.props.onChangeAddress({
-                                            suggestion: {
-                                                value,
-                                            },
-                                        } as IAlgoliaLocationSearchEvent)
-                                    }
-                                    onChangeWebsite={this.props.onChangeBusinessValue(
-                                        'website'
-                                    )}
-                                    onNextStep={() => this.props.setStep(1)}
-                                />
-                            )}
-                            {step === 1 && (
-                                <OwnerStep
-                                    onNextStep={() => this.props.setStep(2)}
-                                    onChangeOwnerValue={
-                                        this.props.onChangeOwnerValue
-                                    }
-                                    onAddOwnerImage={this.props.onAddOwnerImage}
-                                    removeOwner={this.props.removeOwner}
-                                    addOwner={this.props.addOwner}
-                                    owners={this.props.business.owners}
-                                />
-                            )}
-                            {step === 2 && (
-                                <IdentifyStep
-                                    identify={identify}
-                                    onChangeIdentityText={
-                                        this.props.onChangeIdentityText
-                                    }
-                                    onChangeIdentitySelected={
-                                        this.props.onChangeIdentitySelected
-                                    }
-                                    onNextStep={() => this.props.setStep(3)}
-                                />
-                            )}
-                            {step === 3 && (
-                                <DetailsStep
-                                    creating={this.props.creating}
-                                    business={this.props.business}
-                                    onChangeAbout={this.props.onChangeBusinessValue(
-                                        'about'
-                                    )}
-                                    onChangeOwnerBio={
-                                        this.props.onChangeOwnerBio
-                                    }
-                                    onNextStep={this.props.onCreateListing}
-                                />
-                            )}
-                        </>
+                    {step === 1 && (
+                        <OwnerStep
+                            onNextStep={() => props.setStep(2)}
+                            onChangeOwnerValue={props.onChangeOwnerValue}
+                            onAddOwnerImage={props.onAddOwnerImage}
+                            removeOwner={props.removeOwner}
+                            addOwner={props.addOwner}
+                            owners={props.business.owners}
+                        />
                     )}
-                </div>
-            </div>
-        );
-    }
+                    {step === 2 && (
+                        <IdentifyStep
+                            identify={identify}
+                            onChangeIdentityText={props.onChangeIdentityText}
+                            onChangeIdentitySelected={
+                                props.onChangeIdentitySelected
+                            }
+                            onNextStep={() => props.setStep(3)}
+                        />
+                    )}
+                    {step === 3 && (
+                        <DetailsStep
+                            creating={props.creating}
+                            business={props.business}
+                            onChangeAbout={props.onChangeBusinessValue('about')}
+                            onChangeOwnerBio={props.onChangeOwnerBio}
+                            onNextStep={props.onCreateListing}
+                        />
+                    )}
+                </>
+            )}
+        </Container>
+    );
 }

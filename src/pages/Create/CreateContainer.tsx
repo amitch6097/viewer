@@ -165,6 +165,7 @@ export class CreateContainer extends React.Component<
                 onChangeAddress={this.onChangeAddress}
                 businessClass={this.state.business}
                 onChangeBusiness={this.onChangeBusiness}
+                onClickResult={this.props.goToBusiness}
             />
         );
     }

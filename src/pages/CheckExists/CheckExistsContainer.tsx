@@ -4,6 +4,8 @@ import { Search } from '../../lib/Search';
 import { SearchResult } from '../../lib/SearchResult';
 
 export interface ICheckExistsContainerProps {
+    onClickResult: (id: string) => void;
+    onClickContinue: (name: string) => void;
 }
 
 export interface ICheckExistsContainerState {
@@ -75,8 +77,8 @@ export class CheckExistsContainer extends React.Component<
                 results={this.state?.result?.getResults() ?? {}}
                 locationValue={this.state.search.getLocationValue()}
                 businessValue={this.state.search.getSearchValue()}
-                onClickResult={console.log}
-                onContinueClicked={console.log}
+                onClickResult={this.props.onClickResult}
+                onContinueClicked={() => this.props.onClickContinue(this.state.search.data.searchValue)}
             />
         );
     }
