@@ -86,8 +86,8 @@ export function ListingTitleCard(props: IListingProps) {
                 <Grid item xs={12} sm={4}>
                     <CardMedia
                         className={classes.image}
-                        image={props.business.image.url}
-                        title={props.business.name}
+                        image={props.business?.image?.url}
+                        title={props.business?.name}
                     />
                 </Grid>
 
