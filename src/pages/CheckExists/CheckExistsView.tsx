@@ -29,21 +29,22 @@ export interface ICheckExistsViewProps {
 const useStyles = makeStyles({
     root: {
         display: 'flex',
+        minHeight: 'calc(var(--page-height) - var(--page-padding) - var(--page-padding))'
     },
     content: {
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
+        flex: 1,
+        flexWrap: 'wrap'
     },
     inputs: {
-        flex: '1',
         padding: '10px'
     },
     item: {
         width: '100%',
     },
     results: {
-        flex: '1',
         padding: '10px',
         maxHeight: '500px',
         overflowY: 'auto'
@@ -72,7 +73,7 @@ export function CheckExistsView({
             alignItems="flex-start"
             className={classes.root}
         >
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h4" gutterBottom>
                 Let's Check if a Listing already exists for your Business
             </Typography>
             <Grid
@@ -88,6 +89,7 @@ export function CheckExistsView({
                     alignItems="flex-start"
                     className={classes.inputs}
                     spacing={3}
+                    sm={12} md={6}
                 >
                     <Grid item className={classes.item}>
                         <BusinessAutocomplete
@@ -111,18 +113,11 @@ export function CheckExistsView({
                         />
                     </Grid>
                 </Grid>
-                <Grid className={classes.results}>
+                <Grid sm={12} md={6} className={classes.results}>
                     <Results
                         businesses={results}
                         minimal={true}
-                        imageSize={50}
                         onClick={onClickResult}
-                        styles={{
-                            item: {
-                                maxHeight: '100px'
-                            }
-                        }
-                        }
                     />
                 </Grid>
             </Grid>

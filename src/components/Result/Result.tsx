@@ -21,10 +21,12 @@ export interface IResultProps {
 
 const useStyles = makeStyles({
     root: {
-        height: 'var(--card-height)',
+        height: (props: IResultProps) =>
+            props.minimal ? 'var(--card-minimal-height)' : 'var(--card-height)',
     },
     card: {
-        height: 'var(--card-height)',
+        height: (props: IResultProps) =>
+            props.minimal ? 'var(--card-minimal-height)' : 'var(--card-height)',
     },
     cardActionArea: {
         display: 'flex',
@@ -32,15 +34,18 @@ const useStyles = makeStyles({
         alignItems: 'end',
     },
     cardMedia: {
-        width: 'var(--card-height)',
-        height: 'var(--card-height)',
+        width: (props: IResultProps) =>
+            props.minimal ? 'var(--card-minimal-height)' : 'var(--card-height)',
+        height: (props: IResultProps) =>
+            props.minimal ? 'var(--card-minimal-height)' : 'var(--card-height)',
         alignSelf: 'center',
     },
     cardContent: {
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-        height: 'calc(var(--card-height) - 32px)',
+        height: (props: IResultProps) =>
+        props.minimal ? 'calc(var(--card-minimal-height) - 32px)' : 'calc(var(--card-height) - 32px)',
         justifyContent: 'space-between',
     },
     cardContentTop: {
@@ -91,7 +96,7 @@ export function Result(props: IResultProps) {
                             props.business?.image?.url ??
                             'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg'
                         }
-                        title=""
+                        title={props.business.name}
                     />
                     <CardContent className={classes.cardContent}>
                         <div className={classes.cardContentTop}>
@@ -114,15 +119,17 @@ export function Result(props: IResultProps) {
                                     }
                                 </Typography>
                             </div>
-                            <div className={classes.cardContentTopRight}>
-                                <IconButton
-                                    edge="end"
-                                    aria-label="toggle favorite"
-                                    onClick={console.log}
-                                >
-                                    <FavoriteIcon selected={false} />
-                                </IconButton>
-                            </div>
+                            {!props.minimal && (
+                                <div className={classes.cardContentTopRight}>
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="toggle favorite"
+                                        onClick={console.log}
+                                    >
+                                        <FavoriteIcon selected={false} />
+                                    </IconButton>
+                                </div>
+                            )}
                         </div>
                         {!props.minimal && (
                             <div className={classes.cardContentBottom}>
