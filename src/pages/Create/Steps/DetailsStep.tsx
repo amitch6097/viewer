@@ -41,7 +41,7 @@ export class DetailsStep extends React.Component<IDetailsStepProps> {
                     <Listing
                         id={undefined}
                         business={business}
-                        isEditable={true}
+                        isEditMode={true}
                         onChangeOwnerBio={this.props.onChangeOwnerBio}
                         onChangeAbout={this.props.onChangeAbout}
                         isFavorited={false}

@@ -18,6 +18,7 @@ export default {
 
 export const ListingStory = () => (
     <Listing
+        isEditMode={boolean('isEditMode', false)}
         isFavorited={false}
         onToggleFavorite={console.log}
         id={'1'}

@@ -1,41 +1,23 @@
-import React from 'react';
-import './Listing.less';
-
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import * as Icons from '@material-ui/icons';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { Hidden } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
-
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import { IBusinessListing, IReviews } from '../../../typings/types';
-import { onChangeValue } from '../../helpers';
-import { strings } from '../../strings';
-import { config } from '../../config';
-
-import { OwnerBio } from '../../components/OwnerBio';
-import { IdentityDisplay } from '../../components/IdentityDisplay';
-import { ActionButton } from '../../components/ActionButton';
-import { ListingTitleCard } from './ListingTitleCard';
+import './Listing.less';
 import { ListingAbout } from './ListingAbout';
-import { ListingOwners } from './ListingOwners';
-import {
-    Theme,
-    createStyles,
-    makeStyles,
-    useTheme,
-} from '@material-ui/core/styles';
-import { Hidden, List } from '@material-ui/core';
 import { ListingActions } from './ListingActions';
+import { ListingOwners } from './ListingOwners';
 import { ListingReviews } from './ListingReviews';
+import { ListingTitleCard } from './ListingTitleCard';
+
 export interface IListingProps {
     business: IBusinessListing;
     reviews?: IReviews;
     isFavorited: boolean;
     onToggleFavorite: () => void;
     onLoadMoreReviews?: () => void;
-    isEditable?: boolean;
+    isEditMode?: boolean;
     onChangeAbout?: (about: string) => void;
     onChangeOwnerBio?: (index: number) => (bio: string) => void;
     id: string;
@@ -43,8 +25,7 @@ export interface IListingProps {
 
 const useStyles = makeStyles({
     root: {},
-    content: {
-    },
+    content: {},
     aside: {
         position: 'sticky',
         top: 0,
@@ -57,6 +38,16 @@ const useStyles = makeStyles({
 
 export function Listing(props: IListingProps) {
     const classes = useStyles(props);
+    const showReviews = props.reviews && !props.isEditMode;
+
+    function _ListingActions() {
+        return (
+            <ListingActions
+                business={props.business}
+                isEditMode={props.isEditMode}
+            />
+        );
+    }
 
     return (
         <Grid
@@ -82,22 +73,30 @@ export function Listing(props: IListingProps) {
                         business={props.business}
                         isFavorited={props.isFavorited}
                         onToggleFavorite={props.onToggleFavorite}
+                        isEditMode={props.isEditMode}
                     />
-                <Hidden mdUp>
-                    <ListingActions business={props.business} />
-                </Hidden>
+                    <Hidden mdUp>
+                        <_ListingActions />
+                    </Hidden>
                 </section>
                 <Divider className={classes.divider} />
-
                 <section id="bb-listing-about">
-                    <ListingAbout business={props.business} />
+                    <ListingAbout
+                        business={props.business}
+                        isEditMode={props.isEditMode}
+                        onChangeAbout={props.onChangeAbout}
+                    />
                 </section>
                 <Divider className={classes.divider} />
                 <section id="bb-listing-owners">
-                    <ListingOwners business={props.business} />
+                    <ListingOwners
+                        business={props.business}
+                        isEditMode={props.isEditMode}
+                        onChangeAbout={props.onChangeOwnerBio}
+                    />
                 </section>
                 <Divider className={classes.divider} />
-                {props.reviews && (
+                {showReviews && (
                     <section id="bb-listing-reviews">
                         <ListingReviews
                             reviews={props.reviews}
@@ -109,7 +108,7 @@ export function Listing(props: IListingProps) {
             <Hidden smDown>
                 <Grid className={classes.aside} item md={3}>
                     <aside>
-                        <ListingActions business={props.business} />
+                        <_ListingActions />
                     </aside>
                 </Grid>
             </Hidden>

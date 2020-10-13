@@ -61,6 +61,7 @@ export interface IReviews {
     size?: number;
     count?: number;
     lastId?: string;
+    businessId?: string; // not sure but I think this was suppose to be here
 }
 
 export interface IUser {
