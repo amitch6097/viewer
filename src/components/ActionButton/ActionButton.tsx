@@ -9,6 +9,7 @@ export interface IActionButtonProps {
     label: string;
     subLabel: string;
     icon: React.ReactElement;
+    disabled?: boolean;
 }
 
 {

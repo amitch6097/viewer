@@ -1,42 +1,54 @@
-import React from 'react';
-import './Listing.less';
-
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import { ListingTitleCard } from './ListingTitleCard';
 import {
-    Theme,
-    createStyles,
-    makeStyles,
-    useTheme,
+    makeStyles
 } from '@material-ui/core/styles';
-
-import { IdentityDisplay } from '../../components/IdentityDisplay';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
+import { IdentityDisplay } from '../../components/IdentityDisplay';
 import { onChangeValue } from '../../helpers';
 import { strings } from '../../strings';
 
-export interface IListingProps {
+export interface IListingAboutProps {
     business: IBusinessListing;
-    isEditable?: boolean;
+    isEditMode?: boolean;
     onChangeAbout?: (about: string) => void;
+    onChangeIdentityText?: (text: string) => void;
 }
 
 const useStyles = makeStyles({
-    root: {},
+    root: {
+        '& textarea': {
+            resize: 'none'
+        }
+    },
     title: {
         fontWeight: 700,
     },
     identityContainer: {
-        marginTop: '10px'
+        marginTop: '10px',
     },
     identityItem: {},
 });
 
-export function ListingAbout(props: IListingProps) {
+export function ListingAbout(props: IListingAboutProps) {
     const classes = useStyles(props);
+
+    function About() {
+        return props.isEditMode ? (
+            <TextareaAutosize
+                style={{ width: '100%' }}
+                aria-label="about the business"
+                placeholder='About the Business'
+                rowsMin={3}
+                onChange={onChangeValue(props.onChangeAbout)}
+                value={props.business.about}
+            />
+        ) : (
+            <Typography variant="body1">{props.business.about}</Typography>
+        );
+    }
 
     return (
         <Grid
@@ -48,17 +60,7 @@ export function ListingAbout(props: IListingProps) {
             <Typography className={classes.title} variant="h5" gutterBottom>
                 About
             </Typography>
-            {props.isEditable ? (
-                <TextareaAutosize
-                    style={{ width: '100%' }}
-                    aria-label="about the business"
-                    rowsMin={3}
-                    onChange={onChangeValue(props.onChangeAbout)}
-                    value={props.business.about}
-                />
-            ) : (
-                <Typography variant="body1">{props.business.about}</Typography>
-            )}
+            <About />
             <Grid
                 className={classes.identityContainer}
                 container

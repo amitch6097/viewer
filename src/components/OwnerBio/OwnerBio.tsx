@@ -9,13 +9,28 @@ import { IOwner } from '../../../typings/types';
 import { onChangeValue } from '../../helpers';
 
 export interface IOwnerBioProps {
-    onChangeOwnerBio?: (bio: string) => void;
     owner: IOwner;
-    isEditable?: boolean;
+    isEditMode?: boolean;
+    onChangeAbout?: (about: string) => void;
 }
 
 export function OwnerBio(props: IOwnerBioProps) {
-    const { owner, isEditable } = props;
+    function About() {
+        return props.isEditMode ? (
+            <TextareaAutosize
+                style={{ width: '100%' }}
+                aria-label="About the Owner"
+                placeholder="About the Owner"
+                rowsMin={3}
+                onChange={onChangeValue(props.onChangeAbout)}
+                value={owner.bio}
+            />
+        ) : (
+            <Typography variant="body1">{owner.bio}</Typography>
+        );
+    }
+
+    const { owner } = props;
     return (
         <div className="bb-owner-bio">
             <div className="bb-owner-bio__meta">
@@ -42,20 +57,9 @@ export function OwnerBio(props: IOwnerBioProps) {
                     >
                         {owner.position}
                     </Typography>
+                    <About />
                 </div>
             </div>
-            <Typography variant="caption">About</Typography>
-            {isEditable ? (
-                <TextareaAutosize
-                    style={{ width: '100%' }}
-                    aria-label="about this owner"
-                    rowsMin={3}
-                    onChange={onChangeValue(props.onChangeOwnerBio)}
-                    value={owner.bio}
-                />
-            ) : (
-                <Typography variant="body1">{owner.bio}</Typography>
-            )}
         </div>
     );
 }

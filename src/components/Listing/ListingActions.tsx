@@ -1,37 +1,20 @@
-import React from 'react';
-import './Listing.less';
-
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import { ListingTitleCard } from './ListingTitleCard';
-import {
-    Theme,
-    createStyles,
-    makeStyles,
-    useTheme,
-} from '@material-ui/core/styles';
-import { config } from '../../config';
-
-import * as Icons from '@material-ui/icons';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { IdentityDisplay } from '../../components/IdentityDisplay';
+import {
+    makeStyles
+} from '@material-ui/core/styles';
+import * as Icons from '@material-ui/icons';
+import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
-import { onChangeValue } from '../../helpers';
-import { strings } from '../../strings';
-import { OwnerBio } from '../../components/OwnerBio';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-
 import { ActionButton } from '../../components/ActionButton';
+import { config } from '../../config';
+import { strings } from '../../strings';
 
-export interface IListingProps {
+export interface IListingActionsProps {
     business: IBusinessListing;
-    isEditable?: boolean;
-    onChangeAbout?: (about: string) => void;
+    isEditMode?: boolean;
 }
 
-const useStyles = props => makeStyles({
+const useStyles = makeStyles({
     root: {
         width: '100%',
     },
@@ -42,10 +25,9 @@ function getActionIcon(key) {
     return <Icon />;
 }
 
-export function ListingActions(props: IListingProps) {
-    const matches = useMediaQuery('(max-width:960px)');
-    const classes = useStyles({matches})();
-
+export function ListingActions(props: IListingActionsProps) {
+    const classes = useStyles();
+    const disabled = props.isEditMode;
     return (
         <ButtonGroup
             className={classes.root}
@@ -57,6 +39,7 @@ export function ListingActions(props: IListingProps) {
                 return (
                     props.business[key] && (
                         <ActionButton
+                            disabled={disabled}
                             label={strings.actions[key]}
                             icon={getActionIcon(key)}
                             subLabel={value}

@@ -1,29 +1,16 @@
-import React from 'react';
-import './Listing.less';
-
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import { ListingTitleCard } from './ListingTitleCard';
 import {
-    Theme,
-    createStyles,
-    makeStyles,
-    useTheme,
+    makeStyles
 } from '@material-ui/core/styles';
-
-import { IdentityDisplay } from '../../components/IdentityDisplay';
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
-import { onChangeValue } from '../../helpers';
-import { strings } from '../../strings';
 import { OwnerBio } from '../../components/OwnerBio';
 
-
-export interface IListingProps {
+export interface IListingOwnersProps {
     business: IBusinessListing;
-    isEditable?: boolean;
-    onChangeAbout?: (about: string) => void;
+    isEditMode?: boolean;
+    onChangeAbout?: (index: number) => (about: string) => void;
 }
 
 const useStyles = makeStyles({
@@ -34,10 +21,12 @@ const useStyles = makeStyles({
     ownersContainer: {
         marginTop: '10px',
     },
-    ownerItem: {},
+    ownerItem: {
+        width: '100%'
+    },
 });
 
-export function ListingOwners(props: IListingProps) {
+export function ListingOwners(props: IListingOwnersProps) {
     const classes = useStyles(props);
 
     return (
@@ -67,7 +56,14 @@ export function ListingOwners(props: IListingProps) {
                             justify="flex-start"
                             alignItems="flex-start"
                         >
-                            <OwnerBio owner={owner} isEditable={props.isEditable} />
+                            <OwnerBio
+                                owner={owner}
+                                isEditMode={props.isEditMode}
+                                onChangeAbout={
+                                    props.onChangeAbout &&
+                                    props.onChangeAbout(index)
+                                }
+                            />
                         </Grid>
                     );
                 })}
