@@ -1,7 +1,6 @@
 import React from 'react';
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
-import {CheckExists} from '../../src/pages/CheckExists';
-
+import { CheckExists } from '../../src/pages/CheckExists';
 
 export default {
     title: 'Pages|CheckExists',
@@ -9,7 +8,6 @@ export default {
     decorators: [withKnobs],
 };
 
-
 export const CheckExistsStory = () => (
-    <CheckExists />
+    <CheckExists onClickResult={console.log} onClickContinue={console.log} />
 );
