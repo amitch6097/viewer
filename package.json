@@ -17,6 +17,7 @@
         "query-string": "^6.13.1",
         "react": "^16.10.2",
         "react-dom": "^16.10.2",
+        "react-hook-form": "^6.9.2",
         "react-instantsearch-dom": "^6.5.0",
         "react-router-dom": "^5.1.2",
         "react-spring": "^8.0.27",

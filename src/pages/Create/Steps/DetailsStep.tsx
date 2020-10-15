@@ -1,19 +1,12 @@
-import React from 'react';
-import './DetailsStep.less';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
-
+import React from 'react';
 import { IBusinessListing } from '../../../../typings/types';
-import { onChangeValue } from '../../../helpers';
-import { strings } from '../../../strings';
-import { config } from '../../../config';
-
-import { OwnerBio } from '../../../components/OwnerBio';
 import { Listing } from '../../../components/Listing';
+import { strings } from '../../../strings';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Overlay } from '../../../components/Overlay';
 
 export interface IDetailsStepProps {
     business: IBusinessListing;
@@ -23,47 +16,71 @@ export interface IDetailsStepProps {
     onNextStep: () => void;
 }
 
-export class DetailsStep extends React.Component<IDetailsStepProps> {
-    checkFields = () => {
-        this.props.onNextStep();
-    };
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        minHeight:
+            'calc(var(--page-height) - var(--page-padding) - var(--page-padding))',
+    },
+    content: {
+        flex: 1,
+    },
+    progress: {
+        color: theme.palette.primary.contrastText,
+    },
+    continue: {
+        alignSelf: 'flex-end',
+        marginTop: '25px',
+    },
+}));
 
-    render() {
-        const { business } = this.props;
-        return (
-            <div className="bb-details-step">
-                <Grid
-                    container
-                    direction="column"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                >
-                    <Listing
-                        id={undefined}
-                        business={business}
-                        isEditMode={true}
-                        onChangeOwnerBio={this.props.onChangeOwnerBio}
-                        onChangeAbout={this.props.onChangeAbout}
-                        isFavorited={false}
-                        onToggleFavorite={console.log}
-                    />
-                    <Button
-                        onClick={this.checkFields}
-                        classes={{
-                            root: 'bb-details-step__continue continue',
-                        }}
-                        variant="contained"
-                        color="primary"
-                    >
-                        {this.props.creating ? (
-                            <CircularProgress />
-                        ) : (
-                            strings.buttons.createListing
-                        )}
-                    </Button>
-                    {this.props.creating && <CircularProgress />}
-                </Grid>
-            </div>
-        );
+export function DetailsStep(props: IDetailsStepProps) {
+    const classes = useStyles();
+
+    function checkFields() {
+        props.onNextStep();
     }
+
+    const { business } = props;
+    return (
+        <Grid className={classes.root} container direction="column">
+            <Grid
+                container
+                direction="column"
+                justify="flex-start"
+                alignItems="flex-start"
+                spacing={5}
+                className={classes.content}
+            >
+                <Listing
+                    id={undefined}
+                    business={business}
+                    isEditMode={true}
+                    onChangeOwnerBio={props.onChangeOwnerBio}
+                    onChangeAbout={props.onChangeAbout}
+                    isFavorited={false}
+                    onToggleFavorite={console.log}
+                />
+            </Grid>
+            <Button
+                onClick={checkFields}
+                className={classes.continue}
+                variant="contained"
+                color="primary"
+            >
+                {props.creating ? (
+                    <>
+                        <CircularProgress className={classes.progress} />
+                    </>
+                ) : (
+                    strings.buttons.createListing
+                )}
+            </Button>
+            {props.creating && (
+                <Overlay>
+                    <CircularProgress />
+                </Overlay>
+            )}
+        </Grid>
+    );
 }
