@@ -1,35 +1,18 @@
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import React from 'react';
-import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
 import { EmailMask, PhoneMask } from '../../../components/Masks';
 import { LocationAutocomplete } from '../../../components/Search';
 import { Select } from '../../../components/Select';
-import { getCategories, onChangeValue } from '../../../helpers';
-import { Business } from '../../../lib/Business';
+import { getCategories } from '../../../helpers';
 import { strings } from '../../../strings';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 export interface IInfoStepProps {
-    category: string;
-    phone: string;
-    email: string;
-    address: string;
-    website: string;
-    onChangeBusiness: (business: Business) => void;
-    business: Business;
-    onChangeCategory: (str: string) => void;
-    onChangePhone: (str: string) => void;
-    onChangeEmail: (str: string) => void;
-    onChangeAddress: (str: string) => void;
-    onChangeWebsite: (str: string) => void;
     onNextStep: () => void;
-    onClickAddressSuggestion: (event: IAlgoliaLocationSearchEvent) => void;
 }
 
 export interface IInfoStepState {
@@ -75,53 +58,88 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const CATEGORIES = getCategories();
+
 export function InfoStep(props: IInfoStepProps) {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
-        categoryError: '',
-        phoneError: '',
-        emailError: '',
+        category: {
+            value: CATEGORIES[0].id,
+            error: undefined,
+            label: strings.create.info.labels.category,
+            required: true,
+        },
+        phone: {
+            value: undefined,
+            error: undefined,
+            label: strings.create.info.labels.phone + ' &nbsp;*',
+            required: true,
+        },
+        email: {
+            value: undefined,
+            error: undefined,
+            label: strings.create.info.labels.email + ' &nbsp;*',
+            required: true,
+        },
+        address: {
+            value: undefined,
+            error: undefined,
+            label: strings.create.info.labels.address,
+            required: true,
+        },
+        website: {
+            value: undefined,
+            error: undefined,
+            label: strings.create.info.labels.website,
+            required: true,
+        },
+        image: {
+            value: undefined,
+            error: undefined,
+            label: undefined,
+        },
     });
 
-    function checkFields() {
-        const nextErrors: IInfoStepState = {
-            categoryError: '',
-            phoneError: '',
-            emailError: '',
-        };
-        let hasError = false;
-
-        if (!props.category) {
-            hasError = true;
-            nextErrors.categoryError = strings.create.info.errors.category;
-        }
-        if (!props.phone) {
-            hasError = true;
-            nextErrors.phoneError = strings.create.info.errors.phone;
-        }
-        if (!props.email) {
-            hasError = true;
-            nextErrors.emailError = strings.create.info.errors.email;
-        }
-
+    const updateValue = (key: string, value: any) => {
         setState({
-            ...nextErrors,
+            ...state,
+            [key]: {
+                ...state[key],
+                value,
+            },
         });
+    };
 
-        if (!hasError) {
+    const onSubmit = () => {
+        let hasErrors = false;
+        const errorState = Object.keys(state).reduce(
+            (__, key) => {
+                const { required, value, label } = __[key];
+                if (required && !value) {
+                    __[key] = {
+                        ...__[key],
+                        error: `${label} input needs a value`,
+                    };
+                    hasErrors = true;
+                } else {
+                    __[key] = {
+                        ...__[key],
+                        error: undefined
+                    };
+                }
+                return __;
+            },
+            { ...state }
+        );
+
+        if (hasErrors) {
+            setState(errorState);
+        } else {
             props.onNextStep();
         }
-    }
+    };
 
-    const {
-        image,
-        category,
-        phone,
-        email,
-        address,
-        website,
-    } = props.business.getData();
     return (
         <Grid className={classes.root} container direction="column">
             <Grid
@@ -141,48 +159,41 @@ export function InfoStep(props: IInfoStepProps) {
                     spacing={3}
                 >
                     <Select
+                        {...state['category']}
                         className={classes.input}
-                        error={state.categoryError}
-                        value={props.category}
-                        label={strings.create.info.labels.category}
-                        onChange={props.onChangeCategory}
-                        options={getCategories()}
+                        onChange={(value) => updateValue('category', value)}
+                        options={CATEGORIES}
                     />
                     <OutlinedInput
+                        {...state['phone']}
                         className={`${classes.input} ${classes.showLegend}`}
-                        value={props.phone}
-                        onChange={onChangeValue(props.onChangePhone)}
+                        id="phone"
                         name="phone"
-                        error={Boolean(state.phoneError)}
-                        // helperText={state.phoneError}
-                        label={strings.create.info.labels.phone + ' &nbsp;*'}
+                        onChange={(e) => updateValue('phone', e.target.value)}
                         inputComponent={PhoneMask}
                     />
                     <OutlinedInput
+                        {...state['email']}
                         className={`${classes.input} ${classes.showLegend}`}
-                        error={Boolean(state.emailError)}
-                        // helperText={state.emailError}
-                        value={props.email}
-                        onChange={onChangeValue(props.onChangeEmail)}
+                        onChange={(e) => updateValue('email', e.target.value)}
                         name="email"
-                        label={strings.create.info.labels.email + ' &nbsp;*'}
                         inputComponent={EmailMask}
                     />
                     <LocationAutocomplete
-                        onChange={props.onChangeAddress}
-                        onClickSuggestion={props.onClickAddressSuggestion}
-                        label={strings.create.info.labels.address}
-                        useTextField={true}
+                        {...state['address']}
                         className={classes.input}
+                        onClickSuggestion={(value) =>
+                            updateValue('address', value)
+                        }
+                        useTextField={true}
                     />
                     <TextField
+                        {...state['website']}
                         className={classes.input}
-                        key="website"
                         id="website"
-                        label={strings.create.info.labels.website}
+                        name="website"
                         variant="outlined"
-                        value={props.website}
-                        onChange={onChangeValue(props.onChangeWebsite)}
+                        onChange={(e) => updateValue('website', e.target.value)}
                     />
                 </Grid>
                 <Grid xs={12} md={6} item>
@@ -190,20 +201,22 @@ export function InfoStep(props: IInfoStepProps) {
                         className={classes.input}
                         accept="image/*"
                         id="icon-button-photo"
-                        onChange={(e) => {
-                            const file = e.target.files[0];
-                            const url = URL.createObjectURL(file);
-                            props.onChangeBusiness(
-                                props.business.onAddImage(url)
-                            );
-                        }}
+                        onChange={(e: any) =>
+                            updateValue(
+                                'image',
+                                URL.createObjectURL(e.target.filestate[0])
+                            )
+                        }
                         type="file"
                     />
-                    <Avatar className={classes.image} src={image?.url} />
+                    <Avatar
+                        className={classes.image}
+                        src={state['image'].value}
+                    />
                 </Grid>
             </Grid>
             <Button
-                onClick={checkFields}
+                onClick={onSubmit}
                 className={classes.continue}
                 variant="contained"
                 color="primary"
