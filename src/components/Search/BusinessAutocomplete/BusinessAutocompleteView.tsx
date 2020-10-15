@@ -64,6 +64,7 @@ export class BusinessAutocompleteView extends Component<
                     }}
                     renderInput={(params) => (
                         <TextField
+                            id="business-name"
                             classes={{
                                 root: 'bb-business-autocomplete-view__input',
                             }}

@@ -30,7 +30,6 @@ export function BusinessView({
         <Container className={classes.container}>
             <Listing
                 id={id}
-                isEditable={false}
                 business={business}
                 reviews={reviews}
                 onLoadMoreReviews={onLoadMoreReviews}

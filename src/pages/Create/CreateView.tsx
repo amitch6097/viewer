@@ -10,6 +10,7 @@ import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
 import { strings } from '../../strings';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useForm } from 'react-hook-form';
 
 import {
     EIdentify,
@@ -64,6 +65,16 @@ const useStyles = makeStyles({
 });
 
 export function CreateView(props: ICreateViewProps) {
+    const { handleSubmit, register, errors } = useForm();
+    const onSubmit = (e) => {
+        const form = new FormData(e.target);
+        e.preventDefault();
+        //@ts-ignore
+        for(var pair of form.entries()) {
+            console.log(pair[0]+ ', '+ pair[1]); 
+         }
+    };
+
     function CheckExistsStepLabel({ completed, label, onClick }) {
         return completed ? <Link onClick={onClick}>{label}</Link> : label;
     }
@@ -82,95 +93,79 @@ export function CreateView(props: ICreateViewProps) {
 
     return (
         <Container className={classes.root}>
-            {exists === undefined && (
-                <CheckExists
-                    onClickResult={props.onClickResult}
-                    onClickContinue={props.onStartCreate}
-                />
-            )}
-            {exists === false && (
-                <>
-                    <Stepper activeStep={step}>
-                        {[
-                            strings.create.stepLabels.info,
-                            strings.create.stepLabels.owner,
-                            strings.create.stepLabels.identify,
-                            strings.create.stepLabels.details,
-                        ].map((stepLabel, index) => {
-                            return (
-                                <Step completed={step > index}>
-                                    <StepLabel>
-                                        <CheckExistsStepLabel
-                                            onClick={props.onClickStepLink(
-                                                index
-                                            )}
-                                            completed={step > index}
-                                            label={stepLabel}
-                                        />
-                                    </StepLabel>
-                                </Step>
-                            );
-                        })}
-                    </Stepper>
-                    {step === 0 && (
-                        <InfoStep
-                            business={props.businessClass}
-                            onChangeBusiness={props.onChangeBusiness}
-                            category={category}
-                            phone={phone}
-                            email={email}
-                            address={address?.value ?? ''}
-                            website={website}
-                            onChangeCategory={props.onChangeBusinessValue(
-                                'category'
-                            )}
-                            onChangePhone={props.onChangeBusinessValue('phone')}
-                            onChangeEmail={props.onChangeBusinessValue('email')}
-                            onClickAddressSuggestion={props.onChangeAddress}
-                            onChangeAddress={(value: string) =>
-                                props.onChangeAddress({
-                                    suggestion: {
-                                        value,
-                                    },
-                                } as IAlgoliaLocationSearchEvent)
-                            }
-                            onChangeWebsite={props.onChangeBusinessValue(
-                                'website'
-                            )}
-                            onNextStep={() => props.setStep(1)}
-                        />
-                    )}
-                    {step === 1 && (
-                        <OwnerStep
-                            onNextStep={() => props.setStep(2)}
-                            onChangeOwnerValue={props.onChangeOwnerValue}
-                            onAddOwnerImage={props.onAddOwnerImage}
-                            removeOwner={props.removeOwner}
-                            addOwner={props.addOwner}
-                            owners={props.business.owners}
-                        />
-                    )}
-                    {step === 2 && (
-                        <IdentifyStep
-                            identify={identify}
-                            onChangeIdentityText={props.onChangeIdentityText}
-                            onChangeIdentitySelected={
-                                props.onChangeIdentitySelected
-                            }
-                            onNextStep={() => props.setStep(3)}
-                        />
-                    )}
-                    {step === 3 && (
-                        <DetailsStep
-                            creating={props.creating}
-                            business={props.business}
-                            onChangeAbout={props.onChangeBusinessValue('about')}
-                            onChangeOwnerBio={props.onChangeOwnerBio}
-                            onNextStep={props.onCreateListing}
-                        />
-                    )}
-                </>
-            )}
+            <form onSubmit={onSubmit}>
+                {exists === undefined && (
+                    <CheckExists
+                        onClickResult={props.onClickResult}
+                        onClickContinue={props.onStartCreate}
+                    />
+                )}
+                {exists === false && (
+                    <>
+                        <Stepper activeStep={step}>
+                            {[
+                                strings.create.stepLabels.info,
+                                strings.create.stepLabels.owner,
+                                strings.create.stepLabels.identify,
+                                strings.create.stepLabels.details,
+                            ].map((stepLabel, index) => {
+                                return (
+                                    <Step completed={step > index}>
+                                        <StepLabel>
+                                            <CheckExistsStepLabel
+                                                onClick={props.onClickStepLink(
+                                                    index
+                                                )}
+                                                completed={step > index}
+                                                label={stepLabel}
+                                            />
+                                        </StepLabel>
+                                    </Step>
+                                );
+                            })}
+                        </Stepper>
+                        {step === 0 && (
+                            <InfoStep
+                                onNextStep={() => props.setStep(1)}
+                            />
+                        )}
+                        {step === 1 && (
+                            <OwnerStep
+                                onNextStep={() => props.setStep(2)}
+                                onChangeOwnerValue={props.onChangeOwnerValue}
+                                onAddOwnerImage={props.onAddOwnerImage}
+                                removeOwner={props.removeOwner}
+                                addOwner={props.addOwner}
+                                owners={props.business.owners}
+                            />
+                        )}
+                        {step === 2 && (
+                            <IdentifyStep
+                                identify={identify}
+                                onChangeIdentityText={
+                                    props.onChangeIdentityText
+                                }
+                                onChangeIdentitySelected={
+                                    props.onChangeIdentitySelected
+                                }
+                                onNextStep={() => props.setStep(3)}
+                            />
+                        )}
+                        {step === 3 && (
+                            <DetailsStep
+                                creating={props.creating}
+                                business={props.business}
+                                onChangeAbout={props.onChangeBusinessValue(
+                                    'about'
+                                )}
+                                onChangeOwnerBio={props.onChangeOwnerBio}
+                                onNextStep={props.onCreateListing}
+                            />
+                        )}
+                    </>
+                )}
+                <Button type="submit">Submit</Button>
+            </form>
         </Container>
     );
 }
