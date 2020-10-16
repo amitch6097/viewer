@@ -1,4 +1,15 @@
+import { EIdentify } from "typings/types";
+
 export const config = {
+    identify: {
+        [EIdentify.MINORITY] : {
+            enabled: true
+        },
+        [EIdentify.FEMALE] : {
+            enabled: true
+        }
+    },
+
     actions: {
         address: {
             icon: 'Room',

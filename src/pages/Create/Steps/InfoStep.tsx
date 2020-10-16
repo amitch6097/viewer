@@ -5,20 +5,27 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
+import { useForm } from '../../../hooks/useForm';
 import { EmailMask, PhoneMask } from '../../../components/Masks';
 import { LocationAutocomplete } from '../../../components/Search';
 import { Select } from '../../../components/Select';
-import { getCategories } from '../../../helpers';
+import { generateGUID, getCategories } from '../../../helpers';
 import { strings } from '../../../strings';
-
+import {IAlgoliaLocationSearchEventSuggestion} from '../../../../typings/algolia';
 export interface IInfoStepProps {
-    onNextStep: () => void;
+    onNextStep: (state: IInfoStepState) => void;
 }
 
 export interface IInfoStepState {
-    categoryError: string;
-    phoneError: string;
-    emailError: string;
+    category: string;
+    phone: string;
+    email: string;
+    address: IAlgoliaLocationSearchEventSuggestion;
+    website: string;
+    image: {
+        id: string;
+        url: string;
+    };
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -62,8 +69,7 @@ const CATEGORIES = getCategories();
 
 export function InfoStep(props: IInfoStepProps) {
     const classes = useStyles();
-
-    const [state, setState] = React.useState({
+    const {onSubmit, state, updateValue} = useForm({
         category: {
             value: CATEGORIES[0].id,
             error: undefined,
@@ -92,53 +98,14 @@ export function InfoStep(props: IInfoStepProps) {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.website,
-            required: true,
+            required: false,
         },
         image: {
             value: undefined,
             error: undefined,
             label: undefined,
         },
-    });
-
-    const updateValue = (key: string, value: any) => {
-        setState({
-            ...state,
-            [key]: {
-                ...state[key],
-                value,
-            },
-        });
-    };
-
-    const onSubmit = () => {
-        let hasErrors = false;
-        const errorState = Object.keys(state).reduce(
-            (__, key) => {
-                const { required, value, label } = __[key];
-                if (required && !value) {
-                    __[key] = {
-                        ...__[key],
-                        error: `${label} input needs a value`,
-                    };
-                    hasErrors = true;
-                } else {
-                    __[key] = {
-                        ...__[key],
-                        error: undefined
-                    };
-                }
-                return __;
-            },
-            { ...state }
-        );
-
-        if (hasErrors) {
-            setState(errorState);
-        } else {
-            props.onNextStep();
-        }
-    };
+    }, props.onNextStep);
 
     return (
         <Grid className={classes.root} container direction="column">
@@ -204,14 +171,17 @@ export function InfoStep(props: IInfoStepProps) {
                         onChange={(e: any) =>
                             updateValue(
                                 'image',
-                                URL.createObjectURL(e.target.filestate[0])
+                                {
+                                    url: URL.createObjectURL(e.target.files[0]),
+                                    id: generateGUID()
+                                }
                             )
                         }
                         type="file"
                     />
                     <Avatar
                         className={classes.image}
-                        src={state['image'].value}
+                        src={state['image'].value?.url}
                     />
                 </Grid>
             </Grid>

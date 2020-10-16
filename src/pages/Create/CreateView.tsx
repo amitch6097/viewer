@@ -1,59 +1,34 @@
-import React from 'react';
-import './CreateView.less';
-
-import Stepper from '@material-ui/core/Stepper';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import Container from '@material-ui/core/Container';
-import { strings } from '../../strings';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { useForm } from 'react-hook-form';
-
+import Stepper from '@material-ui/core/Stepper';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import {
-    EIdentify,
-    IIdentify,
-    IOwner,
-    IBusinessListing,
+    IBusinessListing
 } from '../../../typings/types';
-import { AppBar } from '../../components/AppBar';
-import { Footer } from '../../components/Footer';
-import { InfoStep } from './Steps/InfoStep';
-import { IdentifyStep } from './Steps/IdentifyStep';
-import { DetailsStep } from './Steps/DetailsStep';
-import { OwnerStep } from './Steps/OwnerStep';
-import { CheckExistsStep } from './Steps/CheckExistsStep';
-import { IAlgoliaLocationSearchEvent } from 'typings/algolia';
-import { Business } from '../../lib/Business';
+import { strings } from '../../strings';
 import { CheckExists } from '../CheckExists/CheckExists';
+import { DetailsStep } from './Steps/DetailsStep';
+import { IdentifyStep, IdentifyStepState } from './Steps/IdentifyStep';
+import { IInfoStepState, InfoStep } from './Steps/InfoStep';
+import { OwnerStep, OwnerStepState } from './Steps/OwnerStep';
 
 export interface ICreateViewProps {
     step: number;
-    business: IBusinessListing;
     exists: boolean;
-    creating: boolean;
-    onClickStepLink: (index: number) => void;
-    onChangeBusinessValue: (key: string) => (value: string) => void;
-    setStep: (index: number) => void;
-    onAddOwnerImage: (index) => (e) => void;
-    onChangeOwnerValue: (
-        index: number
-    ) => (key: string) => (value: string) => void;
-    removeOwner: (index: number) => () => void;
-    addOwner: () => void;
-    onChangeIdentityText: (identity: EIdentify, text: string) => void;
-    onChangeIdentitySelected: (identity: EIdentify, selected: boolean) => void;
-    onChangeOwnerBio: (index: number) => (bio: string) => void;
-    onCreateListing: () => void;
-    onSetExists: (exists: boolean) => void;
+    name: string;
+    info: IInfoStepState;
+    owner: OwnerStepState;
+    identify: IdentifyStepState;
     onStartCreate: (businessName: string) => void;
-    onChangeAddress: (value: IAlgoliaLocationSearchEvent) => void;
-
-    businessClass: Business;
-    onChangeBusiness: (business: Business) => void;
     onClickResult: (id: string) => void;
+    onClickStepLink: (index: number) => (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+    onSetInfo: (state: IInfoStepState) => void;
+    onSetOwner: (state: OwnerStepState) => void;
+    onSetIdentify: (state: IdentifyStepState) => void;
+    onCreateListing: (state: IBusinessListing) => void;
 }
 
 const useStyles = makeStyles({
@@ -65,44 +40,23 @@ const useStyles = makeStyles({
 });
 
 export function CreateView(props: ICreateViewProps) {
-    const { handleSubmit, register, errors } = useForm();
-    const onSubmit = (e) => {
-        const form = new FormData(e.target);
-        e.preventDefault();
-        //@ts-ignore
-        for(var pair of form.entries()) {
-            console.log(pair[0]+ ', '+ pair[1]); 
-         }
-    };
+    const classes = useStyles();
 
     function CheckExistsStepLabel({ completed, label, onClick }) {
         return completed ? <Link onClick={onClick}>{label}</Link> : label;
     }
 
-    const classes = useStyles();
-    const { step, exists } = props;
-
-    const {
-        category,
-        phone,
-        email,
-        address,
-        website,
-        identify,
-    } = props.business;
-
     return (
         <Container className={classes.root}>
-            <form onSubmit={onSubmit}>
-                {exists === undefined && (
+                {props.exists === undefined && (
                     <CheckExists
                         onClickResult={props.onClickResult}
                         onClickContinue={props.onStartCreate}
                     />
                 )}
-                {exists === false && (
+                {props.exists === false && (
                     <>
-                        <Stepper activeStep={step}>
+                        <Stepper activeStep={props.step}>
                             {[
                                 strings.create.stepLabels.info,
                                 strings.create.stepLabels.owner,
@@ -110,13 +64,13 @@ export function CreateView(props: ICreateViewProps) {
                                 strings.create.stepLabels.details,
                             ].map((stepLabel, index) => {
                                 return (
-                                    <Step completed={step > index}>
+                                    <Step completed={props.step > index}>
                                         <StepLabel>
                                             <CheckExistsStepLabel
                                                 onClick={props.onClickStepLink(
                                                     index
                                                 )}
-                                                completed={step > index}
+                                                completed={props.step > index}
                                                 label={stepLabel}
                                             />
                                         </StepLabel>
@@ -124,48 +78,32 @@ export function CreateView(props: ICreateViewProps) {
                                 );
                             })}
                         </Stepper>
-                        {step === 0 && (
+                        {props.step === 0 && (
                             <InfoStep
-                                onNextStep={() => props.setStep(1)}
+                                onNextStep={props.onSetInfo}
                             />
                         )}
-                        {step === 1 && (
+                        {props.step === 1 && (
                             <OwnerStep
-                                onNextStep={() => props.setStep(2)}
-                                onChangeOwnerValue={props.onChangeOwnerValue}
-                                onAddOwnerImage={props.onAddOwnerImage}
-                                removeOwner={props.removeOwner}
-                                addOwner={props.addOwner}
-                                owners={props.business.owners}
+                                onNextStep={props.onSetOwner}
                             />
                         )}
-                        {step === 2 && (
+                        {props.step === 2 && (
                             <IdentifyStep
-                                identify={identify}
-                                onChangeIdentityText={
-                                    props.onChangeIdentityText
-                                }
-                                onChangeIdentitySelected={
-                                    props.onChangeIdentitySelected
-                                }
-                                onNextStep={() => props.setStep(3)}
+                                onNextStep={props.onSetIdentify}
                             />
                         )}
-                        {step === 3 && (
+                        {props.step === 3 && (
                             <DetailsStep
-                                creating={props.creating}
-                                business={props.business}
-                                onChangeAbout={props.onChangeBusinessValue(
-                                    'about'
-                                )}
-                                onChangeOwnerBio={props.onChangeOwnerBio}
-                                onNextStep={props.onCreateListing}
+                                onCreateListing={props.onCreateListing}
+                                name={props.name}
+                                info={props.info}
+                                owner={props.owner}
+                                identify={props.identify}
                             />
                         )}
                     </>
                 )}
-                <Button type="submit">Submit</Button>
-            </form>
         </Container>
     );
 }
