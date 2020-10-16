@@ -38,6 +38,7 @@ const useStyles = (props) =>
             root: {
                 display: 'flex',
                 flexDirection: 'row',
+                minHeight: '250px'
             },
             details: {
                 display: 'flex',

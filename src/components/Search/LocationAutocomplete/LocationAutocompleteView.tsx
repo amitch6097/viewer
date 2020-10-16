@@ -12,6 +12,7 @@ export interface ILocationAutocompleteViewProps {
     placeholder?: string;
     value?:string;
     cityResultsOnly?: boolean;
+    error?: boolean;
 }
 
 export class LocationAutocompleteView extends Component<
@@ -70,6 +71,7 @@ export class LocationAutocompleteView extends Component<
                         placeholder={this.props.placeholder}
                         label={this.props.label}
                         variant="outlined"
+                        error={this.props.error}
                     />
                 ) : (
                     <input

@@ -9,8 +9,8 @@ import { onChangeValue } from '../../helpers';
 import { strings } from '../../strings';
 
 export interface ISelectProps {
-    error?: string;
-    label: string;
+    error?: boolean;
+    label?: string;
     value: string;
     onChange: (value: string) => void;
     className?: string;

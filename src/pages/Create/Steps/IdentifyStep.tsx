@@ -1,27 +1,21 @@
-import React from 'react';
-
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Alert from '@material-ui/lab/Alert';
-
-import { ExpandCheckbox } from '../../../components/ExpandCheckbox';
+import React from 'react';
 import { EIdentify, IIdentify } from '../../../../typings/types';
-import { onChangeValue } from '../../../helpers';
+import { ExpandCheckbox } from '../../../components/ExpandCheckbox';
+import { useForm } from '../../../hooks/useForm';
 import { strings } from '../../../strings';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import {config} from '../../../config';
 
 export interface IIdentifyStepProps {
-    onChangeIdentitySelected: (identity: EIdentify, selected: boolean) => void;
-    onChangeIdentityText: (identity: EIdentify, text: string) => void;
-    identify: Record<EIdentify, IIdentify>;
-    onNextStep: () => void;
+    onNextStep: (state: IdentifyStepState) => void;
 }
 
-export interface IIdentifyStepState {
-    errors: Record<EIdentify, string>;
-}
+export type IdentifyStepState = Record<EIdentify, IIdentify>
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,35 +38,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const identities = Object.keys(config.identify).filter(key => config.identify[key].enabled);
+
 export function IdentifyStep(props: IIdentifyStepProps) {
     const classes = useStyles();
-    const [state, setState] = React.useState({
-        errors: {} as Record<EIdentify, string>,
-    });
+    const { onSubmit, state, updateValue } = useForm(
+        identities.reduce((__, key) => {
+            __[key] = {
+                label: strings.create.identify[key].label,
+                value: {
+                    selected: false,
+                    text: undefined,
+                },
+                errorString: 'Please provide more information.',
+                hasError: (state) =>
+                    state[key].value.selected && !state[key].value.text,
+            };
+            return __;
+        }, {}),
+        props.onNextStep
+    );
 
-    function checkFields() {
-        let hasErrors = false;
-        const errors: Record<EIdentify, string> = Object.keys(
-            props.identify
-        ).reduce((tempErrors, key: EIdentify) => {
-            const identity = props.identify[key];
-            if (identity.selected && !identity.text) {
-                hasErrors = true;
-                tempErrors[key] = 'Please provide more information.';
-            }
-            return tempErrors;
-        }, {} as Record<EIdentify, string>);
-
-        setState({
-            errors,
-        });
-
-        if (!hasErrors) {
-            props.onNextStep();
-        }
-    }
-
-    const { errors } = state;
     return (
         <Grid className={classes.root} container direction="column">
             <Grid
@@ -83,19 +69,17 @@ export function IdentifyStep(props: IIdentifyStepProps) {
                 spacing={5}
                 className={classes.content}
             >
-                {Object.keys(props.identify).map((key: EIdentify) => {
-                    const identity = props.identify[key];
-
+                {Object.keys(state).map((key: EIdentify) => {
                     return (
                         <ExpandCheckbox
-                            selected={identity.selected}
+                            selected={state[key].value.selected}
+                            label={state[key].label}
                             onChangeSelected={() =>
-                                props.onChangeIdentitySelected(
-                                    key,
-                                    !identity.selected
-                                )
+                                updateValue(key, {
+                                    ...state[key].value,
+                                    selected: !state[key].value.selected,
+                                })
                             }
-                            label={strings.create.identify[key].label}
                         >
                             <Grid
                                 item
@@ -107,19 +91,22 @@ export function IdentifyStep(props: IIdentifyStepProps) {
                                 <Typography variant="subtitle1">
                                     Tell us more!
                                 </Typography>
-                                {errors && errors[key] && (
+                                {state[key].error && (
                                     <Alert severity="error">
-                                        {errors[key]}
+                                        {state[key].errorString}
                                     </Alert>
                                 )}
                                 <TextareaAutosize
                                     style={{ width: '100%' }}
                                     aria-label="empty textarea"
                                     rowsMin={3}
-                                    onChange={onChangeValue((v) =>
-                                        props.onChangeIdentityText(key, v)
-                                    )}
-                                    value={identity.text}
+                                    onChange={(e) =>
+                                        updateValue(key, {
+                                            ...state[key].value,
+                                            text: e.target.value,
+                                        })
+                                    }
+                                    value={state[key].value.text}
                                 />
                             </Grid>
                         </ExpandCheckbox>
@@ -127,7 +114,7 @@ export function IdentifyStep(props: IIdentifyStepProps) {
                 })}
             </Grid>
             <Button
-                onClick={checkFields}
+                onClick={onSubmit}
                 className={classes.continue}
                 variant="contained"
                 color="primary"

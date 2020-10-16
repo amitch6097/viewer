@@ -7,23 +7,23 @@ import React from 'react';
 import { IOwner } from '../../../../typings/types';
 import { OwnerCard } from '../../../components/OwnerCard';
 import { strings } from '../../../strings';
-
+import { generateGUID } from '../../../helpers';
+import { useForm, IFormItem } from '../../../hooks/useForm';
 export interface IOwnerStepProps {
-    onNextStep: () => void;
-    onAddOwnerImage: (index: number) => (e: any) => void;
-    removeOwner: (index) => () => void;
-    onChangeOwnerValue: (
-        index: number
-    ) => (key: string) => (value: string) => void;
-    addOwner: () => void;
-    owners: IOwner[];
+    onNextStep: (state: OwnerStepState) => void;
 }
 
-export interface IOwnerStepState {
-    errors: Array<{
+export type OwnerStepState = Record<
+    string,
+    {
         name: string;
-    }>;
-}
+        position: string;
+        image: {
+            id: string;
+            url: string;
+        };
+    }
+>;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,43 +39,42 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function addOwnerToForm(
+    form: Record<string, IFormItem>
+): Record<string, IFormItem> {
+    const guid = generateGUID();
+    return {
+        ...form,
+        [guid]: {
+            label: 'owner',
+            value: {
+                name: undefined,
+                position: undefined,
+                image: undefined,
+            },
+            errorString: 'Please Provide a Name',
+            hasError: (state) => !state[guid].value.name,
+        },
+    };
+}
+
+function removeOwnerFromForm(
+    form: Record<string, IFormItem>,
+    key: string
+): Record<string, IFormItem> {
+    const formCopy = { ...form };
+    delete formCopy[key];
+    return formCopy;
+}
+
 export function OwnerStep(props: IOwnerStepProps) {
     const classes = useStyles();
 
-    const [state, setState] = React.useState({
-        errors: [
-            {
-                name: undefined,
-            },
-        ],
-    });
+    const { onSubmit, state, updateValue, setState } = useForm(
+        addOwnerToForm({}),
+        (values) => props.onNextStep(values as OwnerStepState)
+    );
 
-    function checkFields() {
-        const { owners } = props;
-        let hasErrors = false;
-
-        const errors = Object.values(owners).map((owner) => {
-            const name = !Boolean(owner.name);
-
-            if (name) {
-                hasErrors = true;
-            }
-
-            return {
-                name: name ? 'Please Provide a Name' : '',
-            };
-        });
-
-        setState({
-            errors,
-        });
-
-        if (!hasErrors) {
-            props.onNextStep();
-        }
-    }
-
-    const { owners } = props;
     return (
         <Grid className={classes.root} container direction="column">
             <Grid className={classes.content}>
@@ -86,28 +85,51 @@ export function OwnerStep(props: IOwnerStepProps) {
                     alignItems="center"
                     spacing={5}
                 >
-                    {owners.map((owner, index) => {
+                    {Object.keys(state).map((key, index) => {
                         return (
-                            <Grid item>
+                            <Grid item key={key}>
                                 <OwnerCard
-                                    errors={state.errors[index]}
-                                    // key={owner.name || index}
-                                    owner={owner}
-                                    withDelete={owners.length > 1}
-                                    removeOwner={props.removeOwner(index)}
-                                    onChangeValue={props.onChangeOwnerValue(
-                                        index
-                                    )}
-                                    onAddOwnerImage={props.onAddOwnerImage(
-                                        index
-                                    )}
+                                    error={
+                                        state[key].error &&
+                                        state[key].errorString
+                                    }
+                                    name={state[key].value.name}
+                                    image={state[key].value.image?.url}
+                                    position={state[key].value.position}
+                                    withDelete={Object.keys(state).length > 1}
+                                    removeOwner={() =>
+                                        setState(
+                                            removeOwnerFromForm(state, key)
+                                        )
+                                    }
+                                    onChangeName={(name) => {
+                                        updateValue(key, {
+                                            ...state[key].value,
+                                            name,
+                                        });
+                                    }}
+                                    onChangePosition={(position) => {
+                                        updateValue(key, {
+                                            ...state[key].value,
+                                            position,
+                                        });
+                                    }}
+                                    onChangeImage={(url) => {
+                                        updateValue(key, {
+                                            ...state[key].value,
+                                            image: {
+                                                url,
+                                                id: generateGUID()
+                                            }
+                                        });
+                                    }}
                                 />
                             </Grid>
                         );
                     })}
                     <Grid item>
                         <IconButton
-                            onClick={props.addOwner}
+                            onClick={() => setState(addOwnerToForm(state))}
                             color="primary"
                             component="span"
                         >
@@ -118,7 +140,7 @@ export function OwnerStep(props: IOwnerStepProps) {
             </Grid>
 
             <Button
-                onClick={checkFields}
+                onClick={onSubmit}
                 className={classes.continue}
                 variant="contained"
                 color="primary"

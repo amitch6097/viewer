@@ -1,26 +1,25 @@
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import ClearIcon from '@material-ui/icons/Clear';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import React from 'react';
+import { TextField } from '../../components/TextField';
 import './OwnerCard.less';
 
-import Grid from '@material-ui/core/Grid';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
-import Avatar from '@material-ui/core/Avatar';
-import Paper from '@material-ui/core/Paper';
 
-import { IOwner } from '../../../typings/types';
-import { onChangeValue } from '../../helpers';
-import { TextField } from '../../components/TextField';
 
 export interface IOwnerCardProps {
-    owner: IOwner;
-    onAddOwnerImage: (e: any) => void;
+    error?: string;
+    name: string;
+    position: string;
+    image: string;
+    onChangeImage: (imageURL: string) => void;
+    onChangePosition: (position: string) => void;
+    onChangeName: (name: string) => void;
     withDelete: boolean;
     removeOwner: () => void;
-    onChangeValue: (key: string) => (value: string) => void;
-    errors?: {
-        name: string;
-    };
 }
 
 export function OwnerCard(props: IOwnerCardProps) {
@@ -43,14 +42,16 @@ export function OwnerCard(props: IOwnerCardProps) {
                         classes={{
                             root: 'bb-owner-card__avatar-container-avatar',
                         }}
-                        src={props.owner.image?.url}
+                        src={props.image}
                     />
                     <div className="bb-owner-card__avatar-upload">
                         <input
                             className={'bb-owner-card__avatar-upload-input'}
                             accept="image/*"
                             id="icon-button-photo"
-                            onChange={props.onAddOwnerImage}
+                            onChange={(e) => {
+                                props.onChangeImage(URL.createObjectURL(e.target.files[0]))
+                            }}
                             type="file"
                         />
                         <label htmlFor="icon-button-photo">
@@ -73,21 +74,21 @@ export function OwnerCard(props: IOwnerCardProps) {
                 </div>
                 <TextField
                     className="bb-owner-card__avatar-container-label"
-                    error={props.errors?.name}
+                    error={props.error}
                     required={true}
                     id="name"
                     key="name"
                     label="Name"
-                    value={props.owner.name}
-                    onChange={props.onChangeValue('name')}
+                    value={props.name}
+                    onChange={props.onChangeName}
                 />
                 <TextField
                     className="bb-owner-card__avatar-container-sub-label"
                     id="position"
                     key="position"
                     label="Position"
-                    value={props.owner.position}
-                    onChange={props.onChangeValue('position')}
+                    value={props.position}
+                    onChange={props.onChangePosition}
                 />
             </Grid>
         </Paper>

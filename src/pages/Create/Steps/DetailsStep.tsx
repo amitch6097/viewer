@@ -2,25 +2,31 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
-import { IBusinessListing } from '../../../../typings/types';
+import { IBusinessListing, IOwner } from '../../../../typings/types';
 import { Listing } from '../../../components/Listing';
 import { strings } from '../../../strings';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Overlay } from '../../../components/Overlay';
+import { IdentifyStepState } from './IdentifyStep';
+import { OwnerStepState } from './OwnerStep';
+import { IInfoStepState } from './InfoStep';
+import { generateGUID } from '../../../helpers';
+import { useForm } from '../../../hooks/useForm';
 
 export interface IDetailsStepProps {
-    business: IBusinessListing;
-    creating: boolean;
-    onChangeAbout: (about: string) => void;
-    onChangeOwnerBio: (index: number) => (bio: string) => void;
-    onNextStep: () => void;
+    name: string;
+    info: IInfoStepState;
+    owner: OwnerStepState;
+    identify: IdentifyStepState;
+    onCreateListing: (business: IBusinessListing) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        paddingTop: '20px',
         minHeight:
-            'calc(var(--page-height) - var(--page-padding) - var(--page-padding))',
+            'calc(var(--page-height) - var(--page-padding) - var(--page-padding) - 20px)',
     },
     content: {
         flex: 1,
@@ -34,14 +40,56 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function formatBusiness({
+    about,
+    name,
+    info,
+    owners,
+    identify,
+}: {
+    about: string;
+    name: string;
+    info: IInfoStepState;
+    owners: IOwner[];
+    identify: IdentifyStepState;
+}): IBusinessListing {
+    return {
+        id: undefined,
+        name,
+        guid: generateGUID(),
+        ...info,
+        identify,
+        owners,
+        about,
+    };
+}
+
 export function DetailsStep(props: IDetailsStepProps) {
     const classes = useStyles();
+    const [creating, setCreating] = React.useState(false);
 
-    function checkFields() {
-        props.onNextStep();
+    function handleCreateListing(values: { owners: IOwner[]; about: string }) {
+        setCreating(true);
+        const business = formatBusiness({
+            ...props,
+            owners: values.owners,
+            about: values.about,
+        });
+        props.onCreateListing(business);
     }
 
-    const { business } = props;
+    const { onSubmit, state, updateValue } = useForm(
+        {
+            owners: {
+                value: Object.values(props.owner),
+            },
+            about: {
+                value: undefined,
+            },
+        },
+        handleCreateListing
+    );
+
     return (
         <Grid className={classes.root} container direction="column">
             <Grid
@@ -54,21 +102,34 @@ export function DetailsStep(props: IDetailsStepProps) {
             >
                 <Listing
                     id={undefined}
-                    business={business}
                     isEditMode={true}
-                    onChangeOwnerBio={props.onChangeOwnerBio}
-                    onChangeAbout={props.onChangeAbout}
                     isFavorited={false}
+                    business={formatBusiness({
+                        ...props,
+                        owners: state.owners.value,
+                        about: state.about.value,
+                    })}
+                    onChangeOwnerBio={(index: number) => (bio: string) => {
+                        const nextOwners = [...state.owners.value];
+                        nextOwners[index] = {
+                            ...nextOwners[index],
+                            bio,
+                        };
+                        updateValue('owners', nextOwners);
+                    }}
+                    onChangeAbout={(about) => {
+                        updateValue('about', about);
+                    }}
                     onToggleFavorite={console.log}
                 />
             </Grid>
             <Button
-                onClick={checkFields}
+                onClick={onSubmit}
                 className={classes.continue}
                 variant="contained"
                 color="primary"
             >
-                {props.creating ? (
+                {creating ? (
                     <>
                         <CircularProgress className={classes.progress} />
                     </>
@@ -76,7 +137,7 @@ export function DetailsStep(props: IDetailsStepProps) {
                     strings.buttons.createListing
                 )}
             </Button>
-            {props.creating && (
+            {creating && (
                 <Overlay>
                     <CircularProgress />
                 </Overlay>
