@@ -102,6 +102,19 @@ export interface IBusinessListing {
     hashtags?: string[];
 }
 
+export interface IBusinessListingUpdateProperties {
+    about: string;
+    image?: IImage;
+    category: string;
+    phone: string;
+    email: string;
+    address: IAlgoliaLocationSearchEventSuggestion;
+    website: string;
+    identify: Record<EIdentify, IIdentify>;
+    owners: IOwner[];
+    name: string;
+}
+
 export interface IOwner {
     name: string;
     bio?: string;

@@ -14,6 +14,12 @@ import { getFavoriteGroups } from './getFavoriteGroups';
 import { createFavoriteGroup } from './createFavoriteGroup';
 import { setBusinessAsFavorite } from './setBusinessAsFavorite';
 import { getFavoriteGroup } from './getFavoriteGroup';
+import { onFlagCreated, createFlag } from './createFlag';
+import {
+    createBusinessUpdateRequest,
+    onBusinessUpdateRequestCreated,
+} from './createBusinessUpdateRequest';
+import { updateBusinessUpdatedRequest } from './updateBusinessUpdatedRequest';
 
 export {
     onBusinessCreated,
@@ -26,4 +32,9 @@ export {
     createFavoriteGroup,
     setBusinessAsFavorite,
     getFavoriteGroup,
+    updateBusinessUpdatedRequest,
+    createBusinessUpdateRequest,
+    onBusinessUpdateRequestCreated,
+    onFlagCreated,
+    createFlag,
 };
