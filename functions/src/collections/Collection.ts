@@ -10,10 +10,6 @@ export abstract class Collection {
         this.collection = firestore.collection(collectionId);
     }
 
-    async delete(id: string) {
-        await this.collection.doc(id).delete();
-    }
-
     async getData(id: string) {
         const document = await this.getDocument(id);
         return document

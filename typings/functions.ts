@@ -1,11 +1,7 @@
+import { IFavoriteGroupDocument, IReviewDocument } from './documents';
 import {
-    IFavoriteGroupDocument,
-    IReviewDocument,
-    IBusinessDocument,
-    IBusinessUpdateRequestDocument,
-    IFlagDocument,
-} from './documents';
-import { IBusinessListing, IBusinessListingUpdateProperties } from './types';
+    IBusinessDocument, IBusinessListing
+} from './types';
 
 export interface ICreateFavoriteGroupProps {
     label: string;
@@ -69,34 +65,6 @@ export interface ICreateBusinessProps {
 }
 
 export interface ICreateBusinessResponse {
+    id: string;
     result: IBusinessDocument;
-}
-
-export interface IUpdateBusinessUpdateRequestProps {
-    businessUpdateRequestId: string;
-    action: 'delete' | 'approve';
-}
-
-export interface IUpdateBusinessUpdateRequestResponse {
-    action: 'delete' | 'approve';
-}
-
-export interface ICreateBusinessUpdateRequestProps {
-    businessId: string;
-    updateProperties: Partial<IBusinessListingUpdateProperties>;
-}
-
-export interface ICreateBusinessUpdateRequestResponse {
-    result: IBusinessUpdateRequestDocument;
-}
-
-
-export interface ICreateFlagProps {
-    text: string;
-    type: 'data' | 'inappropriate' | 'closed';
-    businessId: string;
-}
-
-export interface ICreateFlagResponse {
-    result: IFlagDocument
 }

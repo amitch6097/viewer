@@ -1,4 +1,4 @@
-import {IBusinessListing, IBusinessListingUpdateProperties} from './types';
+import {IBusinessListing} from './types';
 
 export interface IUserDocument {
     name: string | undefined;
@@ -9,15 +9,6 @@ export interface IUserDocument {
     favoriteGroups: Record<string, {
         createdAt: number;
     }>;
-}
-
-export interface IFlagDocument {
-    id: string;
-    businessId: string;
-    type: 'data' | 'inappropriate' | 'closed',
-    text: string;
-    createdBy: string;
-    createdAt?: number;
 }
 
 export interface IReviewDocument {
@@ -53,7 +44,6 @@ export interface IBusinessDocument {
     meta?: {
         createdAt: number;
         createdBy: string | undefined;
-        ownedBy: string | undefined;
     };
     _geoloc?: {
         lat: number;
@@ -62,16 +52,4 @@ export interface IBusinessDocument {
     _tags?: string[];
     reviews?: string[]; //review id list
     reviewsRatingTotal?: number;
-    businessUpdateRequests: string[];
-    flags: string[];
-}
-
-export interface IBusinessUpdateRequestDocument {
-    id: string;
-    businessId: string;
-    data: Partial<IBusinessListingUpdateProperties>;
-    createdAt: number;
-    createdBy: string;
-    approved?: boolean;
-    approvedBy?: string;
 }
