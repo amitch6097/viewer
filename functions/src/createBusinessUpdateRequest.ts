@@ -19,7 +19,9 @@ export const createBusinessUpdateRequest = functions.https.onCall(
             if (!businessId || !updateProperties) {
                 throw new functions.https.HttpsError(
                     'failed-precondition',
-                    `Can not create update request with missing parameter: ${data}`
+                    `Can not create update request with missing parameter: ${{
+                        ...data
+                    }}`
                 );
             }
 
@@ -48,7 +50,7 @@ export const createBusinessUpdateRequest = functions.https.onCall(
         } catch (err) {
             throw new functions.https.HttpsError(
                 'unknown',
-                `Failed to created favorite group with error: ${err}, data: ${data}`
+                `Failed to created business update request: ${err}, data: ${data}`
             );
         }
     }
