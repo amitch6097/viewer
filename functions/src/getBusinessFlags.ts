@@ -35,7 +35,7 @@ export const getBusinessFlags = functions.https.onCall(
                 );
             }
 
-            const result = await flagCollection.getAll(businessData.businessUpdateRequests);
+            const result = await flagCollection.getAll(businessData.flags);
             return {
                 result,
             };
