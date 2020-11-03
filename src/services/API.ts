@@ -131,7 +131,7 @@ export class API {
             business,
         });
         return {
-            id: response.id,
+            id: response.result.id,
             business: new Business(response.result),
         };
     }
@@ -150,7 +150,7 @@ export class API {
     }
 
     static async isBusinessFavorited(businessId: string): Promise<boolean> {
-        const user = await API.getMyUser();
+        // const user = await API.getMyUser();
         return false;
     }
 
@@ -177,10 +177,10 @@ export class API {
         businessId: string,
         setByFavoriteGroupId: Record<string, boolean>
     ): Promise<boolean> {
-        const response = await Functions.setBusinessAsFavorite({
-            businessId,
-            setByFavoriteGroupId,
-        });
+        // const response = await Functions.setBusinessAsFavorite({
+        //     businessId,
+        //     setByFavoriteGroupId,
+        // });
         return true;
     }
 
