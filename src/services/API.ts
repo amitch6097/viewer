@@ -8,7 +8,7 @@ import { UserReviews } from '../lib/UserReviews';
 import { BusinessReviews } from '../lib/BusinessReviews';
 import { FavoriteGroups } from '../lib/FavoriteGroups';
 
-import { IBusinessListing, IReview } from '../../typings/types';
+import { IBusinessListing, IReview, IBusinessListingUpdateProperties } from '../../typings/types';
 import { User } from '../lib/User';
 import { FavoriteGroup } from '../lib/FavoriteGroup';
 
@@ -177,10 +177,10 @@ export class API {
         businessId: string,
         setByFavoriteGroupId: Record<string, boolean>
     ): Promise<boolean> {
-        // const response = await Functions.setBusinessAsFavorite({
-        //     businessId,
-        //     setByFavoriteGroupId,
-        // });
+        await Functions.setBusinessAsFavorite({
+            businessId,
+            setByFavoriteGroupId,
+        });
         return true;
     }
 
@@ -202,6 +202,30 @@ export class API {
         const response = await Functions.getFavoriteGroup({id});
         return FavoriteGroup.fromDocument(response.favoriteGroup);
     }
+
+    static async createFlag(args: {
+        text: string;
+        type: 'data' | 'inappropriate' | 'closed';
+        businessId: string;
+    }) {
+        return await Functions.createFlag(args);
+    }
+
+    static async createBusinessUpdateRequest(args: {
+        businessId: string;
+        updateProperties: Partial<IBusinessListingUpdateProperties>
+    }) {
+        return await Functions.createBusinessUpdateRequest(args);
+    }
+
+
+    static async updateBusinessUpdatedRequest(args: {
+        businessUpdateRequestId: string;
+        action: 'delete' | 'approve';
+    }) {
+        return await Functions.updateBusinessUpdatedRequest(args);
+    }
+
 }
 
 if (typeof window !== 'undefined') {
