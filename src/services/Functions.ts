@@ -1,6 +1,7 @@
 import {
     ICreateBusinessProps,
     ICreateBusinessResponse,
+    ICreateBusinessUpdateRequestResponse,
     ICreateFavoriteGroupProps,
     ICreateFavoriteGroupResponse,
     ICreateReviewProps,
@@ -13,6 +14,11 @@ import {
     IGetFavoriteGroupsResponse,
     ISetBusinessAsFavoriteProps,
     ISetBusinessAsFavoriteResponse,
+    ICreateBusinessUpdateRequestProps,
+    IUpdateBusinessUpdateRequestProps,
+    IUpdateBusinessUpdateRequestResponse,
+    ICreateFlagProps,
+    ICreateFlagResponse
 } from '../../typings/functions';
 import firebase from '../firebase';
 
@@ -24,6 +30,9 @@ interface IProps {
     getFavoriteGroups: IGetFavoriteGroupsProps;
     setBusinessAsFavorite: ISetBusinessAsFavoriteProps;
     getFavoriteGroup: IGetFavoriteGroupProps;
+    createBusinessUpdateRequest: ICreateBusinessUpdateRequestProps;
+    updateBusinessUpdatedRequest: IUpdateBusinessUpdateRequestProps;
+    createFlag: ICreateFlagProps;
 }
 
 interface IResponse {
@@ -34,6 +43,9 @@ interface IResponse {
     getFavoriteGroups: IGetFavoriteGroupsResponse;
     setBusinessAsFavorite: ISetBusinessAsFavoriteResponse;
     getFavoriteGroup: IGetFavoriteGroupResponse;
+    createBusinessUpdateRequest: ICreateBusinessUpdateRequestResponse;
+    updateBusinessUpdatedRequest: IUpdateBusinessUpdateRequestResponse;
+    createFlag: ICreateFlagResponse;
 }
 
 export class Functions {
@@ -96,6 +108,24 @@ export class Functions {
         props: ISetBusinessAsFavoriteProps
     ): Promise<ISetBusinessAsFavoriteResponse> {
         return await call('setBusinessAsFavorite', props);
+    }
+
+    static async createBusinessUpdateRequest(
+        props: ICreateBusinessUpdateRequestProps
+    ): Promise<ICreateBusinessUpdateRequestResponse> {
+        return await call('createBusinessUpdateRequest', props);
+    }
+
+    static async updateBusinessUpdatedRequest(
+        props: IUpdateBusinessUpdateRequestProps
+    ): Promise<IUpdateBusinessUpdateRequestResponse> {
+        return await call('updateBusinessUpdatedRequest', props);
+    }
+
+    static async createFlag(
+        props: ICreateFlagProps
+    ): Promise<ICreateFlagResponse> {
+        return await call('createFlag', props);
     }
 }
 

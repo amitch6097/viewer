@@ -31,33 +31,21 @@ export const createFlag = functions.https.onCall(
                 businessId,
                 authId: context.auth.uid,
             });
+
+            const businessCollection = new BusinessCollection();
+            await businessCollection.addFlag(
+                businessId,
+                flagDocument.id
+            );
+
             return {
                 result: flagDocument,
             };
         } catch (err) {
             throw new functions.https.HttpsError(
                 'unknown',
-                `Failed to created favorite group with error: ${err}, data: ${data}`
+                `Failed to create flag: ${err}, data: ${data}`
             );
         }
     }
 );
-
-export const onFlagCreated = functions.firestore
-    .document('flag/{id}')
-    .onCreate(async (snap, context) => {
-        try {
-            const data = snap.data();
-            const businessCollection = new BusinessCollection();
-            const writeResult = businessCollection.addFlag(
-                data.businessId,
-                context.params.id
-            );
-            return writeResult;
-        } catch (err) {
-            throw new functions.https.HttpsError(
-                'unknown',
-                `Failed to run onBusinessCreated with error ${err}`
-            );
-        }
-    });

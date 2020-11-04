@@ -9,7 +9,10 @@ import {
 import { BUSINESS_DATA } from '../../__mock__/business-data';
 import { MOCK_USER } from '../../__mock__/user-data';
 import { FavoriteGroupCollection } from '../src/Collections/FavoriteGroupCollection';
+import { FlagBusiness } from './Functions/FlagBusiness';
+import { UpdateBusiness } from './Functions/UpdateBusiness';
 import { clearMockUser, createMockUser, testTimeCreated } from './helpers';
+
 
 const projectConfig = {
     projectId: 'common-good-68b0b',
@@ -42,6 +45,16 @@ describe('my functions', () => {
         await clearMockUser(admin);
         resolve();
     });
+
+    it('should update a business', async (resolve) => {
+        await UpdateBusiness(api, tests, admin);
+        resolve();
+    });
+
+    it('should let a user flag a business', async (resolve) => {
+        await FlagBusiness(api, tests, admin);
+        resolve();
+    })
 
     it('should let a user create a favorite groups', async (resolve) => {
         await createMockUser(api, tests, admin);
@@ -234,7 +247,6 @@ describe('my functions', () => {
             .doc(id)
             .get();
 
-
         const businessData = business.data() as IBusinessDocument;
 
         expect(id).toBeTruthy();
@@ -314,7 +326,9 @@ describe('my functions', () => {
         );
 
         expect(getBusinessesForFavoriteGroupResponse1.businesses).toBeTruthy();
-        expect(getBusinessesForFavoriteGroupResponse1.businesses.length).toBe(1);
+        expect(getBusinessesForFavoriteGroupResponse1.businesses.length).toBe(
+            1
+        );
         expect(getBusinessesForFavoriteGroupResponse1.businesses[0].id).toBe(
             id
         );
@@ -341,7 +355,9 @@ describe('my functions', () => {
         );
 
         expect(getBusinessesForFavoriteGroupResponse2.businesses).toBeTruthy();
-        expect(getBusinessesForFavoriteGroupResponse2.businesses.length).toBe(0);
+        expect(getBusinessesForFavoriteGroupResponse2.businesses.length).toBe(
+            0
+        );
 
         /** clean up */
         await clearMockUser(admin);

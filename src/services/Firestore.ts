@@ -1,7 +1,5 @@
 import {
     IBusinessDocument,
-
-
     IReview, IReviewDocument, IUserDocument
 } from '../../typings/types';
 import firebase from '../firebase';

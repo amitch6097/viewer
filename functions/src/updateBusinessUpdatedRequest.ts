@@ -45,27 +45,23 @@ export const updateBusinessUpdatedRequest = functions.https.onCall(
                 );
             }
 
+            if (context.auth.uid !== businessData.meta.ownedBy) {
+                throw new functions.https.HttpsError(
+                    'permission-denied',
+                    `Could not take action on this update request because current user does not own business`
+                );
+            }
 
-
-
-
-
-
-            
-
-            if (
-                action === 'approve' &&
-                businessData &&
-                businessUpdateRequest &&
-                businessUpdateRequest.approved &&
-                businessUpdateRequest.approvedBy === businessData.meta.ownedBy
-            ) {
+            if (action === 'approve') {
                 const updatedBusinessData = await businessCollection.update(
                     businessUpdateRequest.businessId,
                     businessUpdateRequest.data
                 );
                 await businessCollection.removeUpdateRequest(
                     businessUpdateRequest.businessId,
+                    businessUpdateRequest.id
+                );
+                await businessUpdateRequestCollection.delete(
                     businessUpdateRequest.id
                 );
                 // Add an 'objectID' field which Algolia requires
@@ -88,7 +84,7 @@ export const updateBusinessUpdatedRequest = functions.https.onCall(
         } catch (err) {
             throw new functions.https.HttpsError(
                 'unknown',
-                `Failed to created favorite group with error: ${err}, data: ${data}`
+                `Failed to update business update request: ${err}, data: ${data}`
             );
         }
     }

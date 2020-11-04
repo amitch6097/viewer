@@ -1,4 +1,4 @@
-import { EIdentify } from "typings/types";
+import { EIdentify } from "../typings/types";
 
 export const config = {
     identify: {

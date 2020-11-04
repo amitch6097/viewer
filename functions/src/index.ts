@@ -14,12 +14,13 @@ import { getFavoriteGroups } from './getFavoriteGroups';
 import { createFavoriteGroup } from './createFavoriteGroup';
 import { setBusinessAsFavorite } from './setBusinessAsFavorite';
 import { getFavoriteGroup } from './getFavoriteGroup';
-import { onFlagCreated, createFlag } from './createFlag';
+import { createFlag } from './createFlag';
 import {
     createBusinessUpdateRequest,
-    onBusinessUpdateRequestCreated,
 } from './createBusinessUpdateRequest';
 import { updateBusinessUpdatedRequest } from './updateBusinessUpdatedRequest';
+import { getBusinessFlags } from './getBusinessFlags';
+import { getBusinessUpdateRequests } from './getBusinessUpdateRequests';
 
 export {
     onBusinessCreated,
@@ -34,7 +35,7 @@ export {
     getFavoriteGroup,
     updateBusinessUpdatedRequest,
     createBusinessUpdateRequest,
-    onBusinessUpdateRequestCreated,
-    onFlagCreated,
     createFlag,
+    getBusinessFlags,
+    getBusinessUpdateRequests
 };

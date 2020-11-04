@@ -31,10 +31,10 @@ export class FavoriteGroup  extends React.Component<IFavoriteGroupProps, IFavori
     constructor(props: IFavoriteGroupProps) {
         super(props);
 
-        const updatedAgo = timeAgo.format(new Date( this.props.group.updatedAt));
+        const updatedAgo = timeAgo.format(new Date( props.group.updatedAt));
         this.state = {
-            initialSelection: this.props.selected,
-            number: this.props.group.length,
+            initialSelection: props.selected,
+            number: props.group.length,
             text: updatedAgo
         }
     }

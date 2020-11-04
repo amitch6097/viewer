@@ -100,3 +100,19 @@ export interface ICreateFlagProps {
 export interface ICreateFlagResponse {
     result: IFlagDocument
 }
+
+export interface IGetBusinessUpdateRequestsProps {
+    businessId: string;
+}
+
+export interface IGetBusinessUpdateRequestsResponse {
+    result: IBusinessUpdateRequestDocument[];
+}
+
+export interface IGetBusinessFlagsProps {
+    businessId: string;
+}
+
+export interface IGetBusinessFlagsResponse {
+    result: IFlagDocument[];
+}
