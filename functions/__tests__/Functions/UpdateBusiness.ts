@@ -17,6 +17,7 @@ export async function UpdateBusiness(api, tests, admin) {
         api.updateBusinessUpdatedRequest
     );
     const wrappedCreateBusiness = tests.wrap(api.createBusiness);
+    const wrappedGetBusinessUpdateRequests = tests.wrap(api.getBusinessUpdateRequests);
 
     // create the business
     const { result } = await wrappedCreateBusiness(
@@ -41,6 +42,16 @@ export async function UpdateBusiness(api, tests, admin) {
         }
     );
 
+    // should be able to pick the new requests up in the get update requests endpoint
+    const businessRequestsResponse1 =  await wrappedGetBusinessUpdateRequests({
+        businessId,
+    }, {
+        auth: MOCK_USER,
+    });
+    expect(businessRequestsResponse1.result.length).toEqual(1);
+    expect(businessRequestsResponse1.result[0].id).toEqual(updateRequestResponse1.result.id);
+
+
     // approve the update
     const {action} =  await wrappedUpdateBusinessUpdatedRequest(
         {
@@ -61,6 +72,14 @@ export async function UpdateBusiness(api, tests, admin) {
     expect(businessData1.data.email).toEqual(newEmail);
     expect(updateRequestData1).toBeUndefined();
 
+    // should NOT be able to get the update requests because it was deleted
+    const businessRequestsResponse2 =  await wrappedGetBusinessUpdateRequests({
+        businessId,
+    }, {
+        auth: MOCK_USER,
+    });
+    expect(businessRequestsResponse2.result.length).toEqual(0);
+
     // make a new request
     const updateRequestResponse2 = await wrappedCreateBusinessUpdateRequest(
         {
@@ -73,6 +92,15 @@ export async function UpdateBusiness(api, tests, admin) {
             auth: MOCK_USER,
         }
     );
+
+    // should be able to pick the new requests up in the get update requests endpoint
+    const businessRequestsResponse3 =  await wrappedGetBusinessUpdateRequests({
+        businessId,
+    }, {
+        auth: MOCK_USER,
+    });
+    expect(businessRequestsResponse3.result.length).toEqual(1);
+    expect(businessRequestsResponse3.result[0].id).toEqual(updateRequestResponse2.result.id);
 
     //deny the request
     await wrappedUpdateBusinessUpdatedRequest(
@@ -92,6 +120,14 @@ export async function UpdateBusiness(api, tests, admin) {
     expect(updateRequestData2).toBeUndefined();
     const businessData2 = await businessCollection.getData(businessId);
     expect(businessData2.data.email).toEqual(businessData1.data.email);
+
+    // should NOT be able to get the update requests because it was deleted
+    const businessRequestsResponse4 =  await wrappedGetBusinessUpdateRequests({
+        businessId,
+    }, {
+        auth: MOCK_USER,
+    });
+    expect(businessRequestsResponse4.result.length).toEqual(0);
 
     await businessCollection.delete(businessId)
     await clearMockUser(admin);
