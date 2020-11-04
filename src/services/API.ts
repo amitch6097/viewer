@@ -227,8 +227,3 @@ export class API {
     }
 
 }
-
-if (typeof window !== 'undefined') {
-    // @ts-ignore
-    window._API = API;
-}
