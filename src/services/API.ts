@@ -1,16 +1,18 @@
-import { Firestore } from './Firestore';
+import { BusinessFlag } from 'src/lib/BusinessFlag';
+import { BusinessUpdateRequest } from 'src/lib/BusinessUpdateRequest';
+import { IBusinessUpdateRequestDocument, IFlagDocument } from '../../typings/documents';
+import { IBusinessListing, IBusinessListingUpdateProperties, IReview } from '../../typings/types';
+import { Business } from '../lib/Business';
+import { BusinessReviews } from '../lib/BusinessReviews';
+import { FavoriteGroup } from '../lib/FavoriteGroup';
+import { FavoriteGroups } from '../lib/FavoriteGroups';
+import { Review } from '../lib/Review';
+import { User } from '../lib/User';
+import { UserReviews } from '../lib/UserReviews';
 import { Auth } from './Auth';
+import { Firestore } from './Firestore';
 import { Functions } from './Functions';
 
-import { Business } from '../lib/Business';
-import { Review } from '../lib/Review';
-import { UserReviews } from '../lib/UserReviews';
-import { BusinessReviews } from '../lib/BusinessReviews';
-import { FavoriteGroups } from '../lib/FavoriteGroups';
-
-import { IBusinessListing, IReview, IBusinessListingUpdateProperties } from '../../typings/types';
-import { User } from '../lib/User';
-import { FavoriteGroup } from '../lib/FavoriteGroup';
 
 export class API {
     static subscribeOnAuthChange(fn: () => void) {
@@ -226,4 +228,19 @@ export class API {
         return await Functions.updateBusinessUpdatedRequest(args);
     }
 
+    static async getBusinessFlags(args: {
+        businessId: string
+    }): Promise<BusinessFlag[]> {
+        const response = await Functions.getBusinessFlags(args);
+        const flags: IFlagDocument[] = response.result;
+        return flags.map((document) => new BusinessFlag({document}))
+    }
+
+    static async getBusinessUpdateRequests(args: {
+        businessId: string
+    }): Promise<BusinessUpdateRequest[]> {
+        const response = await Functions.getBusinessUpdateRequests(args);
+        const updateRequests: IBusinessUpdateRequestDocument[] = response.result;
+        return updateRequests.map((document) => new BusinessUpdateRequest({document}))
+    }
 }
