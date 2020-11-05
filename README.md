@@ -41,9 +41,6 @@ Users will be able to Suggest Edits to businesses to always keep the business in
 ### User Favorites
 Users will be able to Favorite businesses, assigning these favoites to Favorite Groups.  Users will then be able to make these favorite groups public, allowing anyone to view their curated list of businesses, say a list of Female owned Wedding Planner Businesses.
 
-<img src="./gifs/favorite.gif" height="250"/>
-<img src="./gifs/my-favorites.gif" height="250"/>
-
 <table>
   <tr>
     <td><img src="./gifs/favorite.gif"" alt="Add a Favorite Gif" height="250"/></td>
