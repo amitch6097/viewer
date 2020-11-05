@@ -22,9 +22,17 @@ As mentioned before the goal is to have users provide the data for businesses.  
 ### User Reviews
 Users can write reviews about businesses which they like providing a rating out of 5 stars and leaving a comment, they will later be able to view their reviews.
 
-<img src="./gifs/review.gif" height="250"/>
-<img src="./gifs/my-review.gif" height="250"/>
-
+<table>
+  <tr>
+    <td><img src="./gifs/review.gif" alt="Add a Review Gif" height="250"/></td>
+    <td><img src="./gifs/my-reviews.gif" alt="My Reviews Gif" height="250"/></td>
+  </tr>
+    <tr>
+    <td>Add a Review</td>
+     <td>User Reviews</td>
+  </tr>
+</table>
+ 
 ### User Suggested Edits
 Users will be able to Suggest Edits to businesses to always keep the business information up to date.
 
@@ -35,6 +43,17 @@ Users will be able to Favorite businesses, assigning these favoites to Favorite 
 
 <img src="./gifs/favorite.gif" height="250"/>
 <img src="./gifs/my-favorites.gif" height="250"/>
+
+<table>
+  <tr>
+    <td><img src="./gifs/favorite.gif"" alt="Add a Favorite Gif" height="250"/></td>
+    <td><img src="./gifs/my-favorites.gif" alt="My Favorites Gif" height="250"/></td>
+  </tr>
+    <tr>
+    <td>Add a Favorite</td>
+     <td>User Favorites</td>
+  </tr>
+</table>
 
 ## Mocks
 [Figma Mocks](https://www.figma.com/file/OBixuzmcR47mjDk2oid4eE/Common-Good-UI?node-id=33133%3A29379)
