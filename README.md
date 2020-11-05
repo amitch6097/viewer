@@ -11,6 +11,8 @@ This project aims to allow users to more adequately search businesses.  Currentl
 ### Search
 Anyone will be able to search and filter using location, female owned businesses, minority owned business, and sustainably owned businesses.
 
+<img src="search.gif" height="250"/>
+
 ### User Added Businesses
 As mentioned before the goal is to have users provide the data for businesses.  They will be able to do this through a wizard.
 
