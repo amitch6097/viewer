@@ -1,4 +1,4 @@
-# Common Good Website Repo
+# Common Good Website
 
 ... In progress
 
