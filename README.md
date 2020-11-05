@@ -11,19 +11,30 @@ This project aims to allow users to more adequately search businesses.  Currentl
 ### Search
 Anyone will be able to search and filter using location, female owned businesses, minority owned business, and sustainably owned businesses.
 
-<img src="search.gif" height="250"/>
+<img src="./gifs/search.gif" height="250"/>
 
 ### User Added Businesses
 As mentioned before the goal is to have users provide the data for businesses.  They will be able to do this through a wizard.
 
+<img src="./gifs/add.gif" height="250"/>
+
+
 ### User Reviews
 Users can write reviews about businesses which they like providing a rating out of 5 stars and leaving a comment, they will later be able to view their reviews.
+
+<img src="./gifs/review.gif" height="250"/>
+<img src="./gifs/my-review.gif" height="250"/>
 
 ### User Suggested Edits
 Users will be able to Suggest Edits to businesses to always keep the business information up to date.
 
+<img src="./gifs/edit.gif" height="250"/>
+
 ### User Favorites
 Users will be able to Favorite businesses, assigning these favoites to Favorite Groups.  Users will then be able to make these favorite groups public, allowing anyone to view their curated list of businesses, say a list of Female owned Wedding Planner Businesses.
+
+<img src="./gifs/favorite.gif" height="250"/>
+<img src="./gifs/my-favorites.gif" height="250"/>
 
 ## Mocks
 [Figma Mocks](https://www.figma.com/file/OBixuzmcR47mjDk2oid4eE/Common-Good-UI?node-id=33133%3A29379)
