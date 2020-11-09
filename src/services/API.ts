@@ -1,5 +1,5 @@
-import { BusinessFlag } from 'src/lib/BusinessFlag';
-import { BusinessUpdateRequest } from 'src/lib/BusinessUpdateRequest';
+import { BusinessFlag } from '../lib/BusinessFlag';
+import { BusinessUpdateRequest } from '../lib/BusinessUpdateRequest';
 import { IBusinessUpdateRequestDocument, IFlagDocument } from '../../typings/documents';
 import { IBusinessListing, IBusinessListingUpdateProperties, IReview } from '../../typings/types';
 import { Business } from '../lib/Business';

@@ -14,6 +14,7 @@ import { strings } from '../../../strings';
 import {IAlgoliaLocationSearchEventSuggestion} from '../../../../typings/algolia';
 export interface IInfoStepProps {
     onNextStep: (state: IInfoStepState) => void;
+    withImage?: boolean;
 }
 
 export interface IInfoStepState {
@@ -163,7 +164,7 @@ export function InfoStep(props: IInfoStepProps) {
                         onChange={(e) => updateValue('website', e.target.value)}
                     />
                 </Grid>
-                <Grid xs={12} md={6} item>
+                {props.withImage && (<Grid xs={12} md={6} item>
                     <input
                         className={classes.input}
                         accept="image/*"
@@ -183,7 +184,7 @@ export function InfoStep(props: IInfoStepProps) {
                         className={classes.image}
                         src={state['image'].value?.url}
                     />
-                </Grid>
+                </Grid>)}
             </Grid>
             <Button
                 onClick={onSubmit}
