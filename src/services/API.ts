@@ -1,9 +1,9 @@
-import { BusinessFlag } from '../lib/BusinessFlag';
-import { BusinessUpdateRequest } from '../lib/BusinessUpdateRequest';
-import { IBusinessUpdateRequestDocument, IFlagDocument } from '../../typings/documents';
+import { IBusinessDocument, IBusinessUpdateRequestDocument, IFlagDocument } from '../../typings/documents';
 import { IBusinessListing, IBusinessListingUpdateProperties, IReview } from '../../typings/types';
 import { Business } from '../lib/Business';
+import { BusinessFlag } from '../lib/BusinessFlag';
 import { BusinessReviews } from '../lib/BusinessReviews';
+import { BusinessUpdateRequest } from '../lib/BusinessUpdateRequest';
 import { FavoriteGroup } from '../lib/FavoriteGroup';
 import { FavoriteGroups } from '../lib/FavoriteGroups';
 import { Review } from '../lib/Review';
@@ -242,5 +242,14 @@ export class API {
         const response = await Functions.getBusinessUpdateRequests(args);
         const updateRequests: IBusinessUpdateRequestDocument[] = response.result;
         return updateRequests.map((document) => new BusinessUpdateRequest({document}))
+    }
+
+
+    // TODO
+    static async getMyBusinesses(args: {}) {
+        const response = await Functions.getMyBusinesses(args);
+        const businesses: IBusinessDocument[] = response.result;
+        return businesses.map((document) => new Business(document))
+
     }
 }
