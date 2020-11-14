@@ -23,3 +23,4 @@ export function UpdateBusinessView(props: IUpdateBusinessViewProps) {
         </Container>
     );
 }
+
