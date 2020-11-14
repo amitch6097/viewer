@@ -9,6 +9,9 @@ export interface IUserDocument {
     favoriteGroups: Record<string, {
         createdAt: number;
     }>;
+    businesses: Record<string, {
+        createdAt: number;
+    }>;
 }
 
 export interface IFlagDocument {
