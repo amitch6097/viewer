@@ -15,6 +15,7 @@ import {IAlgoliaLocationSearchEventSuggestion} from '../../../../typings/algolia
 export interface IInfoStepProps {
     onNextStep: (state: IInfoStepState) => void;
     withImage?: boolean;
+    notRequired?: boolean;
 }
 
 export interface IInfoStepState {
@@ -72,34 +73,34 @@ export function InfoStep(props: IInfoStepProps) {
     const classes = useStyles();
     const {onSubmit, state, updateValue} = useForm({
         category: {
-            value: CATEGORIES[0].id,
+            value: undefined,
             error: undefined,
             label: strings.create.info.labels.category,
-            required: true,
+            required: !props.notRequired,
         },
         phone: {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.phone + ' &nbsp;*',
-            required: true,
+            required: !props.notRequired,
         },
         email: {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.email + ' &nbsp;*',
-            required: true,
+            required: !props.notRequired,
         },
         address: {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.address,
-            required: true,
+            required: !props.notRequired,
         },
         website: {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.website,
-            required: false,
+            required: !props.notRequired,
         },
         image: {
             value: undefined,

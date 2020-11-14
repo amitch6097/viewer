@@ -1,39 +1,48 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import './styles.less';
-
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 import { AppBar } from './components/AppBar';
 import { Footer } from './components/Footer';
-import { HashRouter } from 'react-router-dom'
-
-import { Home } from './pages/Home/';
-import { Create } from './pages/Create';
-import { Login } from './pages/Login';
-import { SignUp } from './pages/SignUp';
-import { Business } from './pages/Business';
-import { Discover } from './pages/Discover';
-import { CreateReview } from './pages/CreateReview';
-
+import { BusinessContextProvider } from './context/BusinessContext';
 import SearchContextProvider from './context/SearchContext';
+import { Business } from './pages/Business';
+import { Create } from './pages/Create';
+import { CreateReview } from './pages/CreateReview';
+import { Discover } from './pages/Discover';
+import { Home } from './pages/Home/';
+import { Login } from './pages/Login';
 import { MyFavorites } from './pages/MyFavorites';
+import { SignUp } from './pages/SignUp';
+import { UpdateBusiness } from './pages/UpdateBusiness';
+import './styles.less';
+
 
 function App() {
     return (
         <HashRouter>
             <SearchContextProvider>
-                <AppBar />
+                <BusinessContextProvider>
+                    <AppBar />
                     <Route exact path="/create" component={Create} />
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/sign-up" component={SignUp} />
                     <Route exact path="/" component={Home} />
                     <Route exact path="/business/:id" component={Business} />
-                    <Route exact path="/business/:id/new-review" component={CreateReview} />
+                    <Route exact path="/business/:businessId/update" component={UpdateBusiness} />
+                    <Route
+                        exact
+                        path="/business/:id/new-review"
+                        component={CreateReview}
+                    />
                     <Route path="/discover" component={Discover} />
-                    <Route exact path="/my-favorites/:favoriteGroupId" component={MyFavorites} />
+                    <Route
+                        exact
+                        path="/my-favorites/:favoriteGroupId"
+                        component={MyFavorites}
+                    />
                     <Route exact path="/my-favorites" component={MyFavorites} />
-                <Footer />
+                    <Footer />
+                </BusinessContextProvider>
             </SearchContextProvider>
         </HashRouter>
     );

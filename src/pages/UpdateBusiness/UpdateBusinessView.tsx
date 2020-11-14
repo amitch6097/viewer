@@ -1,19 +1,25 @@
-
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import {InfoStep} from '../Create/Steps/InfoStep';
+import { IInfoStepState, InfoStep } from '../Create/Steps/InfoStep';
 import { makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-    root: {}
+    root: {},
 }));
 
-export function UpdateBusinessView() {
+export interface IUpdateBusinessViewProps {
+    businessName: string;
+    onSubmit: (state: IInfoStepState) => void;
+}
+
+export function UpdateBusinessView(props: IUpdateBusinessViewProps) {
     const classes = useStyles();
 
     return (
         <Container className={classes.root}>
-            <InfoStep onNextStep={console.log} withImage={false} />
+            <Typography>{props.businessName}</Typography>
+            <InfoStep onNextStep={props.onSubmit} withImage={false} notRequired={true} />
         </Container>
     );
 }
