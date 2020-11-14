@@ -8,4 +8,10 @@ export default {
     decorators: [withKnobs],
 };
 
-export const UpdateBusinessViewStory = () => <UpdateBusinessView />;
+export const UpdateBusinessViewStory = () => (
+    <UpdateBusinessView
+        businessName={'My Business Name'}
+        onSubmit={console.log}
+    />
+);
+
