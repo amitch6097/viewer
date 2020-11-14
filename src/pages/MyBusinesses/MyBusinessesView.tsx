@@ -16,6 +16,7 @@ export function MyBusinessesView(props: IMyBusinessesViewProps) {
                 <Results
                     onClick={props.onClickBusiness}
                     businesses={props.businesses}
+                    minimal={true}
                 />
             ) : (
                 <ResultsSkeleton />

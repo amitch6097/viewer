@@ -13,6 +13,7 @@ export interface IResultsProps {
         root?: object;
         item?: object;
     };
+    minimal?: boolean;
 }
 
 const useStyles = makeStyles({
