@@ -6,7 +6,6 @@ import { Result, ResultSkeleton } from './Result';
 
 export interface IResultsProps {
     businesses: Record<string, IBusinessListing>;
-    minimal?: boolean;
     imageSize?: number;
     onClick: (index: string) => void;
     spacing?: number;
