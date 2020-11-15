@@ -116,3 +116,9 @@ export interface IGetBusinessFlagsProps {
 export interface IGetBusinessFlagsResponse {
     result: IFlagDocument[];
 }
+
+export interface IGetMyBusinessesProps {}
+
+export interface IGetMyBusinessesResponse {
+    result: IBusinessDocument[];
+}

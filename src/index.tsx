@@ -11,6 +11,7 @@ import { CreateReview } from './pages/CreateReview';
 import { Discover } from './pages/Discover';
 import { Home } from './pages/Home/';
 import { Login } from './pages/Login';
+import { MyBusinesses } from './pages/MyBusinesses';
 import { MyFavorites } from './pages/MyFavorites';
 import { SignUp } from './pages/SignUp';
 import { UpdateBusiness } from './pages/UpdateBusiness';
@@ -41,6 +42,7 @@ function App() {
                         component={MyFavorites}
                     />
                     <Route exact path="/my-favorites" component={MyFavorites} />
+                    <Route exact path="/my-businesses" component={MyBusinesses} />
                     <Footer />
                 </BusinessContextProvider>
             </SearchContextProvider>

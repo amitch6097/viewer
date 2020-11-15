@@ -23,6 +23,9 @@ import {
     IGetBusinessUpdateRequestsResponse,
     IGetBusinessFlagsProps,
     IGetBusinessFlagsResponse,
+    IGetMyBusinessesProps,
+    IGetMyBusinessesResponse,
+
 } from '../../typings/functions';
 import firebase from '../firebase';
 
@@ -39,6 +42,7 @@ interface IProps {
     createFlag: ICreateFlagProps;
     getBusinessFlags: IGetBusinessFlagsProps;
     getBusinessUpdateRequests: IGetBusinessUpdateRequestsProps;
+    getMyBusinesses: IGetMyBusinessesProps;
 }
 
 interface IResponse {
@@ -54,9 +58,17 @@ interface IResponse {
     createFlag: ICreateFlagResponse;
     getBusinessFlags: IGetBusinessFlagsResponse;
     getBusinessUpdateRequests: IGetBusinessUpdateRequestsResponse;
+    getMyBusinesses: IGetMyBusinessesResponse;
 }
 
 export class Functions {
+
+    static async getMyBusinesses(
+        props: IGetMyBusinessesProps
+    ): Promise<IGetMyBusinessesResponse> {
+        return await call('getMyBusinesses', props);
+    }
+
     static async createBusiness(
         props: ICreateBusinessProps
     ): Promise<ICreateBusinessResponse> {
