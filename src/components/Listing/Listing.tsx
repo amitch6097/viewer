@@ -96,14 +96,14 @@ export function Listing(props: IListingProps) {
                     />
                 </section>
                 <Divider className={classes.divider} />
-                {showReviews && (
+                {(showReviews && props.reviews.size) ? (
                     <section id="bb-listing-reviews">
                         <ListingReviews
                             reviews={props.reviews}
                             onLoadMoreReviews={props.onLoadMoreReviews}
                         />
                     </section>
-                )}
+                ) : (<></>)}
             </Grid>
             <Hidden smDown>
                 <Grid className={classes.aside} item md={3}>

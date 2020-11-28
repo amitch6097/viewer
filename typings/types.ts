@@ -44,6 +44,7 @@ export interface IReview {
     businessId: string;
     createdAt?: number;
     user?: IUserDocument;
+    businessName?: string;
 }
 
 export interface IUserReviews {

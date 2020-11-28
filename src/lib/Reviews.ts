@@ -6,7 +6,7 @@ export class Reviews implements IReviews {
     constructor(data: IReviews) {
         this.data = Object.freeze({
             reviews: [],
-            count: 1,
+            count: 100,
             ...data,
         });
     }

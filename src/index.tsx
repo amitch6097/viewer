@@ -15,8 +15,8 @@ import { MyBusinesses } from './pages/MyBusinesses';
 import { MyFavorites } from './pages/MyFavorites';
 import { SignUp } from './pages/SignUp';
 import { UpdateBusiness } from './pages/UpdateBusiness';
+import { MyReviews } from './pages/MyReviews';
 import './styles.less';
-
 
 function App() {
     return (
@@ -29,7 +29,11 @@ function App() {
                     <Route exact path="/sign-up" component={SignUp} />
                     <Route exact path="/" component={Home} />
                     <Route exact path="/business/:id" component={Business} />
-                    <Route exact path="/business/:businessId/update" component={UpdateBusiness} />
+                    <Route
+                        exact
+                        path="/business/:businessId/update"
+                        component={UpdateBusiness}
+                    />
                     <Route
                         exact
                         path="/business/:id/new-review"
@@ -42,7 +46,12 @@ function App() {
                         component={MyFavorites}
                     />
                     <Route exact path="/my-favorites" component={MyFavorites} />
-                    <Route exact path="/my-businesses" component={MyBusinesses} />
+                    <Route
+                        exact
+                        path="/my-businesses"
+                        component={MyBusinesses}
+                    />
+                    <Route exact path="/my-reviews" component={MyReviews} />
                     <Footer />
                 </BusinessContextProvider>
             </SearchContextProvider>

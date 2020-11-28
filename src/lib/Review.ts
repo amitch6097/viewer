@@ -10,7 +10,7 @@ export class Review implements IReview {
     }
 
     get user() {
-        return this.data.user || {} as IUser;
+        return this.data.user;
     }
 
     get createdAt() {
@@ -27,5 +27,9 @@ export class Review implements IReview {
 
     get text() {
         return this.data.text;
+    }
+
+    get businessName() {
+        return this.data.businessName;
     }
 }
