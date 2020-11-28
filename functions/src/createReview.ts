@@ -3,7 +3,7 @@ import {
     ICreateReviewProps,
     ICreateReviewResponse
 } from '../../typings/functions';
-import { IReviewDocument } from '../../typings/types';
+import { IReviewDocument } from '../../typings/documents';
 import { BusinessCollection } from './Collections/BusinessCollection';
 import { ReviewCollection } from './Collections/ReviewCollection';
 import { UserCollection } from './Collections/UserCollection';
@@ -41,7 +41,7 @@ export const createReview = functions.https.onCall(
             const reviewCollection = new ReviewCollection();
             const userCollection = new UserCollection();
 
-            const reviewDocument = await reviewCollection.addReview({
+            const reviewDocument: IReviewDocument = await reviewCollection.addReview({
                 text,
                 rating,
                 businessId,
