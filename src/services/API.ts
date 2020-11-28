@@ -308,6 +308,6 @@ export class API {
     static async getMyBusinesses(args: {}) {
         const response = await Functions.getMyBusinesses(args);
         const businesses: IBusinessDocument[] = response.result;
-        return businesses.map((document) => new Business(document));
+        return businesses.map((document) => new Business(document))
     }
 }
