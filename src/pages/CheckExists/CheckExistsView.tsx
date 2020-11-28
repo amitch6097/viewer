@@ -26,7 +26,7 @@ export interface ICheckExistsViewProps {
     results: Record<string, IBusinessListing>;
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         minHeight: 'calc(var(--page-height) - var(--page-padding) - var(--page-padding))'
@@ -39,10 +39,11 @@ const useStyles = makeStyles({
         flexWrap: 'wrap'
     },
     inputs: {
-        padding: '10px'
+        padding:  theme.spacing(1),
     },
     item: {
         width: '100%',
+        margin:  theme.spacing(2),
     },
     results: {
         padding: '10px',
@@ -52,7 +53,7 @@ const useStyles = makeStyles({
     continue: {
         alignSelf: 'flex-end'
     }
-});
+}));
 
 export function CheckExistsView({
     onChangeBusiness,
@@ -65,13 +66,15 @@ export function CheckExistsView({
     results,
     onContinueClicked,
 }: ICheckExistsViewProps) {
-    const classes = useStyles();
+    const theme = useTheme();
+    const classes = useStyles(theme);
     return (
         <Grid
             direction="column"
             justify="flex-start"
             alignItems="flex-start"
             className={classes.root}
+            container
         >
             <Typography variant="h4" gutterBottom>
                 Let's Check if a Listing already exists for your Business
@@ -81,14 +84,11 @@ export function CheckExistsView({
                 direction="row"
                 justify="space-between"
                 alignItems="flex-start"
+                container
             >
                 <Grid
-                    container
-                    direction="column"
-                    justify="flex-start"
-                    alignItems="flex-start"
+                    item
                     className={classes.inputs}
-                    spacing={3}
                     sm={12} md={6}
                 >
                     <Grid item className={classes.item}>
@@ -113,7 +113,7 @@ export function CheckExistsView({
                         />
                     </Grid>
                 </Grid>
-                <Grid sm={12} md={6} className={classes.results}>
+                <Grid item sm={12} md={6} className={classes.results}>
                     <Results
                         businesses={results}
                         minimal={true}
