@@ -25,7 +25,7 @@ export const getMyReviews = functions.https.onCall(
                     result: []
                 }
             }
-            const reviewIds = Object.keys(user.reviews);
+            const reviewIds = user.reviews;
             const reviews =  await reviewCollection.getAll(reviewIds);
             return {
                 result: reviews,
