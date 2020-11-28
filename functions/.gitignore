@@ -10,3 +10,5 @@ lib/
 node_modules/
 
 common-good-key.json
+
+.runtimeconfig.json 

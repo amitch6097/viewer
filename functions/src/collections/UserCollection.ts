@@ -58,6 +58,7 @@ export class UserCollection extends Collection {
             email: (user as admin.auth.UserRecord)?.email ?? '',
             reviews: [],
             favoriteGroups: {},
+            businesses: {},
             createdAt: Number(new Date()),
         };
 
