@@ -21,6 +21,7 @@ import { getBusinessFlags } from './getBusinessFlags';
 import { getBusinessUpdateRequests } from './getBusinessUpdateRequests';
 import { getMyBusinesses } from './getMyBusinesses';
 import { getMyReviews } from './getMyReviews';
+import { deleteMyReview } from './deleteMyReview';
 
 export {
     onBusinessCreated,
@@ -39,4 +40,5 @@ export {
     getBusinessUpdateRequests,
     getMyBusinesses,
     getMyReviews,
+    deleteMyReview,
 };
