@@ -5,13 +5,25 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { Link } from '@material-ui/core';
 import { Auth } from '../../services/Auth';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 export interface IAppBarUserProps {
     onClickMyFavorites?: () => void;
     onClickLogout?: () => void;
 }
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginLeft: theme.spacing(1),
+
+    },
+}));
+
+
 export function AppBarUser({ onClickLogout }: IAppBarUserProps) {
+    const theme = useTheme();
+    const classes = useStyles(theme);
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
@@ -24,7 +36,7 @@ export function AppBarUser({ onClickLogout }: IAppBarUserProps) {
     };
 
     return (
-        <div>
+        <div className={classes.root}>
             <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
