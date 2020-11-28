@@ -4,7 +4,7 @@ import { BusinessCollection } from './BusinessCollection';
 
 export class ReviewCollection extends Collection {
     constructor() {
-        super('business');
+        super('review');
     }
 
     async getData(id: string): Promise<IReviewDocument> {

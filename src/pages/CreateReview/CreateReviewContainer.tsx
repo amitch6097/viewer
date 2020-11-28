@@ -6,6 +6,7 @@ import { API } from '../../services';
 
 export interface ICreateReviewContainerProps {
     id: string;
+    goToBusiness?: () => void;
 }
 
 export interface ICreateReviewContainerState {
@@ -43,6 +44,7 @@ export class CreateReviewContainer extends React.Component<
             rating,
             businessId: this.props.id,
         });
+        this.props.goToBusiness();
     };
 
     render() {
