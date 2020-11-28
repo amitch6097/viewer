@@ -20,6 +20,7 @@ import { updateBusinessUpdatedRequest } from './updateBusinessUpdatedRequest';
 import { getBusinessFlags } from './getBusinessFlags';
 import { getBusinessUpdateRequests } from './getBusinessUpdateRequests';
 import { getMyBusinesses } from './getMyBusinesses';
+import { getMyReviews } from './getMyReviews';
 
 export {
     onBusinessCreated,
@@ -38,4 +39,5 @@ export {
     getBusinessFlags,
     getBusinessUpdateRequests,
     getMyBusinesses,
+    getMyReviews,
 };
