@@ -1,4 +1,5 @@
 import { localURLtoBlob } from 'src/helpers';
+import { Reviews } from 'src/lib/Reviews';
 import {
     IBusinessDocument,
     IBusinessUpdateRequestDocument,
@@ -110,12 +111,12 @@ export class API {
             });
             return new BusinessReviews({
                 businessId,
-                reviews: {
+                reviews: new Reviews({
                     size,
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                },
+                })
             });
         } else {
             const {
@@ -128,11 +129,11 @@ export class API {
             });
             return new BusinessReviews({
                 businessId,
-                reviews: {
+                reviews: new Reviews({
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                },
+                }),
             });
         }
     }
