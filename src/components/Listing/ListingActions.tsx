@@ -35,7 +35,7 @@ export function ListingActions(props: IListingActionsProps) {
             color="primary"
         >
             {['address', 'website', 'phone', 'email'].map((key) => {
-                const value = key === 'address' ? props.business[key].name : props.business[key];
+                const value = key === 'address' ? props.business[key]?.name : props.business[key];
                 return (
                     props.business[key] && (
                         <ActionButton

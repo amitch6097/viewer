@@ -1,21 +1,16 @@
 import React from 'react';
-import { goToBusiness } from '../../history';
-
+import { useHistory } from 'react-router-dom';
 import { CreateContainer } from './CreateContainer';
-
 export interface ICreateProps {
     history: any;
 }
 
-export class Create extends React.Component<ICreateProps> {
-    constructor(props) {
-        super(props);
+export function Create() {
+    const history = useHistory();
+
+    async function goToBusiness(businessId: string) {
+        history.push(`/business/${businessId}`);
     }
 
-    goToBusiness = (id: string) => {
-        goToBusiness(this.props.history, id);
-    };
-    render() {
-        return <CreateContainer goToBusiness={this.goToBusiness} />;
-    }
+    return <CreateContainer goToBusiness={goToBusiness} />;
 }

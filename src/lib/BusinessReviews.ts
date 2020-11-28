@@ -2,22 +2,21 @@ import { API } from '../services/API';
 import { IBusinessReviews } from '../../typings/types';
 import { Reviews } from './Reviews';
 
-export class BusinessReviews implements IBusinessReviews {
-    private data: Readonly<IBusinessReviews>;
+export interface BusinessReviewsData {
+    reviews: Reviews;
+    businessId: string;
+}
 
-    constructor(data: IBusinessReviews) {
-        this.data = Object.freeze({
-            reviews: new Reviews({}),
-            ...data
-        });
-    }
+export class BusinessReviews implements IBusinessReviews {
+
+    constructor(readonly data: BusinessReviewsData) {}
 
     get businessId() {
         return this.data.businessId;
     }
 
     get reviews() {
-        return new Reviews(this.data.reviews);
+        return this.data.reviews;
     }
 
     async fetchMore(): Promise<BusinessReviews> {

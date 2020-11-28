@@ -1,5 +1,17 @@
-import { IBusinessDocument, IBusinessUpdateRequestDocument, IFlagDocument } from '../../typings/documents';
-import { IBusinessListing, IBusinessListingUpdateProperties, IReview } from '../../typings/types';
+import { localURLtoBlob } from 'src/helpers';
+import { Reviews } from 'src/lib/Reviews';
+import {
+    IBusinessDocument,
+    IBusinessUpdateRequestDocument,
+    IFlagDocument,
+} from '../../typings/documents';
+import {
+    IBusinessListing,
+    IBusinessListingUpdateProperties,
+    IImage,
+    IOwner,
+    IReview,
+} from '../../typings/types';
 import { Business } from '../lib/Business';
 import { BusinessFlag } from '../lib/BusinessFlag';
 import { BusinessReviews } from '../lib/BusinessReviews';
@@ -10,9 +22,9 @@ import { Review } from '../lib/Review';
 import { User } from '../lib/User';
 import { UserReviews } from '../lib/UserReviews';
 import { Auth } from './Auth';
+import { FBStorage } from './FBStorage';
 import { Firestore } from './Firestore';
 import { Functions } from './Functions';
-
 
 export class API {
     static subscribeOnAuthChange(fn: () => void) {
@@ -99,12 +111,12 @@ export class API {
             });
             return new BusinessReviews({
                 businessId,
-                reviews: {
+                reviews: new Reviews({
                     size,
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                },
+                })
             });
         } else {
             const {
@@ -117,20 +129,69 @@ export class API {
             });
             return new BusinessReviews({
                 businessId,
-                reviews: {
+                reviews: new Reviews({
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                },
+                }),
             });
         }
+    }
+
+    static async uploadImage({
+        image,
+        businessGUID,
+    }: {
+        image: IImage;
+        businessGUID: string;
+    }): Promise<IImage> {
+        const blob = await localURLtoBlob(image.url);
+        const url = await FBStorage.uploadImage({
+            blob,
+            businessGUID,
+            id: image.id,
+        });
+        return {
+            id: image.id,
+            url,
+        };
     }
 
     static async createBusiness(
         business: IBusinessListing
     ): Promise<{ id: string; business: Business }> {
+        const businessCopy = { ...business };
+
+        // upload all owned images
+        businessCopy.owners = await Promise.all(
+            business.owners.map((owner, index) => {
+                return new Promise(async (resolve) => {
+                    if (!owner.image) {
+                        resolve(owner);
+                    } else {
+                        const image = await API.uploadImage({
+                            image: owner.image,
+                            businessGUID: business.guid,
+                        });
+                        resolve({
+                            ...owner,
+                            image: image,
+                        });
+                    }
+                }) as Promise<IOwner>;
+            })
+        );
+
+        //upload business image
+        if (business.image) {
+            businessCopy.image = await API.uploadImage({
+                businessGUID: business.guid,
+                image: business.image,
+            });
+        }
+
         const response = await Functions.createBusiness({
-            business,
+            business: businessCopy,
         });
         return {
             id: response.result.id,
@@ -138,13 +199,11 @@ export class API {
         };
     }
 
-    static async createReview(
-        review: IReview
-    ): Promise<{ id: string }> {
+    static async createReview(review: IReview): Promise<{ id: string }> {
         const response = await Functions.createReview({
             text: review.text,
             rating: review.rating,
-            businessId: review.businessId
+            businessId: review.businessId,
         });
         return {
             id: response.id,
@@ -201,7 +260,7 @@ export class API {
     }
 
     static async getFavoriteGroup(id: string): Promise<FavoriteGroup> {
-        const response = await Functions.getFavoriteGroup({id});
+        const response = await Functions.getFavoriteGroup({ id });
         return FavoriteGroup.fromDocument(response.favoriteGroup);
     }
 
@@ -215,11 +274,10 @@ export class API {
 
     static async createBusinessUpdateRequest(args: {
         businessId: string;
-        updateProperties: Partial<IBusinessListingUpdateProperties>
+        updateProperties: Partial<IBusinessListingUpdateProperties>;
     }) {
         return await Functions.createBusinessUpdateRequest(args);
     }
-
 
     static async updateBusinessUpdatedRequest(args: {
         businessUpdateRequestId: string;
@@ -229,19 +287,22 @@ export class API {
     }
 
     static async getBusinessFlags(args: {
-        businessId: string
+        businessId: string;
     }): Promise<BusinessFlag[]> {
         const response = await Functions.getBusinessFlags(args);
         const flags: IFlagDocument[] = response.result;
-        return flags.map((document) => new BusinessFlag({document}))
+        return flags.map((document) => new BusinessFlag({ document }));
     }
 
     static async getBusinessUpdateRequests(args: {
-        businessId: string
+        businessId: string;
     }): Promise<BusinessUpdateRequest[]> {
         const response = await Functions.getBusinessUpdateRequests(args);
-        const updateRequests: IBusinessUpdateRequestDocument[] = response.result;
-        return updateRequests.map((document) => new BusinessUpdateRequest({document}))
+        const updateRequests: IBusinessUpdateRequestDocument[] =
+            response.result;
+        return updateRequests.map(
+            (document) => new BusinessUpdateRequest({ document })
+        );
     }
 
     static async getMyBusinesses(args: {}) {

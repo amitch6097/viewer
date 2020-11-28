@@ -92,12 +92,12 @@ export interface IBusinessListing {
     category: string;
     phone: string;
     email: string;
-    address: IAlgoliaLocationSearchEventSuggestion;
-    website: string;
+    address?: IAlgoliaLocationSearchEventSuggestion;
+    website?: string;
     identify: Record<EIdentify, IIdentify>;
     owners: IOwner[];
     name: string;
-    about: string;
+    about?: string;
     guid: string;
     hashtags?: string[];
 }

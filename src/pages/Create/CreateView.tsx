@@ -80,6 +80,7 @@ export function CreateView(props: ICreateViewProps) {
                         </Stepper>
                         {props.step === 0 && (
                             <InfoStep
+                                withImage={true}
                                 onNextStep={props.onSetInfo}
                             />
                         )}

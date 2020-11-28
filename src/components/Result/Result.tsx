@@ -140,7 +140,7 @@ export function Result(props: IResultProps) {
                                     >
                                         {props.business.phone}
                                     </Typography>
-                                    {props.business.address.name && (
+                                    {props.business?.address?.name && (
                                         <Box
                                             className={classes.locationDivider}
                                             component="span"
@@ -151,7 +151,7 @@ export function Result(props: IResultProps) {
                                         variant="body2"
                                         color="textSecondary"
                                     >
-                                        {props.business.address.name}
+                                        {props.business?.address?.name}
                                     </Typography>
                                 </Grid>
                                 <div className={classes.cardContentBottomTags}>
