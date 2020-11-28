@@ -19,11 +19,13 @@ export class ReviewCollection extends Collection {
         text,
         rating,
         businessId,
+        businessName,
         uid,
     }: {
         text: string;
         rating: number;
         businessId: string;
+        businessName: string;
         uid: string;
     }): Promise<IReviewDocument | undefined> {
         const businessCollection = new BusinessCollection();
@@ -34,6 +36,7 @@ export class ReviewCollection extends Collection {
                 rating,
                 text,
                 businessId,
+                businessName,
                 createdAt: Number(new Date()),
                 createdBy: uid
             };

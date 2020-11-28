@@ -19,11 +19,22 @@ export const createReview = functions.https.onCall(
         expectAuthAndData(functions, data, context);
         try {
             const { text, rating, businessId } = data;
+            const businessCollection = new BusinessCollection();
 
-            if (!text || !rating || !businessId) {
+
+            if (!text || !rating || !businessId ) {
                 throw new functions.https.HttpsError(
                     'failed-precondition',
                     `Could not create review, all arguments to function are required: ${data}`
+                );
+            }
+
+            const businessData = await businessCollection.getData(businessId);
+            
+            if (!businessData ) {
+                throw new functions.https.HttpsError(
+                    'failed-precondition',
+                    `Could not get business with businessId: ${businessId}`
                 );
             }
 
@@ -34,8 +45,10 @@ export const createReview = functions.https.onCall(
                 text,
                 rating,
                 businessId,
+                businessName: businessData.data.name,
                 uid: context.auth.uid,
             });
+
             if (!reviewDocument || !reviewDocument.id) {
                 throw new functions.https.HttpsError(
                     'internal',
@@ -44,10 +57,19 @@ export const createReview = functions.https.onCall(
             }
             // update user
             await userCollection.addReview(context.auth.uid, reviewDocument.id);
+
+            // update business 
+            await businessCollection.addReview({
+                businessId,
+                reviewId: reviewDocument.id,
+                rating: reviewDocument.rating
+            });
+
             return {
                 id: reviewDocument.id,
                 review: reviewDocument,
             };
+
         } catch (err) {
             throw new functions.https.HttpsError(
                 'unknown',
@@ -56,29 +78,3 @@ export const createReview = functions.https.onCall(
         }
     }
 );
-
-export const onReviewCreated = functions.firestore
-    .document('review/{id}')
-    .onCreate(
-        async (
-            snap: functions.firestore.QueryDocumentSnapshot,
-            context: functions.EventContext
-        ) => {
-            const review = snap.data() as IReviewDocument;
-            try {
-                // Get the review document
-                const businessCollection = new BusinessCollection();
-                const businessId = review.businessId;
-                await businessCollection.addReview({
-                    businessId,
-                    reviewId: context.params.id,
-                    rating: review.rating
-                });
-            } catch (err) {
-                throw new functions.https.HttpsError(
-                    'unknown',
-                    `Failed to run onReviewCreated with error ${err}, with review ${review}`
-                );
-            }
-        }
-    );

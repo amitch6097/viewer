@@ -11,6 +11,7 @@ import {
     IImage,
     IOwner,
     IReview,
+    IReviewDocument,
 } from '../../typings/types';
 import { Business } from '../lib/Business';
 import { BusinessFlag } from '../lib/BusinessFlag';
@@ -309,5 +310,12 @@ export class API {
         const response = await Functions.getMyBusinesses(args);
         const businesses: IBusinessDocument[] = response.result;
         return businesses.map((document) => new Business(document))
+    }
+
+
+    static async getMyReviews(args: {} = {}) {
+        const response = await Functions.getMyReviews(args);
+        const reviews: IReviewDocument[] = response.result;
+        return reviews.map((document) => new Review(document))
     }
 }
