@@ -1,11 +1,10 @@
 import React from 'react';
+import { API } from 'src/services';
 import { IBusinessListing } from '../../../typings/types';
 import { CreateView } from './CreateView';
 import { IdentifyStepState } from './Steps/IdentifyStep';
 import { IInfoStepState } from './Steps/InfoStep';
 import { OwnerStepState } from './Steps/OwnerStep';
-
-
 
 export interface ICreateContainerProps {
     goToBusiness: (id: string) => void;
@@ -27,7 +26,7 @@ export class CreateContainer extends React.Component<
 
     constructor(props) {
         super(props);
-        this.state =  {
+        this.state = {
             step: 0,
             exists: undefined,
             name: undefined,
@@ -40,43 +39,45 @@ export class CreateContainer extends React.Component<
     handleSetInfo = (info: IInfoStepState) => {
         this.setState({
             info,
-            step: 1
+            step: 1,
         });
-    }
+    };
 
     handleSetOwner = (owner: OwnerStepState) => {
         this.setState({
             owner,
-            step: 2
+            step: 2,
         });
-    }
+    };
 
     handleSetIdentify = (identify: IdentifyStepState) => {
         this.setState({
             identify,
-            step: 3
+            step: 3,
         });
-    }
-
-    onCreateListing = async (business: IBusinessListing) => {
-        // const response = await this.state.business.onCreateListing();
-        // // LocalStorage.clear(CreateContainer.LocalStorageId);
-        // this.props.goToBusiness(response.id);
-        console.log(business);
     };
 
+    onCreateListing = async (businessData: IBusinessListing) => {
+        const { business, id } = await API.createBusiness(businessData);
+        // // LocalStorage.clear(CreateContainer.LocalStorageId);
+        // this.props.goToBusiness(response.id);
+        console.log(business, id);
+        this.props.goToBusiness(id);
+    };
 
-    onClickStepLink = (index: number) => (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    onClickStepLink = (index: number) => (
+        e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    ) => {
         e.preventDefault();
         this.setState({
-            step: index
+            step: index,
         });
     };
 
     onStartCreate = (businessName: string) => {
         this.setState({
             exists: false,
-            name: businessName
+            name: businessName,
         });
     };
 

@@ -152,7 +152,7 @@ export function InfoStep(props: IInfoStepProps) {
                         {...state['address']}
                         className={classes.input}
                         onClickSuggestion={(value) =>
-                            updateValue('address', value)
+                            updateValue('address', value.suggestion)
                         }
                         useTextField={true}
                     />
