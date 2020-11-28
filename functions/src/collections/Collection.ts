@@ -42,12 +42,12 @@ export abstract class Collection {
     }
 
     async getAll(ids: string[]) {
-        const favoriteGroupSnapshots = await Promise.all(
+        const snapshots = await Promise.all(
             ids.map((id: string) => {
                 return this.collection.doc(id).get();
             })
         );
-        const favoriteGroups = favoriteGroupSnapshots.map(
+        const all = snapshots.map(
             (
                 snapshot: FirebaseFirestore.DocumentSnapshot<
                     FirebaseFirestore.DocumentData
@@ -59,6 +59,6 @@ export abstract class Collection {
                 };
             }
         );
-        return favoriteGroups;
+        return all;
     }
 }

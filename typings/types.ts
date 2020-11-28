@@ -21,14 +21,6 @@ export interface IUserDocument extends IUser {
     createdAt?: number;
 }
 
-export interface IReviewDocument {
-    text: string;
-    rating: number;
-    businessId: string;
-    createdAt?: number;
-    createdBy?: string;
-}
-
 export interface IFavoriteGroupDocument {
     label: string;
     favorites: string[]; //favorite document ids
@@ -39,11 +31,13 @@ export interface IFavoriteGroupDocument {
 }
 
 export interface IReview {
+    id: string;
     text: string;
     rating: number;
     businessId: string;
     createdAt?: number;
     user?: IUserDocument;
+    businessName?: string;
 }
 
 export interface IUserReviews {

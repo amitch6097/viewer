@@ -4,3 +4,6 @@ export {
 export {
     Review
 } from './Review';
+export {
+    MyReview
+} from './MyReview';

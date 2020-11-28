@@ -1,9 +1,7 @@
-import React from 'react';
-import { Grid, Typography, Button, Container, Avatar } from '@material-ui/core';
+import { Avatar, Grid, Typography, Link } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import { onChangeValue } from '../../helpers';
+import React from 'react';
 import { IReview } from '../../../typings/types';
 
 export interface IReviewProps {
@@ -13,7 +11,6 @@ export interface IReviewProps {
 const useStyles = makeStyles((theme) => ({
     root: {
         flexFlow: 'nowrap',
-
     },
     user: {
         display: 'flex',
@@ -30,8 +27,11 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
     },
     reviewHeadingDate: {
-        marginLeft: '10px'
-    }
+        marginLeft: '10px',
+    },
+    link: {
+        fontSize: theme.typography.h3.fontSize,
+    },
 }));
 
 export function Review({ review }: IReviewProps) {
@@ -39,10 +39,29 @@ export function Review({ review }: IReviewProps) {
     const classes = useStyles(theme);
 
     return (
-        <Grid container direction="row" alignItems="flex-start" className={classes.root}>
+        <Grid
+            container
+            direction="row"
+            alignItems="flex-start"
+            className={classes.root}
+        >
             <Grid item className={classes.user}>
-                <Avatar src={review.user.image} className={classes.userImg} />
-                <Typography>{review.user.name}</Typography>
+                {review.user ? (
+                    <>
+                        <Avatar
+                            src={review.user.image}
+                            className={classes.userImg}
+                        />
+                        <Typography>{review.user.name}</Typography>
+                    </>
+                ) : (
+                    <Link
+                        href={`/business/${review.businessId}`}
+                        className={classes.link}
+                    >
+                        {review.businessName}
+                    </Link>
+                )}
             </Grid>
             <Grid item className={classes.review}>
                 <div className={classes.reviewHeading}>

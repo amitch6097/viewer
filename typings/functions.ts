@@ -122,3 +122,17 @@ export interface IGetMyBusinessesProps {}
 export interface IGetMyBusinessesResponse {
     result: IBusinessDocument[];
 }
+
+
+export interface IGetMyReviewsProps {}
+export interface IGetMyReviewsResponse {
+    result: IReviewDocument[];
+}
+
+
+export interface IDeleteMyReviewProps {
+    reviewId: string;
+}
+export interface IDeleteMyReviewResponse {
+    result: boolean;
+}

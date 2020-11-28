@@ -28,6 +28,7 @@ export interface IReviewDocument {
     text: string;
     rating: number;
     businessId: string;
+    businessName?: string;
     createdAt?: number;
     createdBy?: string;
 }

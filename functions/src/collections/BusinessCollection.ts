@@ -61,6 +61,23 @@ export class BusinessCollection extends Collection {
         return writeResult;
     }
 
+    async deleteReview({
+        businessId,
+        reviewId,
+        rating,
+    }: {
+        businessId: string;
+        reviewId: string;
+        rating: number;
+    }) {
+        const decrement = rating * -1;
+        const writeResult = await this.collection.doc(businessId).update({
+            reviews: admin.firestore.FieldValue.arrayRemove(reviewId),
+            reviewsRatingTotal: admin.firestore.FieldValue.increment(decrement),
+        });
+        return writeResult;
+    }
+
     async update(
         businessId: string,
         updateProperties: Partial<IBusinessListingUpdateProperties>

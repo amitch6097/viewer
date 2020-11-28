@@ -30,7 +30,7 @@ export const getMyBusinesses = functions.https.onCall(
         } catch (err) {
             throw new functions.https.HttpsError(
                 'unknown',
-                `Failed to get favorite group with error: ${err}, data: ${data}`
+                `Failed to get businesses for user with error: ${err}, data: ${data}`
             );
         }
     }

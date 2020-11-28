@@ -7,7 +7,7 @@ const firestore = admin.firestore();
 firestore.settings({ ignoreUndefinedProperties: true });
 
 import { onBusinessCreated, createBusiness } from './createBusiness';
-import { onReviewCreated, createReview } from './createReview';
+import { createReview } from './createReview';
 import { onUserCreate } from './onUserCreate';
 import { getBusinessesForFavoriteGroup } from './getBusinessesForFavoriteGroup';
 import { getFavoriteGroups } from './getFavoriteGroups';
@@ -20,11 +20,12 @@ import { updateBusinessUpdatedRequest } from './updateBusinessUpdatedRequest';
 import { getBusinessFlags } from './getBusinessFlags';
 import { getBusinessUpdateRequests } from './getBusinessUpdateRequests';
 import { getMyBusinesses } from './getMyBusinesses';
+import { getMyReviews } from './getMyReviews';
+import { deleteMyReview } from './deleteMyReview';
 
 export {
     onBusinessCreated,
     createBusiness,
-    onReviewCreated,
     createReview,
     onUserCreate,
     getBusinessesForFavoriteGroup,
@@ -38,4 +39,6 @@ export {
     getBusinessFlags,
     getBusinessUpdateRequests,
     getMyBusinesses,
+    getMyReviews,
+    deleteMyReview,
 };
