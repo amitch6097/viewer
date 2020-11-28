@@ -70,9 +70,10 @@ export class BusinessCollection extends Collection {
         reviewId: string;
         rating: number;
     }) {
+        const decrement = rating * -1;
         const writeResult = await this.collection.doc(businessId).update({
-            reviews: admin.firestore.FieldValue.arrayUnion(reviewId),
-            reviewsRatingTotal: admin.firestore.FieldValue.increment(rating * -1),
+            reviews: admin.firestore.FieldValue.arrayRemove(reviewId),
+            reviewsRatingTotal: admin.firestore.FieldValue.increment(decrement),
         });
         return writeResult;
     }

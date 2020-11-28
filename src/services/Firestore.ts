@@ -1,6 +1,7 @@
+import { IReviewDocument } from '../../typings/documents';
 import {
     IBusinessDocument,
-    IReview, IReviewDocument, IUserDocument
+    IReview, IUserDocument
 } from '../../typings/types';
 import firebase from '../firebase';
 

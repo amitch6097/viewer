@@ -1,5 +1,6 @@
 import { Store, get, set } from 'idb-keyval';
-import { IBusinessDocument, IReviewDocument } from '../../typings/types';
+import { IBusinessDocument } from '../../typings/types';
+import { IReviewDocument } from '../../typings/documents';
 
 const BBStore = new Store('bb-business-db', 'bb-business-store');
 const BBReviewStore = new Store('bb-review-db', 'bb-review-store');

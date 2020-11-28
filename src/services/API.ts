@@ -4,6 +4,7 @@ import {
     IBusinessDocument,
     IBusinessUpdateRequestDocument,
     IFlagDocument,
+    IReviewDocument,
 } from '../../typings/documents';
 import {
     IBusinessListing,
@@ -11,7 +12,6 @@ import {
     IImage,
     IOwner,
     IReview,
-    IReviewDocument,
 } from '../../typings/types';
 import { Business } from '../lib/Business';
 import { BusinessFlag } from '../lib/BusinessFlag';
@@ -117,7 +117,7 @@ export class API {
                     count,
                     lastId,
                     reviews: reviews.map((review) => new Review(review)),
-                })
+                }),
             });
         } else {
             const {
@@ -200,7 +200,11 @@ export class API {
         };
     }
 
-    static async createReview(review: IReview): Promise<{ id: string }> {
+    static async createReview(review: {
+        text: string;
+        rating: number;
+        businessId: string;
+    }): Promise<{ id: string }> {
         const response = await Functions.createReview({
             text: review.text,
             rating: review.rating,
@@ -309,13 +313,17 @@ export class API {
     static async getMyBusinesses(args: {}) {
         const response = await Functions.getMyBusinesses(args);
         const businesses: IBusinessDocument[] = response.result;
-        return businesses.map((document) => new Business(document))
+        return businesses.map((document) => new Business(document));
     }
-
 
     static async getMyReviews(args: {} = {}) {
         const response = await Functions.getMyReviews(args);
         const reviews: IReviewDocument[] = response.result;
-        return reviews.map((document) => new Review(document))
+        return reviews.map((document) => new Review(document));
+    }
+
+    static async deleteMyReview(reviewId: string): Promise<boolean> {
+        const response = await Functions.deleteMyReview({ reviewId });
+        return response.result;
     }
 }

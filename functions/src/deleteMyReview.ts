@@ -38,7 +38,7 @@ export const deleteMyReview = functions.https.onCall(
                 context.auth.uid
             );
 
-            if (!user.reviews || user.reviews.includes(data.reviewId)) {
+            if (!user.reviews || !user.reviews.includes(data.reviewId)) {
                 throw new functions.https.HttpsError(
                     'unavailable',
                     `User does not have control over this review, data: ${data}`
@@ -58,7 +58,7 @@ export const deleteMyReview = functions.https.onCall(
         } catch (err) {
             throw new functions.https.HttpsError(
                 'unknown',
-                `Failed to get businesses for user with error: ${err}, data: ${data}`
+                `Failed to delete review with error: ${err}, data: ${{...data}}`
             );
         }
     }

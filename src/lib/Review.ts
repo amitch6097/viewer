@@ -9,6 +9,10 @@ export class Review implements IReview {
         });
     }
 
+    get id() {
+        return this.data.id
+    }
+
     get user() {
         return this.data.user;
     }
