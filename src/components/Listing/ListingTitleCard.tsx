@@ -5,20 +5,19 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import {
-    createStyles,
-    makeStyles, Theme
-} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import CreateIcon from '@material-ui/icons/Create';
+import GradeIcon from '@material-ui/icons/Grade';
+import HelpIcon from '@material-ui/icons/Help';
+import DoneIcon from '@material-ui/icons/Done';
 import ShareIcon from '@material-ui/icons/Share';
 import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { strings } from '../../strings';
 import { FavoriteIcon } from '../Favorites';
-
 
 export interface IListingTitleCardProps {
     id: string;
@@ -38,7 +37,7 @@ const useStyles = (props) =>
             root: {
                 display: 'flex',
                 flexDirection: 'row',
-                minHeight: '250px'
+                minHeight: '250px',
             },
             details: {
                 display: 'flex',
@@ -72,6 +71,11 @@ const useStyles = (props) =>
                 display: 'flex',
                 justifyContent: 'flex-end',
             },
+            typographyWithIcon: {
+                marginTop: theme.spacing(1),
+                alignItems: 'center',
+                display: 'flex',
+            },
         })
     );
 export function ListingTitleCard(props: IListingTitleCardProps) {
@@ -86,7 +90,7 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                startIcon={<CreateIcon />}
+                startIcon={<GradeIcon />}
             >
                 <p className={classes.buttonText}>Write a Review</p>
             </Button>
@@ -97,7 +101,7 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
                     variant="contained"
                     color="primary"
                     className={classes.button}
-                    startIcon={<CreateIcon />}
+                    startIcon={<GradeIcon />}
                 >
                     <p className={classes.buttonText}>Write a Review</p>
                 </Button>
@@ -128,6 +132,27 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
                         <Typography variant="subtitle1" color="textSecondary">
                             {strings.categories[props.business.category]}
                         </Typography>
+                        <Link href={`#/business/${props.id}/claim`}>
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                className={classes.typographyWithIcon}
+                            >
+                                <HelpIcon />
+                                {'unclaimed'}
+                            </Typography>
+                        </Link>
+
+                        <Link href={`#/business/${props.id}/edit`}>
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                                className={classes.typographyWithIcon}
+                            >
+                                <CreateIcon />
+                                {'Edit'}
+                            </Typography>
+                        </Link>
                     </CardContent>
                     <div className={classes.controls}>
                         <WriteAReview />
