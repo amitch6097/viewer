@@ -19,6 +19,7 @@ export interface IDiscoverViewProps {
 const useStyles = makeStyles({
     root: {
         flexWrap: 'nowrap',
+        minHeight: 'var(--page-height)',
     },
     filters: {
         width: '300px',
