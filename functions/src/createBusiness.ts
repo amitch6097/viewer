@@ -1,11 +1,9 @@
 import algoliasearch from 'algoliasearch';
 import * as functions from 'firebase-functions';
-import { IUserDocument } from '../../typings/documents';
 import {
     ICreateBusinessProps,
-    ICreateBusinessResponse,
+    ICreateBusinessResponse
 } from '../../typings/functions';
-import { IBusinessListing } from '../../typings/types';
 import { BusinessCollection } from './Collections/BusinessCollection';
 import { UserCollection } from './Collections/UserCollection';
 import { canUserOwnBusiness } from './helpers';
