@@ -1,6 +1,7 @@
 import {IBusinessListing, IBusinessListingUpdateProperties} from './types';
 
 export interface IUserDocument {
+    phone?: string;
     name: string | undefined;
     image?: string;
     email: string | undefined;
@@ -57,7 +58,7 @@ export interface IBusinessDocument {
     meta?: {
         createdAt: number;
         createdBy: string | undefined;
-        ownedBy: string | undefined;
+        ownedBy?: string;
     };
     _geoloc?: {
         lat: number;

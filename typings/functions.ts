@@ -65,6 +65,7 @@ export interface ICreateReviewResponse {
 }
 
 export interface ICreateBusinessProps {
+    isOwner?: boolean;
     business: IBusinessListing;
 }
 
@@ -134,5 +135,12 @@ export interface IDeleteMyReviewProps {
     reviewId: string;
 }
 export interface IDeleteMyReviewResponse {
+    result: boolean;
+}
+
+export interface IClaimBusinessProps {
+    businessId: string;
+}
+export interface IClaimBusinessResponse {
     result: boolean;
 }

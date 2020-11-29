@@ -10,6 +10,8 @@ import { API } from '../../services/';
 export interface IClaimBusinessViewProps {
     business: IBusinessListing;
     onClaimWithPhone: () => void;
+    onClaimWithEmail: () => void;
+    canClaimWithEmail: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -87,6 +89,9 @@ export function ClaimBusinessView(props: IClaimBusinessViewProps) {
                 <button id={ 'sign-in-button'} onClick={onSignInSubmit} >
                     Claim With Phone Number
                 </button>
+                {props.canClaimWithEmail && <Button onClick={props.onClaimWithEmail}>
+                    {'Claim With Email'}
+                </Button>}
             </form>
         </Container>
     );

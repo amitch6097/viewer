@@ -43,6 +43,13 @@ export class API {
         return undefined;
     }
 
+    static async canClaimBusiness(businessId: string): Promise<boolean> {
+        const user = await API.getMyUser();
+        const business = await API.getBusiness(businessId);
+        const hasBusinessEmail = Boolean(user.email && user.email.indexOf(business.website) !== -1)
+        return hasBusinessEmail;
+    }
+
     static async getBusiness(id: string): Promise<Business> {
         const business = await Firestore.getBusiness(id);
         return new Business(business);

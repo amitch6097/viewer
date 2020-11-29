@@ -1,20 +1,5 @@
 import { IAlgoliaLocationSearchEventSuggestion } from './algolia';
 
-export interface IBusinessDocument {
-    id?: string;
-    data: IBusinessListing;
-    meta?: {
-        createdAt: number;
-        createdBy: string | undefined;
-    };
-    _geoloc?: {
-        lat: number;
-        lng: number;
-    };
-    _tags?: string[];
-    reviews?: string[]; //review id list
-}
-
 export interface IUserDocument extends IUser {
     reviews?: string[];
     favorites?: string[];
