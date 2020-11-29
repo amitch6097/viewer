@@ -1,6 +1,11 @@
 import * as admin from 'firebase-admin';
 import { IBusinessDocument } from '../../../typings/documents';
-import { BusinessTagDescriptors, EIdentify, IBusinessListing, IBusinessListingUpdateProperties } from '../../../typings/types';
+import {
+    BusinessTagDescriptors,
+    EIdentify,
+    IBusinessListing,
+    IBusinessListingUpdateProperties,
+} from '../../../typings/types';
 import { Collection } from './Collection';
 
 /**
@@ -78,6 +83,12 @@ export class BusinessCollection extends Collection {
         return writeResult;
     }
 
+    async updateOwner(businessId: string, ownerId: string) {
+        return await this.collection.doc(businessId).update({
+            'meta.ownedBy': ownerId
+        });
+    }   
+
     async update(
         businessId: string,
         updateProperties: Partial<IBusinessListingUpdateProperties>
@@ -95,36 +106,40 @@ export class BusinessCollection extends Collection {
                     latlng: updateProperties.address.latlng,
                     postcode: updateProperties.address.postcode,
                     value: updateProperties.address.value,
-                }
-                __['_geoloc'] =  {
+                };
+                __['_geoloc'] = {
                     lat: updateProperties?.address?.latlng?.lat,
                     lng: updateProperties?.address?.latlng?.lng,
                 };
-            } else  {
+            } else {
                 __['data.' + key] = updateProperties[key];
             }
             return __;
         }, {});
         dotNotation['_tags'] = getTags(updateProperties as IBusinessListing);
         await this.collection.doc(businessId).update(dotNotation);
-        return await this.getData(businessId)
+        return await this.getData(businessId);
     }
 
     async addUpdateRequest(businessId: string, updateRequestId: string) {
         return await this.collection.doc(businessId).update({
-            businessUpdateRequests:admin.firestore.FieldValue.arrayUnion(updateRequestId),
+            businessUpdateRequests: admin.firestore.FieldValue.arrayUnion(
+                updateRequestId
+            ),
         });
     }
 
     async removeUpdateRequest(businessId: string, updateRequestId: string) {
         return await this.collection.doc(businessId).update({
-            businessUpdateRequests: admin.firestore.FieldValue.arrayRemove(updateRequestId),
+            businessUpdateRequests: admin.firestore.FieldValue.arrayRemove(
+                updateRequestId
+            ),
         });
     }
 
     async addFlag(businessId: string, flagId: string) {
         return await this.collection.doc(businessId).update({
-            flags :admin.firestore.FieldValue.arrayUnion(flagId),
+            flags: admin.firestore.FieldValue.arrayUnion(flagId),
         });
     }
 
@@ -134,8 +149,16 @@ export class BusinessCollection extends Collection {
         });
     }
 
-    async add(authId: string, business: IBusinessListing): Promise<IBusinessDocument> {
-        let businessDocument: Omit<IBusinessDocument, 'id'> = {
+    async add({
+        authId,
+        business,
+        isOwner,
+    }: {
+        isOwner: boolean;
+        authId: string;
+        business: IBusinessListing;
+    }): Promise<IBusinessDocument> {
+        const businessDocument: Omit<IBusinessDocument, 'id'> = {
             data: {
                 ...business,
                 address: {
@@ -154,7 +177,7 @@ export class BusinessCollection extends Collection {
             meta: {
                 createdAt: Number(new Date()),
                 createdBy: authId,
-                ownedBy: authId,
+                ownedBy: isOwner ? authId : undefined,
             },
             _geoloc: {
                 lat: business?.address?.latlng?.lat,
@@ -164,14 +187,14 @@ export class BusinessCollection extends Collection {
             reviewsRatingTotal: 0,
             reviews: [],
             businessUpdateRequests: [],
-            flags: []
+            flags: [],
         };
         const writeResult = await this.collection.add(businessDocument);
-        const result = await writeResult.get() 
+        const result = await writeResult.get();
         return {
             id: writeResult.id,
-            ...(result.data()) as Omit<IBusinessDocument, 'id'>
-        }
+            ...(result.data() as Omit<IBusinessDocument, 'id'>),
+        };
     }
 }
 
