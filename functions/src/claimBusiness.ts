@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import {
     IClaimBusinessProps,
-    IClaimBusinessResponse
+    IClaimBusinessResponse,
 } from '../../typings/functions';
 import { BusinessCollection } from './Collections/BusinessCollection';
 import { UserCollection } from './Collections/UserCollection';
@@ -30,12 +30,16 @@ export const claimBusiness = functions.https.onCall(
             const business = await businessCollection.getData(businessId);
             const canBeOwner = canUserOwnBusiness(user, business.data);
             if (canBeOwner) {
-                const result: FirebaseFirestore.WriteResult = await businessCollection.updateOwner(
+                const userResult = await userCollection.addBusiness(
+                    context.auth.uid,
+                    businessId
+                );
+                const businessResult: FirebaseFirestore.WriteResult = await businessCollection.updateOwner(
                     businessId,
                     context.auth.uid
                 );
                 return {
-                    result: Boolean(result),
+                    result: Boolean(userResult && businessResult),
                 };
             }
             return {

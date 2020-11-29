@@ -1,9 +1,9 @@
-import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
+import { IUserDocument } from '../../typings/documents';
+import { UserCollection } from './Collections/UserCollection';
 
 const firestore = admin.firestore();
-import { IUserDocument } from '../../typings/types';
-import { UserCollection } from './Collections/UserCollection';
 
 export const onUserCreate = functions.auth.user().onCreate(async (user) => {
     const userCollection = new UserCollection();
@@ -18,7 +18,8 @@ export async function createUser(
         image: (user as admin.auth.UserRecord)?.photoURL ?? '',
         email: (user as admin.auth.UserRecord)?.email ?? '',
         reviews: [],
-        favorites: [],
+        favoriteGroups: {},
+        businesses: {},
         createdAt: Number(new Date()),
     };
 
