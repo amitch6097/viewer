@@ -1,7 +1,8 @@
-import { IReviewDocument } from '../../typings/documents';
-import { IReview, IUserDocument } from '../../typings/types';
+import { IReviewDocument, IUserDocument } from '../../typings/documents';
+import { IReview } from '../../typings/types';
 import { IBusinessDocument } from '../../typings/documents';
 import firebase from '../firebase';
+import { User } from 'src/lib/User';
 
 const firestore = firebase.firestore();
 
@@ -201,7 +202,7 @@ async function getReviewFromDoc(
     const user = await Firestore.getUser(data.createdBy);
     const review: IReview = {
         ...(data as IReviewDocument),
-        user,
+        user: new User(user)
     };
     return review;
 }

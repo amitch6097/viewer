@@ -102,7 +102,7 @@ export class API {
     static async getReviewsForBusiness({
         businessId,
         startAfterId,
-        count = 1,
+        count = 10,
     }: {
         businessId: string;
         startAfterId?: string;

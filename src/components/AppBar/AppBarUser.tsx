@@ -6,10 +6,12 @@ import Menu from '@material-ui/core/Menu';
 import { Link } from '@material-ui/core';
 import { Auth } from '../../services/Auth';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { IUser } from 'typings/types';
 
 export interface IAppBarUserProps {
     onClickMyFavorites?: () => void;
     onClickLogout?: () => void;
+    user: IUser
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export function AppBarUser({ onClickLogout }: IAppBarUserProps) {
+export function AppBarUser(props: IAppBarUserProps) {
     const theme = useTheme();
     const classes = useStyles(theme);
 
@@ -62,12 +64,15 @@ export function AppBarUser({ onClickLogout }: IAppBarUserProps) {
                 onClose={handleClose}
             >
                 <MenuItem onClick={Auth.signOut}>Logout</MenuItem>
-                <Link href={`/my-reviews`}>
+                <Link href={`/#/my-reviews`}>
                     <MenuItem>My Reviews</MenuItem>
                 </Link>
-                <Link href={`/my-favorites`}>
+                <Link href={`/#/my-favorites`}>
                     <MenuItem>My Favorites</MenuItem>
                 </Link>
+                {props.user.hasBusinesses && (<Link href={`/#/my-businesses`}>
+                    <MenuItem>My Businesses</MenuItem>
+                </Link>)}
             </Menu>
         </div>
     );
