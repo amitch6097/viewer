@@ -1,30 +1,17 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
+import { Container, Grid, Typography } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
-
-import {
-    FavoritesListCard,
-    FavoritesListCardSkelton,
-} from '../../components/Favorites/FavoritesListCard';
-import { IFavoriteGroup } from '../../../typings/base';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { EViewState, IFavoriteGroup } from '../../../typings/base';
 import { IBusinessListing } from '../../../typings/types';
 import {
-    CircularProgress,
-    Container,
-    Grid,
-    Typography,
-} from '@material-ui/core';
-import { EViewState } from '../../../typings/base';
-import { Result, ResultSkeleton } from '../../components/Result/Result';
-import {
-    FavoritesListHeaderSkeleton,
     FavoritesListHeader,
+    FavoritesListHeaderSkeleton,
 } from '../../components/Favorites';
 import { Results, ResultsSkeleton } from '../../components/Result';
 
 export interface IMyFavoriteBusinessesViewProps {
-    businesses: IBusinessListing[];
+    businesses: Record<string, IBusinessListing>;
     state: EViewState;
     onClickBusiness: (businessId: string) => void;
     group: IFavoriteGroup;
@@ -38,7 +25,7 @@ const useStyles = makeStyles({
     container: {
         minHeight: 'var(--page-height)',
         paddingTop: 'var(--page-padding)',
-        paddingBottom: 'var(--page-padding)'
+        paddingBottom: 'var(--page-padding)',
     },
     divider: {
         marginTop: '10px',
@@ -84,7 +71,11 @@ export function MyFavoriteBusinessesView(
                     onClick={console.log}
                 />
                 <Divider className={classes.divider} />{' '}
-                <Results businesses={props.businesses} />
+                <Results
+                    businesses={props.businesses}
+                    withFavorite={false}
+                    onClick={props.onClickBusiness}
+                />
             </Grid>
         );
     }

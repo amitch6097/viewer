@@ -239,11 +239,14 @@ export class API {
 
     static async getBusinessesForFavoriteGroup(
         favoriteGroupId: string
-    ): Promise<Business[]> {
+    ): Promise<Record<string, Business>> {
         const response = await Functions.getBusinessesForFavoriteGroup({
             favoriteGroupId,
         });
-        return response.businesses.map((data) => new Business(data));
+        return response.businesses.reduce((businesses, data) => {
+            businesses[data.id]  = new Business(data)
+            return businesses;
+        }, {});
     }
 
     static async setBusinessAsFavorite(
@@ -317,10 +320,13 @@ export class API {
         );
     }
 
-    static async getMyBusinesses(args: {}) {
+    static async getMyBusinesses(args: {}): Promise<Record<string, Business>> {
         const response = await Functions.getMyBusinesses(args);
         const businesses: IBusinessDocument[] = response.result;
-        return businesses.map((document) => new Business(document));
+        return businesses.reduce((businesses, data) => {
+            businesses[data.id]  = new Business(data)
+            return businesses;
+        }, {});
     }
 
     static async getMyReviews(args: {} = {}) {

@@ -11,6 +11,7 @@ export interface IResultsContainerProps {
         root?: object;
         item?: object;
     }
+    withFavorite: boolean;
 }
 
 export function ResultsContainer(props) {
