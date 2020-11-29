@@ -2,7 +2,6 @@ import { IBusinessDocument } from '../../typings/documents';
 import { IBusinessListing } from '../../typings/types';
 
 export class Business implements IBusinessListing {
-
     constructor(readonly data: IBusinessDocument) {}
 
     get id() {
@@ -63,16 +62,42 @@ export class Business implements IBusinessListing {
 
     get websiteRoot() {
         const website = this.data.data.website;
-        if(!website) {
+        if (!website) {
             return undefined;
         }
         const headerFinal = ['www.', 'https://', 'http://'].find((header) => {
             return website.indexOf(header) >= 0;
         });
         const root = headerFinal
-            ? website.slice(website.indexOf(headerFinal) + headerFinal.length).split('/')[0]
+            ? website
+                  .slice(website.indexOf(headerFinal) + headerFinal.length)
+                  .split('/')[0]
             : website.split('/')[0];
         return root;
+    }
+
+    get averageReview() {
+        if (!this.data?.reviews?.length) {
+            return 0;
+        } else {
+            const value =
+                this.data.reviewsRatingTotal / this.data.reviews.length;
+            return Math.max(value, 0);
+        }
+    }
+
+    get reviewCount() {
+        return this.data?.reviews?.length || 0;
+    }
+
+    get hasAbout() {
+        return Boolean(
+            this.data.data.about ||
+            (this.data.data.identify &&
+                Object.values(this.data.data.identify).find(
+                    (value) => value.selected
+                ))
+        );
     }
 
     public getData(): IBusinessListing {
@@ -82,5 +107,4 @@ export class Business implements IBusinessListing {
     public getListing(): IBusinessListing {
         return this.data.data;
     }
-
 }

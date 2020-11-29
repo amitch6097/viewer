@@ -22,9 +22,11 @@ export function ClaimBusinessContainer(props: IClaimBusinessContainerProps) {
     }, [props.businessId]);
 
     useEffect(() => {
-        canUserClaimWithEmail(business.websiteRoot).then((value: boolean) => {
-            setCanClaimWithEmail(value);
-        });
+        if (business){
+            canUserClaimWithEmail(business.websiteRoot).then((value: boolean) => {
+                setCanClaimWithEmail(value);
+            });
+        }
     }, [business]);
 
     async function onClaimWithPhone() {
@@ -32,7 +34,11 @@ export function ClaimBusinessContainer(props: IClaimBusinessContainerProps) {
     }
 
     async function onClaimWithEmail() {
-        // await API.linkPhone();
+        try {
+            API.claimBusiness(props.businessId);
+        } catch (err) {
+            console.warn(err);
+        }
     }
 
     return (

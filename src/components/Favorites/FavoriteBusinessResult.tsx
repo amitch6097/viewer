@@ -6,8 +6,9 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { IBusiness } from '../../../typings/base';
-import Rating from '@material-ui/lab/Rating';
+// import Rating from '@material-ui/lab/Rating';
 import { Grid } from '@material-ui/core';
+import { Rating } from '../Rating/Rating';
 
 export interface IFavoriteBusinessResultProps {
     business: IBusiness;
@@ -58,14 +59,9 @@ export function FavoriteBusinessResult(props: IFavoriteBusinessResultProps) {
                     alignItems="flex-start"
                 >
                     <Rating
-                        precision={0.25}
-                        name="simple-controlled"
-                        value={props.business.reviewsAverage}
-                        readOnly
+                        average={props.business.reviewsAverage}
+                        reviewCount={props.business.reviewsLength}
                     />
-                    <Typography component="p"  className={classes.ratingCount}>
-                        {props.business.reviewsLength}
-                    </Typography>
                 </Grid>
             </CardContent>
         </Card>

@@ -18,6 +18,7 @@ import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { strings } from '../../strings';
 import { FavoriteIcon } from '../Favorites';
+import { Rating } from '../Rating/Rating';
 
 export interface IListingTitleCardProps {
     id: string;
@@ -72,9 +73,9 @@ const useStyles = (props) =>
                 justifyContent: 'flex-end',
             },
             typographyWithIcon: {
-                marginTop: theme.spacing(1),
                 alignItems: 'center',
                 display: 'flex',
+                margin: '0px'
             },
         })
     );
@@ -129,30 +130,58 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
                         >
                             {props.business.name}
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                            {strings.categories[props.business.category]}
-                        </Typography>
-                        <Link href={`#/business/${props.id}/claim`}>
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                className={classes.typographyWithIcon}
-                            >
-                                <HelpIcon />
-                                {'unclaimed'}
-                            </Typography>
-                        </Link>
 
-                        <Link href={`#/business/${props.id}/edit`}>
+                        <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                        >
                             <Typography
-                                variant="body2"
+                                variant="subtitle1"
                                 color="textSecondary"
-                                className={classes.typographyWithIcon}
                             >
-                                <CreateIcon />
-                                {'Edit'}
+                                {strings.categories[props.business.category]}
                             </Typography>
-                        </Link>
+                            {!props.isEditMode && (
+                                <Link href={`#/business/${props.id}/claim`}>
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                        className={classes.typographyWithIcon}
+                                    >
+                                        {props.business.hasOwner ? (
+                                            <>
+                                                <DoneIcon />
+                                                {'claimed'}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <HelpIcon />
+                                                {'unclaimed'}
+                                            </>
+                                        )}
+                                    </Typography>
+                                </Link>
+                            )}
+                        </Grid>
+
+                        <Rating
+                            average={props.business.averageReview}
+                            reviewCount={props.business.reviewCount}
+                        />
+
+                        {!props.isEditMode && (
+                            <Link href={`#/business/${props.id}/edit`}>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    className={classes.typographyWithIcon}
+                                >
+                                    <CreateIcon />
+                                    {'Edit'}
+                                </Typography>
+                            </Link>
+                        )}
                     </CardContent>
                     <div className={classes.controls}>
                         <WriteAReview />

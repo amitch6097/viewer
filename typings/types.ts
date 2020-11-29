@@ -79,6 +79,10 @@ export interface IBusinessListing {
     about?: string;
     guid: string;
     hashtags?: string[];
+    hasOwner?: boolean;
+    averageReview?: number;
+    reviewCount?: number;
+    hasAbout?: boolean;
 }
 
 export interface IBusinessListingUpdateProperties {

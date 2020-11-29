@@ -20,7 +20,9 @@ const useStyles = makeStyles({
         fontWeight: 700,
     },
     reviews: {},
-    review: {},
+    review: {
+        width: '100%'
+    },
     divider: {
         marginTop: '20px',
     },

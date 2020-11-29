@@ -45,9 +45,9 @@ export function ListingAbout(props: IListingAboutProps) {
                 onChange={onChangeValue(props.onChangeAbout)}
                 value={props.business.about}
             />
-        ) : (
+        ) : props.business.about ? (
             <Typography variant="body1">{props.business.about}</Typography>
-        );
+        ) : (<></>);
     }
 
     return (
