@@ -80,7 +80,7 @@ export class Functions {
     }
 
     static async deleteMyReview(
-        props: IGetMyReviewsProps
+        props: IDeleteMyReviewProps
     ): Promise<IDeleteMyReviewResponse> {
         return await call('deleteMyReview', props);
     }
