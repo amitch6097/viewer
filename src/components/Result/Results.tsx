@@ -1,7 +1,7 @@
 import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, GridSpacing } from '@material-ui/core';
 import { Result, ResultSkeleton } from './Result';
 
 export interface IResultsProps {
@@ -14,6 +14,7 @@ export interface IResultsProps {
         item?: object;
     };
     minimal?: boolean;
+    withFavorite: boolean;
 }
 
 const useStyles = makeStyles({
@@ -30,12 +31,12 @@ const useStyles = makeStyles({
     },
 });
 
-export function Results(props) {
+export function Results(props: IResultsProps) {
     const classes = useStyles(props);
     return (
         <Grid
             container
-            spacing={props.spacing || 2}
+            spacing={props.spacing as GridSpacing || 2}
             direction="column"
             justify="center"
             alignItems="center"
@@ -49,6 +50,7 @@ export function Results(props) {
                             {...props}
                             onClick={() => props.onClick(key)}
                             business={business}
+                            withFavorite={props.withFavorite}
                         />{' '}
                     </Grid>
                 );

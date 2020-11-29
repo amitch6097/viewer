@@ -80,14 +80,18 @@ export function Listing(props: IListingProps) {
                     </Hidden>
                 </section>
                 <Divider className={classes.divider} />
-                <section id="bb-listing-about">
-                    <ListingAbout
-                        business={props.business}
-                        isEditMode={props.isEditMode}
-                        onChangeAbout={props.onChangeAbout}
-                    />
-                </section>
-                <Divider className={classes.divider} />
+                {props.business.hasAbout && (
+                    <>
+                        <section id="bb-listing-about">
+                            <ListingAbout
+                                business={props.business}
+                                isEditMode={props.isEditMode}
+                                onChangeAbout={props.onChangeAbout}
+                            />
+                        </section>
+                        <Divider className={classes.divider} />
+                    </>
+                )}
                 <section id="bb-listing-owners">
                     <ListingOwners
                         business={props.business}
@@ -96,14 +100,16 @@ export function Listing(props: IListingProps) {
                     />
                 </section>
                 <Divider className={classes.divider} />
-                {(showReviews && props.reviews.size) ? (
+                {showReviews && props.reviews.size ? (
                     <section id="bb-listing-reviews">
                         <ListingReviews
                             reviews={props.reviews}
                             onLoadMoreReviews={props.onLoadMoreReviews}
                         />
                     </section>
-                ) : (<></>)}
+                ) : (
+                    <></>
+                )}
             </Grid>
             <Hidden smDown>
                 <Grid className={classes.aside} item md={3}>

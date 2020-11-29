@@ -15,6 +15,7 @@ export const ResultStory = () => (
         onClick={console.log}
         minimal={boolean('minimal', false)}
         business={BUSINESS_DATA}
+        withFavorite={true}
     />
 );
 
@@ -39,6 +40,7 @@ export const ResultsStory = () => {
             minimal={boolean('minimal', false)}
             businesses={businesses}
             spacing={number('spacing', 2)}
+            withFavorite={true}
         />
     );
 };

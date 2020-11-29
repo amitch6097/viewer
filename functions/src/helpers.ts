@@ -1,3 +1,6 @@
+import { IUserDocument } from "../../typings/documents";
+import { IBusinessListing } from "../../typings/types";
+
 export function expectAuthAndData(functions, data, context) {
     if (!context.auth)
         throw new functions.https.HttpsError(
@@ -30,4 +33,32 @@ export function paginate({
     });
     const startIndex = page * count;
     return ordered.slice(startIndex, startIndex + count);
+}
+
+export function canUserOwnBusiness(user: IUserDocument, business: IBusinessListing) {
+    const { website, phone } = business;
+
+    if (!user) {
+        return false;
+    }
+
+    if (website) {
+        const headerFinal = ['www.', 'https://', 'http://'].find((header) => {
+            return website.indexOf(header) >= 0;
+        });
+        const root = headerFinal
+            ? website
+                  .slice(website.indexOf(headerFinal) + headerFinal.length)
+                  .split('/')[0]
+            : website.split('/')[0];
+        if (user.email.indexOf(root) > 0) {
+            return true;
+        }
+    }
+
+    if (phone && phone === user.phone) {
+        return true;
+    }
+
+    return false;
 }

@@ -39,6 +39,17 @@ export class UserCollection extends Collection {
         return writeResult.writeTime;
     }
 
+    async addBusiness(uid: string, businessId: string) {
+        const userDoc = await this.getOrCreateUserDocument(uid);
+        const dotNotation = `businesses.${businessId}`;
+        const writeResult = await userDoc.ref.update({
+            [dotNotation]: {
+                createdAt: Number(new Date()),
+            },
+        });
+        return writeResult.writeTime;
+    }
+
     async deleteReview(uid: string, reviewId: string) {
         const userDoc = await this.getOrCreateUserDocument(uid);
         const writeResult = await userDoc.ref.update({

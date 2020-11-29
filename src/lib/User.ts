@@ -1,6 +1,8 @@
-import { IUserDocument } from '../../typings/types';
+import { IFavoriteGroup } from 'typings/base';
+import { IReview, IUser } from 'typings/types';
+import { IReviewDocument, IUserDocument } from '../../typings/documents';
 
-export class User implements IUserDocument {
+export class User implements IUser {
     private data: Readonly<IUserDocument>;
 
     constructor(data: IUserDocument) {
@@ -24,10 +26,16 @@ export class User implements IUserDocument {
     }
 
     get favorites() {
-        return this.data.favorites || [];
+        return this.data.favoriteGroups || [];
     }
 
     get createdAt() {
         return this.data.createdAt;
+    }
+
+    get hasBusinesses() {
+        return Boolean(
+            this.data.businesses && Object.keys(this.data.businesses).length
+        );
     }
 }

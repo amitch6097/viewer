@@ -118,6 +118,7 @@ export function CheckExistsView({
                         businesses={results}
                         minimal={true}
                         onClick={onClickResult}
+                        withFavorite={false}
                     />
                 </Grid>
             </Grid>

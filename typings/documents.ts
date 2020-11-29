@@ -1,6 +1,8 @@
-import {IBusinessListing, IBusinessListingUpdateProperties} from './types';
+import { IAlgoliaLocationSearchEventSuggestion } from './algolia';
+import { EIdentify, IBusinessListingUpdateProperties, IIdentify, IImage, IOwner } from './types';
 
 export interface IUserDocument {
+    phone?: string;
     name: string | undefined;
     image?: string;
     email: string | undefined;
@@ -53,11 +55,25 @@ export interface IFavoriteGroupDocument {
 
 export interface IBusinessDocument {
     id: string;
-    data: IBusinessListing;
+    data: {
+        id?: string;
+        image?: IImage;
+        category: string;
+        phone: string;
+        email: string;
+        address?: IAlgoliaLocationSearchEventSuggestion;
+        website?: string;
+        identify: Record<EIdentify, IIdentify>;
+        owners: IOwner[];
+        name: string;
+        about?: string;
+        guid: string;
+        hashtags?: string[];
+    },
     meta?: {
         createdAt: number;
         createdBy: string | undefined;
-        ownedBy: string | undefined;
+        ownedBy?: string;
     };
     _geoloc?: {
         lat: number;

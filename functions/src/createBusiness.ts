@@ -5,6 +5,8 @@ import {
     ICreateBusinessResponse
 } from '../../typings/functions';
 import { BusinessCollection } from './Collections/BusinessCollection';
+import { UserCollection } from './Collections/UserCollection';
+import { canUserOwnBusiness } from './helpers';
 
 const ALGOLIA_ID = functions.config().algolia.app_id;
 const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
@@ -40,9 +42,21 @@ export const createBusiness = functions.https.onCall(
             );
         try {
             const businessCollection = new BusinessCollection();
-            const result = await businessCollection.add(context.auth.uid, data.business);
+            let isOwner = data.isOwner;
+            if (isOwner && context.auth.uid) {
+                const userCollection = new UserCollection();
+                const user = await userCollection.getOrCreateUserData(
+                    context.auth.uid
+                );
+                isOwner = canUserOwnBusiness(user, data.business);
+            }
+            const result = await businessCollection.add({
+                authId: context.auth.uid,
+                business: data.business,
+                isOwner,
+            });
             return {
-                result
+                result,
             };
         } catch (err) {
             throw new functions.https.HttpsError(

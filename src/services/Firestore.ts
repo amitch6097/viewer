@@ -1,9 +1,8 @@
-import { IReviewDocument } from '../../typings/documents';
-import {
-    IBusinessDocument,
-    IReview, IUserDocument
-} from '../../typings/types';
+import { IReviewDocument, IUserDocument } from '../../typings/documents';
+import { IReview } from '../../typings/types';
+import { IBusinessDocument } from '../../typings/documents';
 import firebase from '../firebase';
+import { User } from 'src/lib/User';
 
 const firestore = firebase.firestore();
 
@@ -65,7 +64,7 @@ export class Firestore {
     static async getNextReviewsForUser({
         userId,
         count,
-        startAfterId
+        startAfterId,
     }: {
         userId: string;
         count: number;
@@ -81,7 +80,10 @@ export class Firestore {
             return { reviews: [], size };
         } else {
             const startAfterIndex = user.reviews.indexOf(startAfterId) + 1;
-            const reviewIds = user.reviews.slice(startAfterIndex, startAfterIndex + count);
+            const reviewIds = user.reviews.slice(
+                startAfterIndex,
+                startAfterIndex + count
+            );
             const docs = await Promise.all(
                 reviewIds.map((id) =>
                     firestore.collection('review').doc(id).get()
@@ -180,7 +182,11 @@ export class Firestore {
     }
 }
 
-async function getReviewFromDoc(doc: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>): Promise<IReview | undefined> {
+async function getReviewFromDoc(
+    doc: firebase.firestore.QueryDocumentSnapshot<
+        firebase.firestore.DocumentData
+    >
+): Promise<IReview | undefined> {
     if (!doc.exists) {
         return undefined;
     }
@@ -195,8 +201,8 @@ async function getReviewFromDoc(doc: firebase.firestore.QueryDocumentSnapshot<fi
 
     const user = await Firestore.getUser(data.createdBy);
     const review: IReview = {
-        ...data as IReviewDocument,
-        user,
+        ...(data as IReviewDocument),
+        user: new User(user)
     };
     return review;
 }

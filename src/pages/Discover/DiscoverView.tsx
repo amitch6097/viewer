@@ -35,11 +35,11 @@ const useStyles = makeStyles({
         alignItems: 'center',
         flexWrap: 'nowrap',
         top: 'calc(100% - 60px)',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
     },
     'filterContainer--open': {
         top: 0,
-        pointerEvents: 'all'
+        pointerEvents: 'all',
 
         // transform: 'translate(0px, calc(100% - 60px)'
     },
@@ -55,7 +55,7 @@ const useStyles = makeStyles({
         background: 'white',
         width: '99%',
         borderRadius: '20px 20px 0px 0px',
-        margin: '0 auto'
+        margin: '0 auto',
     },
     filterFab: {
         pointerEvents: 'all',
@@ -65,7 +65,7 @@ const useStyles = makeStyles({
     results: {
         // width: 'calc(100% - 300px)',
         width: '100%',
-        margin: '20px'
+        margin: '20px',
     },
 });
 
@@ -87,10 +87,22 @@ export function DiscoverView(props: IDiscoverViewProps) {
                     </aside>
                 </Grid>
             </Hidden>
-            <Grid item className={classes.results} md={9} style={open ? {
-                position: 'fixed'
-            }: {}}>
-                <ResultsContainer onClick={props.onClickBusiness} />
+            <Grid
+                item
+                className={classes.results}
+                md={9}
+                style={
+                    open
+                        ? {
+                              position: 'fixed',
+                          }
+                        : {}
+                }
+            >
+                <ResultsContainer
+                    onClick={props.onClickBusiness}
+                    withFavorite={true}
+                />
                 <ResultPagination />
             </Grid>
             <Hidden only={['md', 'lg']}>
@@ -110,9 +122,7 @@ export function DiscoverView(props: IDiscoverViewProps) {
                         Filter
                     </Fab>
 
-                    <aside
-                        className={classes.filterContent}
-                    >
+                    <aside className={classes.filterContent}>
                         <Grid
                             className={classes.filterContentContainer}
                             container

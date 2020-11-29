@@ -22,10 +22,11 @@ import MailIcon from '@material-ui/icons/Mail';
 import List from '@material-ui/core/List';
 import MenuIcon from '@material-ui/icons/Menu';
 import {AppBarUser} from './AppBarUser';
+import { IUser } from 'typings/types';
 
 export interface IAppBarProps {
     history: any;
-    user?: firebase.User;
+    user?: IUser;
     searchComponent?: JSX.Element;
 }
 
@@ -172,7 +173,7 @@ export function AppBar(props: IAppBarProps) {
                                     >
                                         {strings.appBar.addBusiness}
                                     </Button>
-                                    <AppBarUser />
+                                    <AppBarUser user={props.user} />
                                     {/* <Button
                                         className={classes.button}
                                         onClick={Auth.signOut}

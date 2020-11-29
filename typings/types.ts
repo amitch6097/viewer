@@ -1,26 +1,5 @@
 import { IAlgoliaLocationSearchEventSuggestion } from './algolia';
 
-export interface IBusinessDocument {
-    id?: string;
-    data: IBusinessListing;
-    meta?: {
-        createdAt: number;
-        createdBy: string | undefined;
-    };
-    _geoloc?: {
-        lat: number;
-        lng: number;
-    };
-    _tags?: string[];
-    reviews?: string[]; //review id list
-}
-
-export interface IUserDocument extends IUser {
-    reviews?: string[];
-    favorites?: string[];
-    createdAt?: number;
-}
-
 export interface IFavoriteGroupDocument {
     label: string;
     favorites: string[]; //favorite document ids
@@ -30,13 +9,21 @@ export interface IFavoriteGroupDocument {
     users: string[];
 }
 
+export interface IUser {
+    name: string;
+    email: string;
+    hasBusinesses?: boolean;
+    createdAt: number;
+    image: string;
+}
+
 export interface IReview {
     id: string;
     text: string;
     rating: number;
     businessId: string;
     createdAt?: number;
-    user?: IUserDocument;
+    user?: IUser;
     businessName?: string;
 }
 
@@ -56,12 +43,6 @@ export interface IReviews {
     count?: number;
     lastId?: string;
     businessId?: string; // not sure but I think this was suppose to be here
-}
-
-export interface IUser {
-    name: string | undefined;
-    image?: string;
-    email: string | undefined;
 }
 
 export enum BusinessTagDescriptors {
@@ -94,6 +75,10 @@ export interface IBusinessListing {
     about?: string;
     guid: string;
     hashtags?: string[];
+    hasOwner?: boolean;
+    averageReview?: number;
+    reviewCount?: number;
+    hasAbout?: boolean;
 }
 
 export interface IBusinessListingUpdateProperties {

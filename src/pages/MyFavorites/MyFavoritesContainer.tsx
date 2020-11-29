@@ -17,7 +17,7 @@ export interface IMyFavoritesContainerState {
     favoriteGroupId?: string;
     favoriteGroups?: FavoriteGroups;
     state: EViewState;
-    businesses: Business[];
+    businesses: Record<string, Business>;
 }
 
 export class MyFavoritesContainer extends React.Component<
@@ -55,10 +55,11 @@ export class MyFavoritesContainer extends React.Component<
     fetchBusinessesForFavoriteGroup = async (groupId: string) => {
         const favoriteGroups = await API.getFavoriteGroups();
         const businesses = await API.getBusinessesForFavoriteGroup(groupId);
+        const state = (businesses && Object.keys(businesses).length) ? EViewState.DONE : EViewState.EMPTY;
         this.setState({
             businesses,
             favoriteGroups,
-            state: businesses.length ? EViewState.DONE : EViewState.EMPTY,
+            state
         });
     };
 

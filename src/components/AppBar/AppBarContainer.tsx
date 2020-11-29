@@ -10,7 +10,7 @@ export interface IAppBarContainerProps {
 }
 
 export function AppBarContainer(props: IAppBarContainerProps) {
-    const user: firebase.User = useUser();
+    const user = useUser();
     const withoutSearch = !props.location?.pathname || props.location.pathname === '/';
     const searchComponent = withoutSearch ?  <></> : <SearchContainer />;
 

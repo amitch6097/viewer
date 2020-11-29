@@ -1,13 +1,16 @@
 import React from 'react';
 import * as firebase from 'firebase';
+import { API } from 'src/services';
+import { IUser } from 'typings/types';
 
-export function useUser(): firebase.User {
-    const [user, setUser] = React.useState(firebase.auth().currentUser);
+export function useUser(): IUser | undefined {
+    const [user, setUser] = React.useState(undefined);
 
     React.useEffect(() => {
         firebase.auth().onAuthStateChanged((user) => {
-            setUser(user);
+            API.getMyUser().then(setUser);
         });
+        API.getMyUser().then(setUser);
     }, []);
 
     return user;

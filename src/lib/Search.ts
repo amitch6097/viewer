@@ -1,9 +1,11 @@
 import {
     EIdentify,
     IIdentify,
-    IBusinessDocument,
     BusinessTagDescriptors,
 } from '../../typings/types';
+import {
+    IBusinessDocument
+} from '../../typings/documents';
 import { RequestOptions } from '@algolia/transporter';
 import { SearchOptions } from '@algolia/client-search';
 import { SearchResponse } from '@algolia/client-search';

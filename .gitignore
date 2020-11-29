@@ -5,9 +5,11 @@ node_modules/
 public/
 dist/
 gifs/
+.VSCodeCounter/
 
 **.cache
 **.log
 **.jpg
+
 
 functions/.runtimeconfig.json

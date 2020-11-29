@@ -17,6 +17,7 @@ export interface IResultProps {
     minimal?: boolean;
     imageSize?: number;
     onClick: () => void;
+    withFavorite: boolean;
 }
 
 const useStyles = makeStyles({
@@ -119,7 +120,7 @@ export function Result(props: IResultProps) {
                                     }
                                 </Typography>
                             </div>
-                            {!props.minimal && (
+                            {props.withFavorite && (
                                 <div className={classes.cardContentTopRight}>
                                     <IconButton
                                         edge="end"
