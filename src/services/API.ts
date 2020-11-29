@@ -334,6 +334,12 @@ export class API {
         return response.result;
     }
 
+
+    static async claimBusiness(businessId: string): Promise<boolean> {
+        const response = await Functions.claimBusiness({ businessId });
+        return response.result;
+    }
+
     static async linkPhone() {
         await Auth.linkPhone();
     }
