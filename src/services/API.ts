@@ -326,4 +326,8 @@ export class API {
         const response = await Functions.deleteMyReview({ reviewId });
         return response.result;
     }
+
+    static async linkPhone() {
+        await Auth.linkPhone();
+    }
 }

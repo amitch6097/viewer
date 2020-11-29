@@ -15,11 +15,11 @@ export interface IBusinessContextProvider {
 }
 
 export function BusinessContextProvider(props: IBusinessContextProvider) {
-    const [businessId, setBusinessId] = React.useState(undefined);
-    const business = useBusiness(businessId);
+    const [businessIdState, setBusinessId] = React.useState(undefined);
+    const business = useBusiness(businessIdState);
 
     function fetchBusinessId(businessId: string) {
-        if (businessId !== businessId) {
+        if (businessIdState !== businessId) {
             setBusinessId(businessId)
         }
     }

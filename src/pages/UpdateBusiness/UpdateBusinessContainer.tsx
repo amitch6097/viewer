@@ -26,6 +26,6 @@ export function UpdateBusinessContainer(props: IUpdateBusinessContainerProps) {
         history.push(`/business/${props.businessId}`)
     }
 
-    return <UpdateBusinessView businessName={business.name} onSubmit={onSubmit}/>
+    return <UpdateBusinessView businessName={business?.name} onSubmit={onSubmit}/>
 
 }

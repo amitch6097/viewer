@@ -16,6 +16,7 @@ import { MyFavorites } from './pages/MyFavorites';
 import { SignUp } from './pages/SignUp';
 import { UpdateBusiness } from './pages/UpdateBusiness';
 import { MyReviews } from './pages/MyReviews';
+import { ClaimBusiness } from './pages/ClaimBusiness';
 import './styles.less';
 
 function App() {
@@ -31,8 +32,13 @@ function App() {
                     <Route exact path="/business/:id" component={Business} />
                     <Route
                         exact
-                        path="/business/:businessId/update"
+                        path="/business/:businessId/edit"
                         component={UpdateBusiness}
+                    />
+                    <Route
+                        exact
+                        path="/business/:businessId/claim"
+                        component={ClaimBusiness}
                     />
                     <Route
                         exact
