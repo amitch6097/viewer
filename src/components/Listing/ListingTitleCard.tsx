@@ -13,7 +13,9 @@ import CreateIcon from '@material-ui/icons/Create';
 import GradeIcon from '@material-ui/icons/Grade';
 import HelpIcon from '@material-ui/icons/Help';
 import DoneIcon from '@material-ui/icons/Done';
+import FeedbackIcon from '@material-ui/icons/Feedback';
 import ShareIcon from '@material-ui/icons/Share';
+
 import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { strings } from '../../strings';
@@ -26,6 +28,7 @@ export interface IListingTitleCardProps {
     isFavorited?: boolean;
     onChangeAbout?: (about: string) => void;
     onToggleFavorite?: () => void;
+    onFlagBusiness?: () => void;
     isEditMode?: boolean;
 }
 
@@ -75,7 +78,7 @@ const useStyles = (props) =>
             typographyWithIcon: {
                 alignItems: 'center',
                 display: 'flex',
-                margin: '0px'
+                margin: '0px',
             },
         })
     );
@@ -110,6 +113,32 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
         );
     }
 
+    function Flag() {
+        return disabled ? (
+            <IconButton
+                disabled={disabled}
+                color="secondary"
+                aria-label="flag business"
+                component="span"
+                onClick={props.onFlagBusiness}
+            >
+                <FeedbackIcon />
+            </IconButton>
+        ) : (
+            <Link href={`#/business/${props.id}/new-flag`}>
+                <IconButton
+                    disabled={disabled}
+                    color="secondary"
+                    aria-label="flag business"
+                    component="span"
+                    onClick={props.onFlagBusiness}
+                >
+                    <FeedbackIcon />
+                </IconButton>
+            </Link>
+        );
+    }
+
     return (
         <Card raised={false} className={classes.cardRoot}>
             <Grid container className={classes.root} direction="row">
@@ -131,11 +160,7 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
                             {props.business.name}
                         </Typography>
 
-                        <Grid
-                            container
-                            direction="row"
-                            alignItems="center"
-                        >
+                        <Grid container direction="row" alignItems="center">
                             <Typography
                                 variant="subtitle1"
                                 color="textSecondary"
@@ -212,6 +237,7 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
                                         : 'Favorite'}
                                 </Hidden>
                             </Button>
+                            <Flag />
                         </Hidden>
                         <Hidden mdUp>
                             <Grid className={classes.iconButtons}>
@@ -234,6 +260,7 @@ export function ListingTitleCard(props: IListingTitleCardProps) {
                                         selected={props.isFavorited}
                                     />
                                 </IconButton>
+                                <Flag />
                             </Grid>
                         </Hidden>
                     </div>
