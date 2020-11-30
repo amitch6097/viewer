@@ -26,25 +26,6 @@ export class Auth {
         return Boolean(firebase.auth().currentUser);
     }
 
-    static async linkPhone() {
-        const phoneProvider = new firebase.auth.PhoneAuthProvider();
-        firebase
-            .auth()
-            .currentUser.linkWithPopup(phoneProvider)
-            .then(function (result) {
-                console.warn(result);
-                // Accounts successfully linked.
-                var credential = result.credential;
-                var user = result.user;
-                // ...
-            })
-            .catch(function (error) {
-                console.warn(error);
-                // Handle Errors here.
-                // ...
-            });
-    }
-
     static async signInWithGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.addScope('profile');

@@ -1,4 +1,8 @@
-import { IReviewDocument, IUserDocument } from '../../typings/documents';
+import {
+    IFlagDocument,
+    IReviewDocument,
+    IUserDocument,
+} from '../../typings/documents';
 import { IReview } from '../../typings/types';
 import { IBusinessDocument } from '../../typings/documents';
 import firebase from '../firebase';
@@ -180,6 +184,34 @@ export class Firestore {
             lastId,
         };
     }
+
+    static async getFlagsForBusiness(
+        businessId: string
+    ): Promise<Array<IFlagDocument>> {
+        const business = await firestore
+            .collection('business')
+            .doc(businessId)
+            .get();
+        const flagIds = business.data().flags;
+        if (flagIds) {
+            const flags = await Promise.all(
+                flagIds.map((id: string) => {
+                    return new Promise(async (resolve) => {
+                        const doc = await firestore
+                            .collection('flag')
+                            .doc(id)
+                            .get();
+                        resolve({
+                            id,
+                            ...(doc.data())
+                        });
+                    });
+                })
+            );
+            return flags as Array<IFlagDocument>;
+        }
+        return [];
+    }
 }
 
 async function getReviewFromDoc(
@@ -202,7 +234,7 @@ async function getReviewFromDoc(
     const user = await Firestore.getUser(data.createdBy);
     const review: IReview = {
         ...(data as IReviewDocument),
-        user: new User(user)
+        user: new User(user),
     };
     return review;
 }
