@@ -1,4 +1,4 @@
-import { generateGUID } from 'src/helpers';
+import { generateGUID } from '../helpers';
 import { IBusinessDocument } from '../../typings/documents';
 import { IBusinessListing } from '../../typings/types';
 
