@@ -96,7 +96,7 @@ export function Result(props: IResultProps) {
                         className={classes.cardMedia}
                         image={
                             props.business?.image?.url ??
-                            'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg'
+                            'https://cdn.pixabay.com/photo/2018/11/13/21/43/instagram-3814055__340.png'
                         }
                         title={props.business.name}
                     />
