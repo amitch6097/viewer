@@ -11,14 +11,30 @@ import { strings } from '../../strings';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Grid, Box, IconButton } from '@material-ui/core';
 import { FavoriteIcon } from '../Favorites';
+import { Feedback, Update } from '@material-ui/icons';
 
+const ACTION_ICON_MAP = {
+    favorite: FavoriteIcon,
+    flags: Feedback,
+    updateRequests: Update,
+};
+
+function ActionIcon(props) {
+    const Icon = ACTION_ICON_MAP[props.action];
+    return <Icon selected={props.selected} />;
+}
+export interface ResultActions {
+    favorite: boolean;
+    flags: boolean;
+    updateRequests: boolean;
+}
 export interface IResultProps {
     business: IBusinessListing;
     minimal?: boolean;
     imageSize?: number;
     onClick: () => void;
-    withFavorite: boolean;
-    onClickFavorite?: () => void;
+    actions?: Partial<ResultActions>;
+    onClickAction?: (action: keyof ResultActions) => void;
 }
 
 const useStyles = makeStyles({
@@ -47,7 +63,9 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         flex: 1,
         height: (props: IResultProps) =>
-        props.minimal ? 'calc(var(--card-minimal-height) - 32px)' : 'calc(var(--card-height) - 32px)',
+            props.minimal
+                ? 'calc(var(--card-minimal-height) - 32px)'
+                : 'calc(var(--card-height) - 32px)',
         justifyContent: 'space-between',
     },
     cardContentTop: {
@@ -84,6 +102,7 @@ const useStyles = makeStyles({
 
 export function Result(props: IResultProps) {
     const classes = useStyles(props);
+    const { actions = {} } = props;
 
     return (
         <div className={classes.root}>
@@ -121,23 +140,34 @@ export function Result(props: IResultProps) {
                                     }
                                 </Typography>
                             </div>
-                            {props.withFavorite && (
-                                <div className={classes.cardContentTopRight}>
-                                    <IconButton
-                                        edge="end"
-                                        aria-label="toggle favorite"
-                                        onClick={(event) => {
-                                            event.preventDefault();
-                                            event.stopPropagation();
-                                            if (props.onClickFavorite) {
-                                                props.onClickFavorite();
+                            <div className={classes.cardContentTopRight}>
+                                {Object.keys(actions).map((key) => {
+                                    return (
+                                        <IconButton
+                                            key={key}
+                                            edge="end"
+                                            aria-label={
+                                                strings.result.actions[key]
+                                                    .label
                                             }
-                                        }}
-                                    >
-                                        <FavoriteIcon selected={false} />
-                                    </IconButton>
-                                </div>
-                            )}
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                                event.stopPropagation();
+                                                if (props.onClickAction) {
+                                                    props.onClickAction(
+                                                        key as keyof ResultActions
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <ActionIcon
+                                                action={key}
+                                                selected={actions[key]}
+                                            />
+                                        </IconButton>
+                                    );
+                                })}
+                            </div>
                         </div>
                         {!props.minimal && (
                             <div className={classes.cardContentBottom}>

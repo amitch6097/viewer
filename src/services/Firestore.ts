@@ -192,7 +192,8 @@ export class Firestore {
             .collection('business')
             .doc(businessId)
             .get();
-        const flagIds = business.data().flags;
+        const businessData = business.data();
+        const flagIds = businessData.flags;
         if (flagIds) {
             const flags = await Promise.all(
                 flagIds.map((id: string) => {

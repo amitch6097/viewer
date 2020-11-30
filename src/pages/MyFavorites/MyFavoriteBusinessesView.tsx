@@ -73,7 +73,6 @@ export function MyFavoriteBusinessesView(
                 <Divider className={classes.divider} />{' '}
                 <Results
                     businesses={props.businesses}
-                    withFavorite={false}
                     onClick={props.onClickBusiness}
                 />
             </Grid>
