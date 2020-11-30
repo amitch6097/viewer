@@ -9,6 +9,10 @@ export class Auth {
         firebase.auth().onAuthStateChanged(fn);
     }
 
+    static async isPhoneNumberAlreadyCredential(phoneNumber) {
+        return firebase.auth().getUserByPhoneNumber(phoneNumber)
+    }
+
     static async signOut() {
         try {
             await firebase.auth().signOut();

@@ -28,6 +28,10 @@ export class Business implements IBusinessListing {
         return this.data.data.phone;
     }
 
+    get phoneMask() {
+        return this.data.data.phone;
+    }
+
     get email() {
         return this.data.data.email;
     }

@@ -12,14 +12,20 @@ export interface IClaimBusinessContainerProps {
 
 interface IClaimBusinessContainerState {
     canClaimWithEmail: boolean;
+    canClaimWithPhone: boolean;
     phoneCodeClosure?: (code: string) => Promise<boolean>;
     usePhoneButtonId: string;
     error?: string;
 }
 
-async function canUserClaimWithEmail(websiteRoot: string) {
+async function canUserClaimWithEmail(websiteRoot: string): Promise<boolean> {
     const user = await API.getMyUser();
     return Boolean(websiteRoot && user?.email?.indexOf(websiteRoot) > 0);
+}
+
+async function canUserClaimWithPhone(phoneNumber: string): Promise<boolean> {
+    const canClaimWithPhone = await API.getUserWithPhoneNumberExists(phoneNumber);
+    return canClaimWithPhone;
 }
 
 export class ClaimBusinessContainer extends React.Component<IClaimBusinessContainerProps, IClaimBusinessContainerState> {
@@ -29,6 +35,7 @@ export class ClaimBusinessContainer extends React.Component<IClaimBusinessContai
 
         this.state = {
             canClaimWithEmail: false,
+            canClaimWithPhone: false,
             phoneCodeClosure: undefined,
             usePhoneButtonId: 'use-phone-button',
             error: undefined
@@ -36,6 +43,7 @@ export class ClaimBusinessContainer extends React.Component<IClaimBusinessContai
 
         if (props.business){
             canUserClaimWithEmail(props.business.websiteRoot).then(this.setCanClaimWithEmail);
+            canUserClaimWithPhone(props.business.phone).then(this.setCanClaimWithPhone);
         }
     }
 
@@ -48,6 +56,12 @@ export class ClaimBusinessContainer extends React.Component<IClaimBusinessContai
     setCanClaimWithEmail = (canClaimWithEmail: boolean) => {
         this.setState({
             canClaimWithEmail
+        });
+    }
+
+    setCanClaimWithPhone = (canClaimWithPhone: boolean) => {
+        this.setState({
+            canClaimWithPhone
         });
     }
 
@@ -72,8 +86,7 @@ export class ClaimBusinessContainer extends React.Component<IClaimBusinessContai
                 },
             }
         );
-        const phoneNumber = '+12488604199';
-        const response = await API.linkPhoneNumber(phoneNumber);
+        const response = await API.linkPhoneNumber('+1' + this.props.business.phone);
         if(response) {
             this.setState({
                 phoneCodeClosure: response
@@ -107,6 +120,7 @@ export class ClaimBusinessContainer extends React.Component<IClaimBusinessContai
                 onClickClaimWithPhone={this.onClickClaimWithPhone}
                 onSubmitPhoneNumberCode={this.onSubmitPhoneNumberCode}
                 canClaimWithEmail={this.state.canClaimWithEmail}
+                canClaimWithPhone={this.state.canClaimWithPhone}
                 onClickClaimWithEmail={this.onClickClaimWithEmail}
             />
         );
