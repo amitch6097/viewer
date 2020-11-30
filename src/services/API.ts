@@ -28,6 +28,10 @@ import { Firestore } from './Firestore';
 import { Functions } from './Functions';
 
 export class API {
+    static async getUserWithPhoneNumberExists(phoneNumber: string) {
+        return await Functions.getUserWithPhoneNumberExists({ phoneNumber });
+    }
+
     static subscribeOnAuthChange(fn: () => void) {
         Auth.subscribeOnAuthChange(async () => {
             fn();
