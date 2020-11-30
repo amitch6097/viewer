@@ -2,20 +2,20 @@ import React from 'react';
 import { IFlagDocument } from 'typings/documents';
 import { Business } from '../../lib/Business';
 import { API } from '../../services';
-import { BusinessFlagView } from './BusinessFlagView';
+import { CreateBusinessFlagView } from './CreateBusinessFlagView';
 
-export interface IBusinessFlagContainerProps {
+export interface ICreateBusinessFlagContainerProps {
     id: string;
     goToBusiness?: () => void;
 }
 
-export interface IBusinessFlagContainerState {
+export interface ICreateBusinessFlagContainerState {
     business: Business;
 }
 
-export class BusinessFlagContainer extends React.Component<
-    IBusinessFlagContainerProps,
-    {}
+export class CreateBusinessFlagContainer extends React.Component<
+    ICreateBusinessFlagContainerProps,
+    ICreateBusinessFlagContainerState
 > {
     state = {
         business: undefined,
@@ -49,7 +49,7 @@ export class BusinessFlagContainer extends React.Component<
 
     render() {
         return this.state.business ? (
-            <BusinessFlagView
+            <CreateBusinessFlagView
                 onSubmit={this.handleSubmit}
                 businessName={this.state.business.name}
                 businessId={this.props.id}

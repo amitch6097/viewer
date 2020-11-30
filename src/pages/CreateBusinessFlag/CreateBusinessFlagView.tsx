@@ -16,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export interface IBusinessFlagViewProps {
+export interface ICreateBusinessFlagViewProps {
     onSubmit: (flag: { type: IFlagDocument['type']; text: string }) => void;
     businessName: string;
     businessId: string;
 }
 
-export function BusinessFlagView(props: IBusinessFlagViewProps) {
+export function CreateBusinessFlagView(props: ICreateBusinessFlagViewProps) {
     const classes = useStyles(props);
     return (
         <Container className={classes.root}>
