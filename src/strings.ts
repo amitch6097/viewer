@@ -34,7 +34,8 @@ export const strings = {
 
     createReview: {
         submitText: 'Submit Review',
-        placeholder: "Always my go to place when I have guests in town! Love trying their wide variety ..."
+        placeholder:
+            'Always my go to place when I have guests in town! Love trying their wide variety ...',
     },
 
     filters: {
@@ -111,5 +112,23 @@ export const strings = {
     signUp: {
         signUp: 'Sign Up',
         signIn: 'Already have an account? Sign in',
+    },
+
+    flag: {
+        selectLabel: 'Select a Flag Type',
+        submitButton: 'Submit Flag',
+        textPlaceholder:
+            'Please provide more info about why you are submitting this flag',
+        error: {
+            noText:
+                'Please Provide an explanation of the reason you are submitting this flag (50 character min)',
+            noType: 'Please Provide a type for the flag you are creating',
+        },
+        types: {
+            data: 'Data Issue',
+            inappropriate: 'Inappropriate Content',
+            closed: 'This business is Closed',
+            owner: 'This business in wrongfully claimed',
+        },
     },
 };
