@@ -73,7 +73,6 @@ const CATEGORIES = getCategories();
 export function InfoStep(props: IInfoStepProps) {
     const classes = useStyles();
     const addressRequired = props.webBusiness ? false : !props.notRequired;
-    const websiteRequired = props.webBusiness ? true : !props.notRequired;
 
     const {onSubmit, state, updateValue} = useForm({
         category: {
@@ -104,7 +103,7 @@ export function InfoStep(props: IInfoStepProps) {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.website,
-            required: websiteRequired,
+            required: !props.notRequired,
         },
         image: {
             value: undefined,
