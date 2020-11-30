@@ -16,6 +16,7 @@ export interface IInfoStepProps {
     onNextStep: (state: IInfoStepState) => void;
     withImage?: boolean;
     notRequired?: boolean;
+    webBusiness?: boolean;
 }
 
 export interface IInfoStepState {
@@ -71,6 +72,9 @@ const CATEGORIES = getCategories();
 
 export function InfoStep(props: IInfoStepProps) {
     const classes = useStyles();
+    const addressRequired = props.webBusiness ? false : !props.notRequired;
+    const websiteRequired = props.webBusiness ? true : !props.notRequired;
+
     const {onSubmit, state, updateValue} = useForm({
         category: {
             value: undefined,
@@ -94,13 +98,13 @@ export function InfoStep(props: IInfoStepProps) {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.address,
-            required: !props.notRequired,
+            required: addressRequired
         },
         website: {
             value: undefined,
             error: undefined,
             label: strings.create.info.labels.website,
-            required: !props.notRequired,
+            required: websiteRequired,
         },
         image: {
             value: undefined,
@@ -148,14 +152,14 @@ export function InfoStep(props: IInfoStepProps) {
                         name="email"
                         inputComponent={EmailMask}
                     />
-                    <LocationAutocomplete
+                    {!props.webBusiness && <LocationAutocomplete
                         {...state['address']}
                         className={classes.input}
                         onClickSuggestion={(value) =>
                             updateValue('address', value.suggestion)
                         }
                         useTextField={true}
-                    />
+                    />}
                     <TextField
                         {...state['website']}
                         className={classes.input}

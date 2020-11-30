@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Container, Grid, Typography } from '@material-ui/core';
-import { MyReview } from 'src/components/Review';
+import { MyReview } from '../../components/Review';
 import { IReview, IReviews } from 'typings/types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 

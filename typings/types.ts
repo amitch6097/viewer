@@ -13,8 +13,8 @@ export interface IUser {
     name: string;
     email: string;
     hasBusinesses?: boolean;
-    createdAt: number;
-    image: string;
+    createdAt?: number;
+    image?: string;
 }
 
 export interface IReview {

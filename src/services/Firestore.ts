@@ -2,7 +2,7 @@ import { IReviewDocument, IUserDocument } from '../../typings/documents';
 import { IReview } from '../../typings/types';
 import { IBusinessDocument } from '../../typings/documents';
 import firebase from '../firebase';
-import { User } from 'src/lib/User';
+import { User } from '../lib/User';
 
 const firestore = firebase.firestore();
 

@@ -1,5 +1,5 @@
-import { localURLtoBlob } from 'src/helpers';
-import { Reviews } from 'src/lib/Reviews';
+import { localURLtoBlob } from '../helpers';
+import { Reviews } from '../lib/Reviews';
 import {
     IBusinessDocument,
     IBusinessUpdateRequestDocument,

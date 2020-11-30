@@ -18,6 +18,7 @@ export interface IBusinessAutocompleteProps {
     hits: any;
     disable?: boolean;
     value?: string;
+    placeholder?: string;
 }
 
 export class BusinessAutocompleteView extends Component<
@@ -72,6 +73,7 @@ export class BusinessAutocompleteView extends Component<
                             {...params}
                             variant="outlined"
                             value={this.props.value}
+                            placeholder={this.props.placeholder}
                         />
                     )}
                 />

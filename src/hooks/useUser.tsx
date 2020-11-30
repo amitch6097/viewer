@@ -1,6 +1,6 @@
 import React from 'react';
 import * as firebase from 'firebase';
-import { API } from 'src/services';
+import { API } from '../services';
 import { IUser } from 'typings/types';
 
 export function useUser(): IUser | undefined {

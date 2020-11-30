@@ -3,7 +3,7 @@ import { CheckExistsContainer } from './CheckExistsContainer';
 
 export interface ICheckExistsProps {
     onClickResult: (id: string) => void;
-    onClickContinue: (name: string) => void;
+    onClickContinue: (args: {name: string, webBusiness: boolean}) => void;
 }
 export class CheckExists extends React.Component<ICheckExistsProps> {
     render() {
