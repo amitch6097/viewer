@@ -15,6 +15,7 @@ export interface IResultsProps {
     };
     minimal?: boolean;
     withFavorite: boolean;
+    onClickFavorite?: (businessId: string) => void;
 }
 
 const useStyles = makeStyles({
@@ -52,6 +53,7 @@ export function Results(props: IResultsProps) {
                                 onClick={() => props.onClick(key)}
                                 business={business}
                                 withFavorite={props.withFavorite}
+                                onClickFavorite={() => props.onClickFavorite(key)}
                             />{' '}
                         </Grid>
                     );

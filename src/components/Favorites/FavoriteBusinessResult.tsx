@@ -5,13 +5,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { IBusiness } from '../../../typings/base';
-// import Rating from '@material-ui/lab/Rating';
+import { IBusinessListing } from '../../../typings/types';
 import { Grid } from '@material-ui/core';
 import { Rating } from '../Rating/Rating';
 
 export interface IFavoriteBusinessResultProps {
-    business: IBusiness;
+    business: IBusinessListing;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,7 +39,7 @@ export function FavoriteBusinessResult(props: IFavoriteBusinessResultProps) {
             <CardMedia
                 className={classes.cardMedia}
                 image={
-                    props.business.imageURL ??
+                    props.business?.image?.url ??
                     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg'
                 }
                 title=""
@@ -50,7 +49,7 @@ export function FavoriteBusinessResult(props: IFavoriteBusinessResultProps) {
                     {props.business.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                    {props.business.locationLabel}
+                    {props.business?.address?.name || props.business?.website || ''}
                 </Typography>
                 <Grid
                     container
@@ -59,8 +58,8 @@ export function FavoriteBusinessResult(props: IFavoriteBusinessResultProps) {
                     alignItems="flex-start"
                 >
                     <Rating
-                        average={props.business.reviewsAverage}
-                        reviewCount={props.business.reviewsLength}
+                        average={props.business.averageReview}
+                        reviewCount={props.business.reviewCount}
                     />
                 </Grid>
             </CardContent>

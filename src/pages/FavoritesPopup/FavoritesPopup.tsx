@@ -82,32 +82,26 @@ export class FavoritesPopup extends React.Component<
     render() {
         return (
             <Container className="BPB">
-                <ClickAwayListener onClickAway={this.props.onClose}>
-                    <Popup
-                        label={'My Pop Up'}
-                        actionRight="Save"
-                        onActionRight={this.handleSave}
-                    >
-                        {!this.state.idle ? (
-                            <Favorite
-                                business={{
-                                    name: 'Hungry Howies',
-                                    locationLabel: 'hungryhowies.com',
-                                    reviewsLength: 22,
-                                    reviewsAverage: 4.25,
-                                    imageURL:
-                                        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg',
-                                }}
-                                favoriteGroups={this.state.favoriteGroups.getInOrder()}
-                                onSaveGroup={this.handleSaveGroup}
-                                selected={this.state.selected}
-                                onClickFavoriteGroup={this.handleClickFavoriteGroup}
-                            />
-                        ) : (
-                            <CircularProgress />
-                        )}
-                    </Popup>
-                </ClickAwayListener>
+                <Popup
+                    label={'Favorite Groups'}
+                    actionRight="Save"
+                    actionLeft="Cancel"
+                    onActionLeft={this.props.onClose}
+                    onActionRight={this.handleSave}
+                    onClose={this.props.onClose}
+                >
+                    {!this.state.idle ? (
+                        <Favorite
+                            business={this.props.business}
+                            favoriteGroups={this.state.favoriteGroups.getInOrder()}
+                            onSaveGroup={this.handleSaveGroup}
+                            selected={this.state.selected}
+                            onClickFavoriteGroup={this.handleClickFavoriteGroup}
+                        />
+                    ) : (
+                        <CircularProgress />
+                    )}
+                </Popup>
             </Container>
 
         );

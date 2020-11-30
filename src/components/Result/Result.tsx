@@ -18,6 +18,7 @@ export interface IResultProps {
     imageSize?: number;
     onClick: () => void;
     withFavorite: boolean;
+    onClickFavorite?: () => void;
 }
 
 const useStyles = makeStyles({
@@ -125,7 +126,13 @@ export function Result(props: IResultProps) {
                                     <IconButton
                                         edge="end"
                                         aria-label="toggle favorite"
-                                        onClick={console.log}
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                            if (props.onClickFavorite) {
+                                                props.onClickFavorite();
+                                            }
+                                        }}
                                     >
                                         <FavoriteIcon selected={false} />
                                     </IconButton>

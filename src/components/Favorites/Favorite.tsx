@@ -1,23 +1,28 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-
-import { FavoriteGroupsList } from './FavoriteGroupsList';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+import { IFavoriteGroup } from 'typings/base';
+import { IBusinessListing } from 'typings/types';
 import { FavoriteAddGroup } from './FavoriteAddGroup';
 import { FavoriteBusinessResult } from './FavoriteBusinessResult';
-import { IBusiness, IFavoriteGroup } from 'typings/base';
+import { FavoriteGroupsList } from './FavoriteGroupsList';
+
 
 export interface IFavoriteProps {
     onSaveGroup: (text: string) => void;
-    business: IBusiness;
+    business: IBusinessListing;
     favoriteGroups: IFavoriteGroup[];
     selected: Record<string, boolean>;
     onClickFavoriteGroup: (groupId: string) => void;
 }
 
 const useStyles = makeStyles({
-    root: {},
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden'
+    },
 });
 
 export function Favorite(props: IFavoriteProps) {
