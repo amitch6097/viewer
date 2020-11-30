@@ -18,7 +18,7 @@ import { UpdateBusiness } from './pages/UpdateBusiness';
 import { MyReviews } from './pages/MyReviews';
 import { ClaimBusiness } from './pages/ClaimBusiness';
 import './styles.less';
-import { BusinessFlag } from './pages/BusinessFlag';
+import { CreateBusinessFlag } from './pages/CreateBusinessFlag';
 
 function App() {
     return (
@@ -49,7 +49,7 @@ function App() {
                     <Route
                         exact
                         path="/business/:id/new-flag"
-                        component={BusinessFlag}
+                        component={CreateBusinessFlag}
                     />
                     <Route path="/discover" component={Discover} />
                     <Route

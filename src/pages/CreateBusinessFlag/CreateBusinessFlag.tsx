@@ -1,9 +1,9 @@
 import React from 'react';
-import { BusinessFlagContainer } from './BusinessFlagContainer';
+import { CreateBusinessFlagContainer } from './CreateBusinessFlagContainer';
 import { Container } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
-export function BusinessFlag(props) {
+export function CreateBusinessFlag(props) {
     const history = useHistory();
 
     async function goToBusiness() {
@@ -12,7 +12,7 @@ export function BusinessFlag(props) {
 
     return (
         <Container>
-            <BusinessFlagContainer
+            <CreateBusinessFlagContainer
                 id={props.match.params.id}
                 goToBusiness={goToBusiness}
             />
