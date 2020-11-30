@@ -66,7 +66,10 @@ const useStyles = makeStyles({
     results: {
         // width: 'calc(100% - 300px)',
         width: '100%',
-        margin: '20px',
+        padding: '20px',
+        minHeight: 'var(--page-height)',
+        display: 'flex',
+        flexDirection: 'column'
     },
 });
 

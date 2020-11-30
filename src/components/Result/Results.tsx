@@ -20,6 +20,7 @@ export interface IResultsProps {
 const useStyles = makeStyles({
     root: (props: IResultsProps) => {
         return {
+            flex: 1,
             ...(props?.styles?.root || {}),
         };
     },
@@ -38,7 +39,6 @@ export function Results(props: IResultsProps) {
             container
             spacing={(props.spacing as GridSpacing) || 2}
             direction="column"
-            justify="center"
             alignItems="center"
             className={classes.root}
         >
