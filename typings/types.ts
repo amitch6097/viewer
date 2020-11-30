@@ -79,6 +79,7 @@ export interface IBusinessListing {
     averageReview?: number;
     reviewCount?: number;
     hasAbout?: boolean;
+    websiteRoot?: string;
 }
 
 export interface IBusinessListingUpdateProperties {

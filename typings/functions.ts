@@ -144,3 +144,11 @@ export interface IClaimBusinessProps {
 export interface IClaimBusinessResponse {
     result: boolean;
 }
+
+
+export interface IGetUserWithPhoneNumberExistsProps {
+    phoneNumber: string;
+}
+export interface IGetUserWithPhoneNumberExistsResponse {
+    result: boolean;
+}

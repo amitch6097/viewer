@@ -34,6 +34,14 @@ export class API {
         });
     }
 
+    static getCurrentUser() {
+        return Auth.currentUser();
+    }
+
+    static async linkPhoneNumber(number: string) {
+        return await Auth.linkPhoneNumber(number);
+    }
+
     static async getMyUser() {
         const id = Auth.getCurrentUserId();
         if (id) {
@@ -46,7 +54,9 @@ export class API {
     static async canClaimBusiness(businessId: string): Promise<boolean> {
         const user = await API.getMyUser();
         const business = await API.getBusiness(businessId);
-        const hasBusinessEmail = Boolean(user.email && user.email.indexOf(business.website) !== -1)
+        const hasBusinessEmail = Boolean(
+            user.email && user.email.indexOf(business.website) !== -1
+        );
         return hasBusinessEmail;
     }
 
@@ -244,7 +254,7 @@ export class API {
             favoriteGroupId,
         });
         return response.businesses.reduce((businesses, data) => {
-            businesses[data.id]  = new Business(data)
+            businesses[data.id] = new Business(data);
             return businesses;
         }, {});
     }
@@ -324,7 +334,7 @@ export class API {
         const response = await Functions.getMyBusinesses(args);
         const businesses: IBusinessDocument[] = response.result;
         return businesses.reduce((businesses, data) => {
-            businesses[data.id]  = new Business(data)
+            businesses[data.id] = new Business(data);
             return businesses;
         }, {});
     }
@@ -339,7 +349,6 @@ export class API {
         const response = await Functions.deleteMyReview({ reviewId });
         return response.result;
     }
-
 
     static async claimBusiness(businessId: string): Promise<boolean> {
         const response = await Functions.claimBusiness({ businessId });
