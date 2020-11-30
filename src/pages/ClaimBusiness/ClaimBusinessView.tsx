@@ -11,7 +11,10 @@ export interface IClaimBusinessViewProps {
     onClickClaimWithPhone: () => void;
     onSubmitPhoneNumberCode: (code: string) => void;
     canClaimWithEmail: boolean;
+<<<<<<< HEAD
     canClaimWithPhone: boolean;
+=======
+>>>>>>> master
     readyForPhoneCode: boolean;
     usePhoneButtonId: string;
     error: string;
@@ -49,6 +52,7 @@ export function ClaimBusinessView(props: IClaimBusinessViewProps) {
             <Typography variant="h4" gutterBottom>
                 {`Claim "${props.business?.name}"`}
             </Typography>
+<<<<<<< HEAD
             <Typography variant="body2">
                 To Claim a business you first need to have access to test
                 messages on the business phone number this business is
@@ -115,6 +119,49 @@ export function ClaimBusinessView(props: IClaimBusinessViewProps) {
                             )}
                         </Grid>
                         <Grid item className={classes.claimOption}>
+=======
+            {props.business ? (
+                <form>
+                    <Typography variant="subtitle1">
+                        Claim with Phone Number
+                    </Typography>
+                    <Typography variant="body2">
+                        Using this method you will recieve a text message with a
+                        code at the business phone number associated with this
+                        business.
+                    </Typography>
+                    <Grid container direction="row">
+                        <Typography variant="subtitle1">
+                            {props.business.phone}
+                        </Typography>
+                        {props.readyForPhoneCode && (
+                            <input
+                                value={code}
+                                onChange={(e) => setCode(e.target.value)}
+                            />
+                        )}
+                        <button
+                            id={props.usePhoneButtonId}
+                            onClick={
+                                props.readyForPhoneCode
+                                    ? handleSubmitPhoneNumberCode
+                                    : props.onClickClaimWithPhone
+                            }
+                        >
+                            {props.readyForPhoneCode ? 'Submit' : 'Send Code'}
+                        </button>
+                        {
+                            props.error && (
+                                <Typography variant="body2">
+                                    {props.error}
+                                </Typography>
+                            )
+                        }
+                    </Grid>
+                    {props.canClaimWithEmail && (
+                        <>
+                            <Divider />
+>>>>>>> master
                             <Typography variant="subtitle1">
                                 Claim with Email
                             </Typography>
@@ -124,6 +171,7 @@ export function ClaimBusinessView(props: IClaimBusinessViewProps) {
                                 email address has the business domain associated
                                 with it.
                             </Typography>
+<<<<<<< HEAD
                             <Button
                                 color="primary"
                                 onClick={props.onClickClaimWithEmail}
@@ -145,6 +193,13 @@ export function ClaimBusinessView(props: IClaimBusinessViewProps) {
                             )}
                         </Grid>
                     </Grid>
+=======
+                            <Button onClick={props.onClickClaimWithEmail}>
+                                {'Claim With Email'}
+                            </Button>
+                        </>
+                    )}
+>>>>>>> master
                 </form>
             ) : (
                 <LinearProgress />

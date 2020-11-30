@@ -12,6 +12,12 @@ export interface IClaimBusinessContainerProps {
 
 interface IClaimBusinessContainerState {
     canClaimWithEmail: boolean;
+    phoneCodeClosure?: (code: string) => Promise<boolean>;
+    usePhoneButtonId: string;
+    error?: string;
+}
+interface IClaimBusinessContainerState {
+    canClaimWithEmail: boolean;
     canClaimWithPhone: boolean;
     phoneCodeClosure?: (code: string) => Promise<boolean>;
     usePhoneButtonId: string;
@@ -27,6 +33,7 @@ async function canUserClaimWithPhone(phoneNumber: string): Promise<boolean> {
     const canClaimWithPhone = await API.getUserWithPhoneNumberExists(phoneNumber);
     return canClaimWithPhone;
 }
+
 
 export class ClaimBusinessContainer extends React.Component<IClaimBusinessContainerProps, IClaimBusinessContainerState> {
 
@@ -87,6 +94,7 @@ export class ClaimBusinessContainer extends React.Component<IClaimBusinessContai
             }
         );
         const response = await API.linkPhoneNumber('+1' + this.props.business.phone);
+
         if(response) {
             this.setState({
                 phoneCodeClosure: response
