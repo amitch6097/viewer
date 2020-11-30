@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'row',
             boxShadow: 'none',
+            overflow: 'unset'
         },
         cardMedia: {
             height: '100px',

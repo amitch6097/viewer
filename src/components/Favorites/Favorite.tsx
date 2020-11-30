@@ -10,7 +10,7 @@ import { FavoriteGroupsList } from './FavoriteGroupsList';
 
 
 export interface IFavoriteProps {
-    onSaveGroup: (text: string) => void;
+    onSaveGroup: (text: string) => Promise<void>;
     business: IBusinessListing;
     favoriteGroups: IFavoriteGroup[];
     selected: Record<string, boolean>;
