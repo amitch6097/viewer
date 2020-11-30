@@ -19,6 +19,7 @@ import { MyReviews } from './pages/MyReviews';
 import { ClaimBusiness } from './pages/ClaimBusiness';
 import './styles.less';
 import { CreateBusinessFlag } from './pages/CreateBusinessFlag';
+import { BusinessFlags } from './pages/BusinessFlags';
 
 function App() {
     return (
@@ -40,6 +41,11 @@ function App() {
                         exact
                         path="/business/:businessId/claim"
                         component={ClaimBusiness}
+                    />
+                    <Route
+                        exact
+                        path="/business/:id/flags"
+                        component={BusinessFlags}
                     />
                     <Route
                         exact

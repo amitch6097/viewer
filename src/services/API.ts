@@ -364,7 +364,8 @@ export class API {
         return response.result;
     }
 
-    static async linkPhone() {
-        await Auth.linkPhone();
+    static async getFlagsForBusiness(businessId: string) {
+        const flags = await Firestore.getFlagsForBusiness(businessId);
+        return flags.map(flag => new BusinessFlag({document: flag}));
     }
 }
