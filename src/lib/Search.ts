@@ -208,8 +208,10 @@ export class Search {
         // add location
         if (this.data.locationSuggestion) {
             const {lat, lng} = this.data.locationSuggestion;
-            searchAttributes.aroundLatLng = `${lat}, ${lng}`;
-            searchAttributes.aroundRadius = this.data.locationDistance * 1000 ; // 1000 * km = m;
+            if(lat && lng) {
+                searchAttributes.aroundLatLng = `${lat}, ${lng}`;
+                searchAttributes.aroundRadius = this.data.locationDistance * 1000 ; // 1000 * km = m;
+            }
         }
 
         // add tags

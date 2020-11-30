@@ -161,7 +161,7 @@ export class BusinessCollection extends Collection {
         const businessDocument: Omit<IBusinessDocument, 'id'> = {
             data: {
                 ...business,
-                address: {
+                address: business.address ? {
                     name: business.address.name,
                     administrative: business.address.administrative,
                     county: business.address.county,
@@ -172,7 +172,7 @@ export class BusinessCollection extends Collection {
                     latlng: business.address.latlng,
                     postcode: business.address.postcode,
                     value: business.address.value,
-                },
+                } : undefined,
             },
             meta: {
                 createdAt: Number(new Date()),

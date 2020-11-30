@@ -12,7 +12,12 @@ export interface IFavoriteGroupListProps {
 }
 
 const useStyles = makeStyles({
-    root: {},
+    root: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'scroll',
+    },
 });
 
 export function FavoriteGroupsList(props: IFavoriteGroupListProps) {

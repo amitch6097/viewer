@@ -1,5 +1,5 @@
-import { localURLtoBlob } from 'src/helpers';
-import { Reviews } from 'src/lib/Reviews';
+import { localURLtoBlob } from '../helpers';
+import { Reviews } from '../lib/Reviews';
 import {
     IBusinessDocument,
     IBusinessUpdateRequestDocument,
@@ -28,10 +28,22 @@ import { Firestore } from './Firestore';
 import { Functions } from './Functions';
 
 export class API {
+    static async getUserWithPhoneNumberExists(phoneNumber: string) {
+        return await Functions.getUserWithPhoneNumberExists({ phoneNumber });
+    }
+
     static subscribeOnAuthChange(fn: () => void) {
         Auth.subscribeOnAuthChange(async () => {
             fn();
         });
+    }
+
+    static getCurrentUser() {
+        return Auth.currentUser();
+    }
+
+    static async linkPhoneNumber(number: string) {
+        return await Auth.linkPhoneNumber(number);
     }
 
     static async getMyUser() {
@@ -46,7 +58,9 @@ export class API {
     static async canClaimBusiness(businessId: string): Promise<boolean> {
         const user = await API.getMyUser();
         const business = await API.getBusiness(businessId);
-        const hasBusinessEmail = Boolean(user.email && user.email.indexOf(business.website) !== -1)
+        const hasBusinessEmail = Boolean(
+            user.email && user.email.indexOf(business.website) !== -1
+        );
         return hasBusinessEmail;
     }
 
@@ -244,7 +258,7 @@ export class API {
             favoriteGroupId,
         });
         return response.businesses.reduce((businesses, data) => {
-            businesses[data.id]  = new Business(data)
+            businesses[data.id] = new Business(data);
             return businesses;
         }, {});
     }
@@ -324,7 +338,7 @@ export class API {
         const response = await Functions.getMyBusinesses(args);
         const businesses: IBusinessDocument[] = response.result;
         return businesses.reduce((businesses, data) => {
-            businesses[data.id]  = new Business(data)
+            businesses[data.id] = new Business(data);
             return businesses;
         }, {});
     }
@@ -339,7 +353,6 @@ export class API {
         const response = await Functions.deleteMyReview({ reviewId });
         return response.result;
     }
-
 
     static async claimBusiness(businessId: string): Promise<boolean> {
         const response = await Functions.claimBusiness({ businessId });

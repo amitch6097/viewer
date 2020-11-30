@@ -15,21 +15,6 @@ export interface IOwnerBioProps {
 }
 
 export function OwnerBio(props: IOwnerBioProps) {
-    function About() {
-        return props.isEditMode ? (
-            <TextareaAutosize
-                style={{ width: '100%' }}
-                aria-label="About the Owner"
-                placeholder="About the Owner"
-                rowsMin={3}
-                onChange={onChangeValue(props.onChangeAbout)}
-                value={owner.bio}
-            />
-        ) : (
-            <Typography variant="body1">{owner.bio}</Typography>
-        );
-    }
-
     const { owner } = props;
     return (
         <div className="bb-owner-bio">
@@ -57,7 +42,18 @@ export function OwnerBio(props: IOwnerBioProps) {
                     >
                         {owner.position}
                     </Typography>
-                    <About />
+                    {props.isEditMode ? (
+                        <TextareaAutosize
+                            style={{ width: '100%' }}
+                            aria-label="About the Owner"
+                            placeholder="About the Owner"
+                            rowsMin={3}
+                            onChange={onChangeValue(props.onChangeAbout)}
+                            value={owner.bio}
+                        />
+                    ) : (
+                        <Typography variant="body1">{owner.bio}</Typography>
+                    )}
                 </div>
             </div>
         </div>

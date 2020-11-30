@@ -16,21 +16,28 @@ export default {
     decorators: [withKnobs],
 };
 
-export const ListingStory = () => (
-    <Listing
-        isEditMode={boolean('isEditMode', false)}
-        isFavorited={false}
-        onToggleFavorite={console.log}
-        id={'1'}
-        onLoadMoreReviews={console.log}
-        business={BUSINESS_DATA}
-        reviews={{
-            businessId: '1',
-            reviews: REVIEWS_DATA,
-            count: 3,
-        }}
-    />
-);
+export const ListingStory = () => {
+    const [about, setAbout] = React.useState('');
+    return (
+        <Listing
+            isEditMode={boolean('isEditMode', false)}
+            isFavorited={false}
+            onToggleFavorite={console.log}
+            id={'1'}
+            onLoadMoreReviews={console.log}
+            business={{
+                ...BUSINESS_DATA,
+                about
+            }}
+            onChangeAbout={setAbout}
+            reviews={{
+                businessId: '1',
+                reviews: REVIEWS_DATA,
+                count: 3,
+            }}
+        />
+    );
+};
 
 export const ListingTitleCardStory = () => (
     <ListingTitleCard id={'1'} business={BUSINESS_DATA} />

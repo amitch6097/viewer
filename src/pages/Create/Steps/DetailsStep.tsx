@@ -81,7 +81,7 @@ export function DetailsStep(props: IDetailsStepProps) {
     const { onSubmit, state, updateValue } = useForm(
         {
             owners: {
-                value: Object.values(props.owner),
+                value: props.owner ? Object.values(props.owner) : [],
             },
             about: {
                 value: undefined,
@@ -101,7 +101,7 @@ export function DetailsStep(props: IDetailsStepProps) {
                 className={classes.content}
             >
                 <Listing
-                    id={undefined}
+                    id={props.name}
                     isEditMode={true}
                     isFavorited={false}
                     business={formatBusiness({

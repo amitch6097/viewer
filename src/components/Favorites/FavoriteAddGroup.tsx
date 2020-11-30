@@ -4,13 +4,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Zoom from '@material-ui/core/Zoom';
-import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export interface IFavoriteAddGroupProps {
-    onSave: (text: string) => void;
+    onSave: (text: string) => Promise<void>;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -50,13 +50,21 @@ export function FavoriteAddGroup(props: IFavoriteAddGroupProps) {
     const classes = useStyles();
 
     const [active, setActive] = React.useState(false);
+    const [idle, setIdle] = React.useState(false);
     const [text, setText] = React.useState('');
 
-    function handleSave() {
-        setActive(false);
-        if (props.onSave) {
-            props.onSave(text);
+    useEffect(() => {
+        if (!active) {
+            setIdle(false);
         }
+    }, [active]);
+
+    async function handleSave() {
+        setIdle(true);
+        if (props.onSave) {
+            await props.onSave(text);
+        }
+        setActive(false);
     }
 
     return (
@@ -67,7 +75,9 @@ export function FavoriteAddGroup(props: IFavoriteAddGroupProps) {
         >
             <Zoom in={active}>
                 <div
-                    className={`${classes.item} ${classes.input} ${active ? classes.itemActive : ''}`}
+                    className={`${classes.item} ${classes.input} ${
+                        active ? classes.itemActive : ''
+                    }`}
                 >
                     <Typography variant="h6">Name your Group</Typography>
                     <Typography variant="subtitle1" color="textSecondary">
@@ -84,10 +94,10 @@ export function FavoriteAddGroup(props: IFavoriteAddGroupProps) {
                         <Button
                             variant="contained"
                             color="primary"
-                            disabled={!Boolean(text)}
+                            disabled={!Boolean(text) || idle}
                             onClick={handleSave}
                         >
-                            Save
+                            {idle ? <CircularProgress /> : 'Save'}
                         </Button>
                         <Button
                             className={classes.button}
@@ -101,7 +111,9 @@ export function FavoriteAddGroup(props: IFavoriteAddGroupProps) {
             </Zoom>
             <Zoom in={!active}>
                 <div
-                    className={`${classes.item} ${active ? '' : classes.itemActive}`}
+                    className={`${classes.item} ${
+                        active ? '' : classes.itemActive
+                    }`}
                 >
                     {' '}
                     <ListItem button onClick={() => setActive(true)}>

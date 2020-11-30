@@ -30,11 +30,11 @@ export function Rating(props: IRatingProps) {
             <Rating_M
                 precision={0.25}
                 name="simple-controlled"
-                value={props.average}
+                value={props.average || 0}
                 readOnly
             />
             <Typography component="p" className={classes.ratingCount} color='textSecondary'>
-                {`${props.reviewCount} reviews`}
+                {`${props.reviewCount || 0} reviews`}
             </Typography>
         </div>
     );

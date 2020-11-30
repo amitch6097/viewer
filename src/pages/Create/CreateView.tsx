@@ -22,13 +22,14 @@ export interface ICreateViewProps {
     info: IInfoStepState;
     owner: OwnerStepState;
     identify: IdentifyStepState;
-    onStartCreate: (businessName: string) => void;
+    onStartCreate: (args: { name: string; webBusiness: boolean }) => void;
     onClickResult: (id: string) => void;
     onClickStepLink: (index: number) => (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
     onSetInfo: (state: IInfoStepState) => void;
     onSetOwner: (state: OwnerStepState) => void;
     onSetIdentify: (state: IdentifyStepState) => void;
     onCreateListing: (state: IBusinessListing) => void;
+    webBusiness: boolean;
 }
 
 const useStyles = makeStyles({
@@ -80,6 +81,7 @@ export function CreateView(props: ICreateViewProps) {
                         </Stepper>
                         {props.step === 0 && (
                             <InfoStep
+                                webBusiness={props.webBusiness}
                                 withImage={true}
                                 onNextStep={props.onSetInfo}
                             />

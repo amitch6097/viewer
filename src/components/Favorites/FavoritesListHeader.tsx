@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 const placeholder =
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Florida_Box_Turtle_Digon3_re-edited.jpg/440px-Florida_Box_Turtle_Digon3_re-edited.jpg';
+'https://cdn.pixabay.com/photo/2018/11/13/21/43/instagram-3814055__340.png';
 
 export function FavoritesListHeader(props: IFavoritesListHeaderProps) {
     const classes = useStyles();

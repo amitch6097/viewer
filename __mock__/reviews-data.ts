@@ -1,5 +1,8 @@
-export const REVIEWS_DATA = [
+import { IReview } from "../typings/types";
+
+export const REVIEWS_DATA: IReview[] = [
     {
+        id: '1',
         text: `
     First time here and will be back!
 
@@ -18,6 +21,7 @@ We got there for an early lunch so we had our choice of seats but this place got
         },
     },
     {
+        id: '2',
         text: `
     First time here and will be back!
 
@@ -36,6 +40,7 @@ We got there for an early lunch so we had our choice of seats but this place got
         },
     },
     {
+        id: '3',
         text: `
     First time here and will be back!
 

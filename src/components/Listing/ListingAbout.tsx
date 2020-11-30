@@ -1,10 +1,8 @@
 import Grid from '@material-ui/core/Grid';
-import {
-    makeStyles
-} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { IdentityDisplay } from '../../components/IdentityDisplay';
 import { onChangeValue } from '../../helpers';
@@ -20,8 +18,8 @@ export interface IListingAboutProps {
 const useStyles = makeStyles({
     root: {
         '& textarea': {
-            resize: 'none'
-        }
+            resize: 'none',
+        },
     },
     title: {
         fontWeight: 700,
@@ -34,22 +32,10 @@ const useStyles = makeStyles({
 
 export function ListingAbout(props: IListingAboutProps) {
     const classes = useStyles(props);
-
-    function About() {
-        return props.isEditMode ? (
-            <TextareaAutosize
-                style={{ width: '100%' }}
-                aria-label="about the business"
-                placeholder='About the Business'
-                rowsMin={3}
-                onChange={onChangeValue(props.onChangeAbout)}
-                value={props.business.about}
-            />
-        ) : props.business.about ? (
-            <Typography variant="body1">{props.business.about}</Typography>
-        ) : (<></>);
-    }
-
+    useEffect(() => {
+        console.log('new about');
+    }, []);
+    
     return (
         <Grid
             className={classes.root}
@@ -60,7 +46,20 @@ export function ListingAbout(props: IListingAboutProps) {
             <Typography className={classes.title} variant="h5" gutterBottom>
                 About
             </Typography>
-            <About />
+            {props.isEditMode ? (
+                <TextareaAutosize
+                    style={{ width: '100%' }}
+                    aria-label="about the business"
+                    placeholder="About the Business"
+                    rowsMin={3}
+                    onChange={onChangeValue(props.onChangeAbout)}
+                    value={props.business.about}
+                />
+            ) : props.business.about ? (
+                <Typography variant="body1">{props.business.about}</Typography>
+            ) : (
+                <></>
+            )}
             <Grid
                 className={classes.identityContainer}
                 container

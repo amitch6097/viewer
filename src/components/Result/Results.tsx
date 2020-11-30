@@ -1,7 +1,7 @@
 import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Grid, GridSpacing } from '@material-ui/core';
+import { Grid, GridSpacing, Typography } from '@material-ui/core';
 import { Result, ResultSkeleton } from './Result';
 
 export interface IResultsProps {
@@ -15,11 +15,13 @@ export interface IResultsProps {
     };
     minimal?: boolean;
     withFavorite: boolean;
+    onClickFavorite?: (businessId: string) => void;
 }
 
 const useStyles = makeStyles({
     root: (props: IResultsProps) => {
         return {
+            flex: 1,
             ...(props?.styles?.root || {}),
         };
     },
@@ -36,25 +38,31 @@ export function Results(props: IResultsProps) {
     return (
         <Grid
             container
-            spacing={props.spacing as GridSpacing || 2}
+            spacing={(props.spacing as GridSpacing) || 2}
             direction="column"
-            justify="center"
             alignItems="center"
             className={classes.root}
         >
-            {Object.keys(props.businesses).map((key) => {
-                const business = props.businesses[key];
-                return (
-                    <Grid className={classes.item} key={key} item>
-                        <Result
-                            {...props}
-                            onClick={() => props.onClick(key)}
-                            business={business}
-                            withFavorite={props.withFavorite}
-                        />{' '}
-                    </Grid>
-                );
-            })}
+            {Object.keys(props.businesses).length ? (
+                Object.keys(props.businesses).map((key) => {
+                    const business = props.businesses[key];
+                    return (
+                        <Grid className={classes.item} key={key} item>
+                            <Result
+                                {...props}
+                                onClick={() => props.onClick(key)}
+                                business={business}
+                                withFavorite={props.withFavorite}
+                                onClickFavorite={() => props.onClickFavorite(key)}
+                            />{' '}
+                        </Grid>
+                    );
+                })
+            ) : (
+                <Typography>
+                    No Results, Lets create one! Click continue below
+                </Typography>
+            )}
         </Grid>
     );
 }

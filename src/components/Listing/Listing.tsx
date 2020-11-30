@@ -80,7 +80,7 @@ export function Listing(props: IListingProps) {
                     </Hidden>
                 </section>
                 <Divider className={classes.divider} />
-                {props.business.hasAbout && (
+                {(props.business.hasAbout || props.isEditMode) && (
                     <>
                         <section id="bb-listing-about">
                             <ListingAbout

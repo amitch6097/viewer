@@ -23,6 +23,7 @@ import { getMyBusinesses } from './getMyBusinesses';
 import { getMyReviews } from './getMyReviews';
 import { deleteMyReview } from './deleteMyReview';
 import { claimBusiness } from './claimBusiness';
+import { getUserWithPhoneNumberExists } from './getUserWithPhoneNumberExists';
 
 export {
     onBusinessCreated,
@@ -43,4 +44,5 @@ export {
     getMyReviews,
     deleteMyReview,
     claimBusiness,
+    getUserWithPhoneNumberExists,
 };

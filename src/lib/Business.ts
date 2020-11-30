@@ -1,3 +1,4 @@
+import { generateGUID } from '../helpers';
 import { IBusinessDocument } from '../../typings/documents';
 import { IBusinessListing } from '../../typings/types';
 
@@ -13,7 +14,10 @@ export class Business implements IBusinessListing {
     }
 
     get image() {
-        return this.data.data.image;
+        return this.data.data.image || {
+            id: generateGUID(),
+            url: 'https://cdn.pixabay.com/photo/2018/11/13/21/43/instagram-3814055__340.png'
+        };
     }
 
     get category() {

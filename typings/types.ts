@@ -13,8 +13,8 @@ export interface IUser {
     name: string;
     email: string;
     hasBusinesses?: boolean;
-    createdAt: number;
-    image: string;
+    createdAt?: number;
+    image?: string;
 }
 
 export interface IReview {
@@ -79,6 +79,7 @@ export interface IBusinessListing {
     averageReview?: number;
     reviewCount?: number;
     hasAbout?: boolean;
+    websiteRoot?: string;
 }
 
 export interface IBusinessListingUpdateProperties {

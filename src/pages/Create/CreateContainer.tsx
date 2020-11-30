@@ -1,5 +1,5 @@
 import React from 'react';
-import { API } from 'src/services';
+import { API } from '../../services';
 import { IBusinessListing } from '../../../typings/types';
 import { CreateView } from './CreateView';
 import { IdentifyStepState } from './Steps/IdentifyStep';
@@ -16,6 +16,7 @@ export interface ICreateContainerState {
     info?: IInfoStepState;
     owner?: OwnerStepState;
     identify?: IdentifyStepState;
+    webBusiness: boolean;
 }
 
 export class CreateContainer extends React.Component<
@@ -33,6 +34,7 @@ export class CreateContainer extends React.Component<
             info: undefined,
             identify: undefined,
             owner: undefined,
+            webBusiness: false,
         };
     }
 
@@ -74,16 +76,24 @@ export class CreateContainer extends React.Component<
         });
     };
 
-    onStartCreate = (businessName: string) => {
+    onStartCreate = ({
+        name,
+        webBusiness,
+    }: {
+        name: string;
+        webBusiness: boolean;
+    }) => {
         this.setState({
             exists: false,
-            name: businessName,
+            name,
+            webBusiness,
         });
     };
 
     render() {
         return (
             <CreateView
+                webBusiness={this.state.webBusiness}
                 step={this.state.step}
                 onClickStepLink={this.onClickStepLink}
                 onCreateListing={this.onCreateListing}
