@@ -94,7 +94,7 @@ export interface ICreateBusinessUpdateRequestResponse {
 
 export interface ICreateFlagProps {
     text: string;
-    type: 'data' | 'inappropriate' | 'closed';
+    type: IFlagDocument['type'];
     businessId: string;
 }
 

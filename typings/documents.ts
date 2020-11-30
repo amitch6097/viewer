@@ -19,7 +19,7 @@ export interface IUserDocument {
 export interface IFlagDocument {
     id: string;
     businessId: string;
-    type: 'data' | 'inappropriate' | 'closed',
+    type: 'data' | 'inappropriate' | 'closed' | 'owner',
     text: string;
     createdBy: string;
     createdAt?: number;

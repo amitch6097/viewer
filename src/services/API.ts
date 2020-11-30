@@ -300,7 +300,7 @@ export class API {
 
     static async createFlag(args: {
         text: string;
-        type: 'data' | 'inappropriate' | 'closed';
+        type: IFlagDocument['type'];
         businessId: string;
     }) {
         return await Functions.createFlag(args);

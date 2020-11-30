@@ -16,7 +16,7 @@ export const createFlag = functions.https.onCall(
                 !businessId ||
                 !type ||
                 !text ||
-                !['data', 'inappropriate', 'closed'].includes(type)
+                !['data', 'inappropriate', 'closed', 'owner'].includes(type)
             ) {
                 throw new functions.https.HttpsError(
                     'failed-precondition',

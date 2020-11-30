@@ -20,7 +20,7 @@ export class FlagCollection extends Collection {
         businessId,
         authId,
     }: {
-        type: 'data' | 'inappropriate' | 'closed';
+        type: IFlagDocument['type'];
         text: string;
         authId: string;
         businessId: string;

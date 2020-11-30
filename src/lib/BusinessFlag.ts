@@ -3,7 +3,7 @@ import { IFlagDocument } from '../../typings/documents';
 export interface IBusinessFlag {
     id: string;
     businessId: string;
-    type: 'data' | 'inappropriate' | 'closed';
+    type: IFlagDocument['type'];
     text: string;
     createdBy: string;
     createdAt?: number;

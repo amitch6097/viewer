@@ -1,6 +1,7 @@
 import { config } from './config';
 import { strings } from './strings';
 import { ICategory } from '../typings/types';
+import { IFlagDocument } from 'typings/documents';
 
 /**
  * Function that helps take the value of a change event and calls a function
@@ -31,6 +32,18 @@ export function getCategories(): Array<ICategory> {
         }
     }
     return categories;
+}
+
+export function getFlagTypes(): Array<{
+    id: string;
+    label: string;
+}> {
+    return ['data', 'inappropriate', 'closed', 'owner'].map((key) => {
+        return {
+            id: key,
+            label: strings.flag.types[key],
+        };
+    });
 }
 
 export async function localURLtoBlob(url: string): Promise<Blob> {
