@@ -1,3 +1,3 @@
 export {
     ClaimBusiness
-} from './ClaimBusiness';
+} from './ClaimBusiness'
