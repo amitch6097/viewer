@@ -24,20 +24,29 @@ export class BusinessUpdateRequestCollection extends Collection {
         updateProperties: Partial<IBusinessListingUpdateProperties>;
         authId: string;
     }): Promise<IBusinessUpdateRequestDocument> {
+        const data = {
+            about: updateProperties.about,
+            image: updateProperties.image,
+            category: updateProperties.category,
+            phone: updateProperties.phone,
+            email: updateProperties.email,
+            address: updateProperties.address,
+            website: updateProperties.website,
+            identify: updateProperties.identify,
+            owners: updateProperties.owners,
+            name: updateProperties.name,
+        };
+
+        // remove empty keys
+        Object.keys(data).forEach(key => {
+            if (data[key] === undefined) {
+              delete data[key];
+            }
+        });
+
         const document: Omit<IBusinessUpdateRequestDocument, 'id'> = {
             businessId,
-            data: {
-                about: updateProperties.about,
-                image: updateProperties.image,
-                category: updateProperties.category,
-                phone: updateProperties.phone,
-                email: updateProperties.email,
-                address: updateProperties.address,
-                website: updateProperties.website,
-                identify: updateProperties.identify,
-                owners: updateProperties.owners,
-                name: updateProperties.name,
-            },
+            data: data,
             createdAt: Number(new Date()),
             createdBy: authId,
         };

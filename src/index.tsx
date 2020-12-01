@@ -20,6 +20,7 @@ import { ClaimBusiness } from './pages/ClaimBusiness';
 import './styles.less';
 import { CreateBusinessFlag } from './pages/CreateBusinessFlag';
 import { BusinessFlags } from './pages/BusinessFlags';
+import { BusinessUpdateRequests } from './pages/BusinessUpdateRequests';
 
 function App() {
     return (
@@ -51,6 +52,11 @@ function App() {
                         exact
                         path="/business/:id/new-review"
                         component={CreateReview}
+                    />
+                    <Route
+                        exact
+                        path="/business/:id/update-requests"
+                        component={BusinessUpdateRequests}
                     />
                     <Route
                         exact

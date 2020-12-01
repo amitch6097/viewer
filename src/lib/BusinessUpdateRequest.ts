@@ -22,6 +22,7 @@ export class BusinessUpdateRequest implements IBusinessUpdateRequest {
     get id() {
         return this.data.document.id;
     }
+    
     get businessId() {
         return this.data.document.businessId;
     }
@@ -38,7 +39,8 @@ export class BusinessUpdateRequest implements IBusinessUpdateRequest {
         return this.data.document.approvedBy;
     }
     get updateData() {
-        return this.data.document.data;
+        const data = this.data.document.data;
+        return data;
     }
 
     async delete() {

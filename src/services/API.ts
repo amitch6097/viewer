@@ -366,6 +366,16 @@ export class API {
 
     static async getFlagsForBusiness(businessId: string) {
         const flags = await Firestore.getFlagsForBusiness(businessId);
-        return flags.map(flag => new BusinessFlag({document: flag}));
+        return flags.map((flag) => new BusinessFlag({ document: flag }));
+    }
+
+    static async getUpdateRequestsForBusiness(businessId: string) {
+        const updateRequests = await Firestore.getUpdateRequestsForBusiness(
+            businessId
+        );
+        return updateRequests.map(
+            (updateRequest) =>
+                new BusinessUpdateRequest({ document: updateRequest })
+        );
     }
 }

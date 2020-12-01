@@ -1,4 +1,5 @@
 import {
+    IBusinessUpdateRequestDocument,
     IFlagDocument,
     IReviewDocument,
     IUserDocument,
@@ -205,12 +206,42 @@ export class Firestore {
                             .get();
                         resolve({
                             id,
-                            ...(doc.data())
+                            ...doc.data(),
                         });
                     });
                 })
             );
             return flags as Array<IFlagDocument>;
+        }
+        return [];
+    }
+
+    static async getUpdateRequestsForBusiness(
+        businessId: string
+    ): Promise<Array<IBusinessUpdateRequestDocument>> {
+        const business = await firestore
+            .collection('business')
+            .doc(businessId)
+            .get();
+
+        const businessData = business.data();
+        const businessUpdateRequestIds = businessData.businessUpdateRequests;
+        if (businessUpdateRequestIds) {
+            const updateRequests = await Promise.all(
+                businessUpdateRequestIds.map((id: string) => {
+                    return new Promise(async (resolve) => {
+                        const doc = await firestore
+                            .collection('businessUpdateRequest')
+                            .doc(id)
+                            .get();
+                        resolve({
+                            id,
+                            ...doc.data(),
+                        });
+                    });
+                })
+            );
+            return updateRequests as Array<IBusinessUpdateRequestDocument>;
         }
         return [];
     }
