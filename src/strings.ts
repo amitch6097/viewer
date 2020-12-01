@@ -131,4 +131,18 @@ export const strings = {
             owner: 'This business in wrongfully claimed',
         },
     },
+
+    result: {
+        actions: {
+            favorite: {
+                label: 'toggle favorite',
+            },
+            flags: {
+                label: 'view flags'
+            },
+            updateRequests: {
+                label: 'view update request'
+            },
+        }
+    }
 };

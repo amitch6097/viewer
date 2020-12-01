@@ -3,10 +3,12 @@ import React from 'react';
 import { IBusinessListing } from 'typings/types';
 import { Results, ResultsSkeleton } from '../../components/Result';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { ResultActions } from 'src/components/Result/Result';
 
 export interface IMyBusinessesViewProps {
     businesses: Record<string, IBusinessListing>;
     onClickBusiness: (index: string) => void;
+    onClickAction: (action: keyof ResultActions, businessId: string) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +32,11 @@ export function MyBusinessesView(props: IMyBusinessesViewProps) {
                 <Results
                     onClick={props.onClickBusiness}
                     businesses={props.businesses}
-                    withFavorite={false}
+                    actions={{
+                        flags: true,
+                        updateRequests: true,
+                    }}
+                    onClickAction={props.onClickAction}
                 />
             ) : (
                 <ResultsSkeleton />

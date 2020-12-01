@@ -6,7 +6,7 @@ export class Business implements IBusinessListing {
     constructor(readonly data: IBusinessDocument) {}
 
     get id() {
-        return this.guid;
+        return this.data.id;
     }
 
     get name() {

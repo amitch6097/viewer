@@ -2,7 +2,7 @@ import React from 'react';
 import { IBusinessListing } from '../../../typings/types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Grid, GridSpacing, Typography } from '@material-ui/core';
-import { Result, ResultSkeleton } from './Result';
+import { Result, ResultActions, ResultSkeleton } from './Result';
 
 export interface IResultsProps {
     businesses: Record<string, IBusinessListing>;
@@ -14,8 +14,8 @@ export interface IResultsProps {
         item?: object;
     };
     minimal?: boolean;
-    withFavorite: boolean;
-    onClickFavorite?: (businessId: string) => void;
+    actions?: Partial<ResultActions>;
+    onClickAction?: (action: keyof ResultActions, businessId: string) => void;
 }
 
 const useStyles = makeStyles({
@@ -52,8 +52,10 @@ export function Results(props: IResultsProps) {
                                 {...props}
                                 onClick={() => props.onClick(key)}
                                 business={business}
-                                withFavorite={props.withFavorite}
-                                onClickFavorite={() => props.onClickFavorite(key)}
+                                actions={props.actions}
+                                onClickAction={(action: keyof ResultActions) =>
+                                    props.onClickAction(action, key)
+                                }
                             />{' '}
                         </Grid>
                     );
