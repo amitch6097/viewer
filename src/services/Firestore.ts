@@ -192,6 +192,7 @@ export class Firestore {
             .collection('business')
             .doc(businessId)
             .get();
+
         const businessData = business.data();
         const flagIds = businessData.flags;
         if (flagIds) {
