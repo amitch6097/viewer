@@ -1,8 +1,9 @@
 import { Container, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { IBusinessFlag } from 'src/lib/BusinessFlag';
+import { IBusinessUpdateRequest } from 'src/lib/BusinessUpdateRequest';
 import { Flag } from '../../components/Flag/Flag';
+import { UpdateRequest } from './UpdateRequest';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,21 +19,20 @@ const useStyles = makeStyles((theme) => ({
         padding: '0px',
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 600px))',
-        gridRowGap: theme.spacing(1)
+        gridRowGap: theme.spacing(1),
     },
-    flag: {
-
-    }
+    flag: {},
 }));
 
 export interface IBusinessFlagsViewProps {
-    flags: IBusinessFlag[];
+    updateRequests: IBusinessUpdateRequest[];
     businessName: string;
     businessId: string;
-    onDeleteFlag: (flagId: string) => void;
+    onDelete: (updateRequestId: string) => void;
+    onAccept: (updateRequestId: string) => void;
 }
 
-export function BusinessFlagsView(props: IBusinessFlagsViewProps) {
+export function BusinessUpdateRequestsView(props: IBusinessFlagsViewProps) {
     const classes = useStyles(props);
     return (
         <Container className={classes.root}>
@@ -40,17 +40,21 @@ export function BusinessFlagsView(props: IBusinessFlagsViewProps) {
                 className={classes.businessLink}
                 href={`/business/${props.businessId}`}
             >
-                {' '}
                 {props.businessName}
             </Link>
-            {props.flags && (
+            {props.updateRequests && (
                 <ul className={classes.flagList}>
-                    {props.flags.map((flag) => {
+                    {props.updateRequests.map((updateRequest) => {
                         return (
                             <li className={classes.flag}>
-                                <Flag
-                                    flag={flag}
-                                    onDelete={() => props.onDeleteFlag(flag.id)}
+                                <UpdateRequest
+                                    updateRequest={updateRequest}
+                                    onDelete={() =>
+                                        props.onDelete(updateRequest.id)
+                                    }
+                                    onAccept={() =>
+                                        props.onAccept(updateRequest.id)
+                                    }
                                 />
                             </li>
                         );

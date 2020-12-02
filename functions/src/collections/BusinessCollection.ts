@@ -94,25 +94,27 @@ export class BusinessCollection extends Collection {
         updateProperties: Partial<IBusinessListingUpdateProperties>
     ): Promise<IBusinessDocument> {
         const dotNotation = Object.keys(updateProperties).reduce((__, key) => {
-            if (key === 'address') {
-                __['data.' + key] = {
-                    name: updateProperties.address.name,
-                    administrative: updateProperties.address.administrative,
-                    county: updateProperties.address.county,
-                    city: updateProperties.address.city,
-                    country: updateProperties.address.country,
-                    countryCode: updateProperties.address.countryCode,
-                    type: updateProperties.address.type,
-                    latlng: updateProperties.address.latlng,
-                    postcode: updateProperties.address.postcode,
-                    value: updateProperties.address.value,
-                };
-                __['_geoloc'] = {
-                    lat: updateProperties?.address?.latlng?.lat,
-                    lng: updateProperties?.address?.latlng?.lng,
-                };
-            } else {
-                __['data.' + key] = updateProperties[key];
+            if(updateProperties[key]) {
+                if (key === 'address') {
+                    __['data.' + key] = {
+                        name: updateProperties.address.name,
+                        administrative: updateProperties.address.administrative,
+                        county: updateProperties.address.county,
+                        city: updateProperties.address.city,
+                        country: updateProperties.address.country,
+                        countryCode: updateProperties.address.countryCode,
+                        type: updateProperties.address.type,
+                        latlng: updateProperties.address.latlng,
+                        postcode: updateProperties.address.postcode,
+                        value: updateProperties.address.value,
+                    };
+                    __['_geoloc'] = {
+                        lat: updateProperties?.address?.latlng?.lat,
+                        lng: updateProperties?.address?.latlng?.lng,
+                    };
+                } else {
+                    __['data.' + key] = updateProperties[key];
+                }
             }
             return __;
         }, {});

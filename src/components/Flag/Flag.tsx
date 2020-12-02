@@ -7,7 +7,7 @@ import React from 'react';
 import { IBusinessFlag } from 'src/lib/BusinessFlag';
 import { strings } from 'src/strings';
 
-export interface IMyReviewProps {
+export interface IFlagProps {
     flag: IBusinessFlag;
     onDelete: () => void;
 }
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function Flag(props: IMyReviewProps) {
+export function Flag(props: IFlagProps) {
     const theme = useTheme();
     const classes = useStyles(theme);
     const { flag } = props;
